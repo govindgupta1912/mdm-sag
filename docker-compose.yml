@@ -1,10 +1,8 @@
-version: "3.8"
+version: '3'
 
 services:
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: sag_frontend_gg
     ports:
-      - "8080:80"
-    container_name: vite-frontend
+      - "3000:80"  # or whatever port your app uses
+    restart: always
