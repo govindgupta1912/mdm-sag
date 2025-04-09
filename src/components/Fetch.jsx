@@ -114,6 +114,7 @@ import SoftwareInfo from './SoftwareInfo';
 import SensorInfo from './SensorInfo';
 import nodata from '../assets/no-data.png';
 import Application from './Application';
+import NetworkInfo from './NetworkInfo';
 
 const Fetch = () => {
   const [details, setDetails] = useState();
@@ -218,8 +219,11 @@ const Fetch = () => {
           <div className="bg-white p-4 shadow-md rounded-md">
             <SoftwareInfo details={details} />
           </div>
-          <div className="col-span-1 md:col-span-2 bg-white p-4 shadow-md rounded-md">
+          <div className=" bg-white p-4 shadow-md rounded-md">
             <SensorInfo details={details} />
+          </div>
+          <div className="bg-white p-4 shadow-md rounded-md">
+            <NetworkInfo details={details} />
           </div>
           <div className='col-span-1 md:col-span-2 bg-white p-4 shadow-md rounded-md ml-20'>
             <Application details={details}/>

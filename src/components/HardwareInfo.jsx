@@ -75,7 +75,7 @@ const HardwareInfo = ( {details}) => {
                      <div key={index} className="grid grid-cols-3 gap-2  border-b pb-1">
  
             <span className="text-gray-600 col-span-1">{item.label}</span>
-            <span className="font-medium col-span-2">{item.value}</span>
+            <span className="font-medium col-span-2 break-words whitespace-normal">{item.value}</span>
           </div>
         ))}
       </div>

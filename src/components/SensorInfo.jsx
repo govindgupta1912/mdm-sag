@@ -18,13 +18,13 @@ const SensorInfo = ({details}) => {
       ];
     
       return (
-        <div className="max-w-md mx-auto p-4 shadow-lg rounded-2xl border border-gray-200 bg-white">
+        <div className="max-w-md mx-auto p-4  rounded-2xl  bg-white">
           <h2 className="text-lg font-semibold mb-3">📡 Sensor Availability</h2>
           <div className="space-y-2">
             {sensorData.map((item, index) => (
-              <div key={index} className="flex justify-between border-b pb-1">
-                <span className="text-gray-600">{item.label}</span>
-                <span className="font-medium">{item.value}</span>
+              <div key={index} className="grid grid-cols-3 gap-4 border-b pb-1">
+                <span className="text-gray-600 col-span-1">{item.label}</span>
+                <span className="font-medium col-span-2">{item.value}</span>
               </div>
             ))}
           </div>
