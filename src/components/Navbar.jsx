@@ -25,7 +25,7 @@ const Navbar = () => {
        </div>
 
     <div className=" hidden md:flex space-x-4">
-      <Link to={'/'} className="border border-white text-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-black">
+      <Link to={'/'} className="border border-white text-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-black data-[state=active]:bg-[#03A9FC] data-[state=active]:text-white">
         Fetch Device Info
       </Link>
       <Link to={'/enroll'} className="border border-white text-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-black">
@@ -34,7 +34,7 @@ const Navbar = () => {
       <Link className="border border-white text-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-black">
         Manage Device
       </Link>
-      <Link className="border border-white text-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-black">
+      <Link to={'/policy'} className="border border-white text-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-black">
         Manage Policy
       </Link>
     </div>
