@@ -7,8 +7,8 @@ import CreatePolicy from '../components/CreatePolicy';
 const Policy=()=>{
     return(
 
-        <div>Policy
-            <div className='bg-black w-full flex justify-between items-center ml-4'>
+        <div>
+            <div className='bg-black w-full flex justify-between items-center  px-4'>
                <div className=" h-20 text-white  text-2xl font-bold  p-6 flex ">
                                <img src={enroll} className="w-7 h-7"/>
                                Manage Policy

@@ -16,7 +16,8 @@ const Sidebar = () => {
      setProcessing(true);
      setFetchStatus('loading');
     try {
-      const response = await axios.get("http://192.168.0.121:9001/api/connect_device_list/" );
+      //mayank.nainwal@mobisec.in
+      const response = await axios.get("http://192.168.0.121:9002/api/connect_device_list/" );
        console.log("response dta  heee  " , response?.data)
        //dispatch(setSerialNumber(ZD222D6687));
       if (response.data.devices && response.data.devices.length > 0) {

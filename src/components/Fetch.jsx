@@ -131,7 +131,7 @@ const Fetch = () => {
     }
 
     try {
-      const response = await axios.post("http://192.168.0.121:9001/api/fetch_device_info", { serial_number:Serial_number
+      const response = await axios.post("http://192.168.0.121:9002/api/fetch_device_info", { serial_number:Serial_number
        });
 
       console.log("response data: ", response.data);
