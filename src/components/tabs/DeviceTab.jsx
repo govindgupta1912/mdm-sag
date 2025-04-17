@@ -3,15 +3,15 @@ import ToggleItems from "../ToggleItem";
 import { setPolicyData } from "@/utilites/policySlice";
 
 
-const DeviceTab = () => {
+const DeviceTab = ({ policyData, setPolicyData }) => {
 
-     const dispatch=useDispatch()
-
-     const policyData=useSelector((state)=>state.policy.policyData)
     
      const handelToogle=(key,val)=>{
 
-        dispatch(setPolicyData({[key]:val}))
+        setPolicyData(prev => ({
+          ...prev,
+          [key]: val
+        }));
      }
 
      

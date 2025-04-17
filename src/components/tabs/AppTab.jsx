@@ -22,14 +22,16 @@ const AppTab=({policyData,setPolicyData})=>{
             {
          AppData.map(({title,description,key})=>(
             <ToggleItems
+            key={key}
             title={title}
             description={description}
             value={policyData[key]}
-            onchange={(val)=>(setPolicyData({ ...policyData,[key]:val}))}
+            onChange={(val)=>(setPolicyData({ ...policyData,[key]:val}))}
             />
             )
             )}
             
+             
            
         </div>
     )

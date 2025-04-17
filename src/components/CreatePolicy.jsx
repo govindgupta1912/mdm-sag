@@ -1,4 +1,3 @@
-
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -8,19 +7,18 @@ import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import enroll from "../assets/enroll.png";
 import SecurityTab from "./tabs/SecurityTab";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DeviceTab from "./tabs/DeviceTab";
-import { setPolicyData } from "@/utilites/policySlice";
+import { resetPolicyData, setPolicyData } from "@/utilites/policySlice";
 import NetworkTab from "./tabs/NetworkTab";
 import AppTab from "./tabs/AppTab";
-
-
-
+import { TableDemo } from "./PolicyTable";
+import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Main Page
 const CreatePolicy = () => {
-
   // const [policyData, setPolicyData] = useState({
   //   disabledLocation: false,
   //   disableFactoryReset: false,
@@ -32,21 +30,42 @@ const CreatePolicy = () => {
   //   disableCamera: false,
   // });
 
-  const policyData=useSelector((state)=>state.policy.policyData)
-    
-  const golbalPolicy=useSelector((state)=>state.policy.policyData)
+  const policyData = useSelector((state) => state.policy.policyData);
 
-  const dispatch=useDispatch();
-    
-  const[localPolicy,setLocalPolicy]=useState(golbalPolicy);
+  const golbalPolicy = useSelector((state) => state.policy.policyData);
 
-  console.log("PolicyData",policyData);
+  const dispatch = useDispatch();
 
-  const Create=()=>{
-     dispatch(setPolicyData(localPolicy));
-    console.log("PolicyData",policyData);
-    
-  }
+  const [localPolicy, setLocalPolicy] = useState(golbalPolicy);
+
+  // Reset the Redux state to initialState when the page loads
+  useEffect(() => {
+    dispatch(resetPolicyData());
+  }, [dispatch]);
+
+  // Then update local state from fresh Redux
+  useEffect(() => {
+    setLocalPolicy(policyData);
+  }, [policyData]);
+
+  // console.log("PolicyData",policyData);
+
+  // const Create=async()=>{
+  //    dispatch(setPolicyData(localPolicy));
+  //   console.log("PolicyData",policyData);
+  //  const response_send=await axios.post(`${API_BASE_URL}/api/send_details_to_navkiran`,localPolicy)
+  //  console.log("Rseponse_Send",response_send);
+
+  // }
+
+  const Create = async () => {
+    dispatch(setPolicyData(localPolicy));
+    // const response_send = await axios.post(
+    //   `${API_BASE_URL}/api/send_details_to_navkiran`,
+    //   localPolicy
+    // );
+    console.log("Response_Send", policyData);
+  };
 
   return (
     <div className="w-full bg-white">
@@ -57,10 +76,10 @@ const CreatePolicy = () => {
           Manage Policy
         </div>
         <button
-           onClick={Create}
+          onClick={Create}
           className="w-30 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md shadow-sm px-4"
         >
-          Create Policy
+          <Link to={"/policy"}>Create Policy</Link>
         </button>
       </div>
 
@@ -74,14 +93,18 @@ const CreatePolicy = () => {
           >
             Policy Name
           </Label>
-          <Textarea
-            id="policyName"
-            placeholder="Name your policy"
-            className="bg-gray-200 border border-gray-300 resize-none"
-            rows={1}
-            value={localPolicy.policyName}
-          onChange={(e) =>setLocalPolicy({ ...localPolicy, policyName: e.target.value })}
-          />
+
+          <input
+  id="policyName"
+  type="text"
+  placeholder="Name your policy"
+  className="bg-gray-200 border border-gray-300 text-sm px-1 py-2  w-full"
+  value={localPolicy.policyName}
+  onChange={(e) =>
+    setLocalPolicy({ ...localPolicy, policyName: e.target.value })
+  }
+/>
+
         </div>
 
         {/* Tabs */}
@@ -96,7 +119,9 @@ const CreatePolicy = () => {
                   //   "border border-[#03A9FC] px-6 py-2 rounded-md text-sm font-medium transition duration-200",
                   //   "data-[state=active]:bg-[#03A9FC] data-[state=active]:text-white"
                   // )}
-                  className={"border border-[#03A9FC] px-6 py-2 rounded-md text-sm font-medium transition duration-200 data-[state=active]:bg-[#03A9FC] data-[state=active]:text-white"}
+                  className={
+                    "border border-[#03A9FC] px-6 py-2 rounded-md text-sm font-medium transition duration-200 data-[state=active]:bg-[#03A9FC] data-[state=active]:text-white"
+                  }
                 >
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </TabsTrigger>
@@ -107,22 +132,31 @@ const CreatePolicy = () => {
           {/* Tab Contents */}
           <TabsContent value="security">
             <Card className="p-6 max-w-5xl">
-              <SecurityTab policyData={localPolicy} setPolicyData={setLocalPolicy}/>
+              <SecurityTab
+                policyData={localPolicy}
+                setPolicyData={setLocalPolicy}
+              />
             </Card>
           </TabsContent>
           <TabsContent value="device">
             <Card className="p-6 max-w-5xl">
-              <DeviceTab/>
+              <DeviceTab
+                policyData={localPolicy}
+                setPolicyData={setLocalPolicy}
+              />
             </Card>
           </TabsContent>
           <TabsContent value="network">
             <Card className="p-6 max-w-5xl">
-              <NetworkTab policyData={localPolicy} setPolicyData={setLocalPolicy}/>
+              <NetworkTab
+                policyData={localPolicy}
+                setPolicyData={setLocalPolicy}
+              />
             </Card>
           </TabsContent>
           <TabsContent value="app">
             <Card className="p-6 max-w-5xl">
-              <AppTab policyData={localPolicy} setPolicyData={setLocalPolicy}/>
+              <AppTab policyData={localPolicy} setPolicyData={setLocalPolicy} />
             </Card>
           </TabsContent>
           <TabsContent value="device2">

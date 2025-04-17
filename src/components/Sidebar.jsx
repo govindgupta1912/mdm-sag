@@ -11,13 +11,18 @@ const Sidebar = () => {
   const [processing,setProcessing] =useState(false);
   const dispatch =useDispatch();
   const [fetchStatus,setFetchStatus]=useState('idle');
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 
   const connectADB = async () => {
      setProcessing(true);
      setFetchStatus('loading');
     try {
       //mayank.nainwal@mobisec.in
-      const response = await axios.get("http://192.168.0.121:9002/api/connect_device_list/" );
+      //const response = await axios.get("http://192.168.0.121:9002/api/connect_device_list/" );
+      const response = await axios.get(`${API_BASE_URL}/api/connect_device_list/`);
+
        console.log("response dta  heee  " , response?.data)
        //dispatch(setSerialNumber(ZD222D6687));
       if (response.data.devices && response.data.devices.length > 0) {

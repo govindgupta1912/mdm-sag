@@ -12,6 +12,8 @@ import Enroll from "./components/Enroll.jsx";
 import appStore from "./utilites/appStore.js";
 import Policy from "./pages/Policy.jsx";
 import CreatePolicy from "./components/CreatePolicy.jsx";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App()
 {
@@ -26,9 +28,8 @@ function App()
        <main className="flex-1 p-4 bg-gray-200">
        <Outlet />
        </main>
-      
-
        </div>
+       <ToastContainer position="top-right" autoClose={3000} />
     </div>
     </Provider>
     
@@ -43,7 +44,8 @@ const approuter = createBrowserRouter(
       <Route path="/enroll" element={<Enroll />} />
       <Route path="/policy" element={<Policy/>}/>
       <Route path="/create-policy" element={<CreatePolicy/>}/>
-    </Route> // ✅ You were missing this closing tag
+    </Route> 
+    
     </>
   )
 )
