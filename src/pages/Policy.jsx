@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import enroll from '../assets/enroll.png'
 import { Plus } from 'lucide-react';
 import {
@@ -15,16 +15,61 @@ import {
 import CreatePolicy from '../components/CreatePolicy';
 
  import { Pencil, Trash2 } from "lucide-react"
-
+import axios from 'axios';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Policy=()=>{
 
+  const navigate=useNavigate();
+
     const policies = [
         {
-          id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
-          name: "Office IT department devices",
+          id: "f0906574-60ad-4a70-9dcb-5b0eb1db21cagovind",
+          policyName: "Office IT department devices",
           version: 2,
           updatedOn: "2024-09-24 15:01:44",
+          
+      // --- SecurityTab ---
+      disabledLocation: true,
+      disableFactoryReset: true,
+      disableMicrophone: false,
+      disableBluetooth: false,
+      disableCamera: false,
+      disableNotification: false,
+      disableKeyguard: false,
+      disableFingerprintUnlock: false,
+      disableScreenCapture: false,
+      disableDeveloperOption: false,
+      disableAppInstallFromUnknownSources: false,
+      disableCameraOnLockScreen: false,
+      disableUsbMediaMount: false,
+      disableUsbDataTransfer: false,
+      disableVoiceVideoCalling: false,
+      disableSMS: false,
+  
+      // --- DeviceTab (new additions) ---
+      disabledAddingUsers: false,
+      disableModifyAccount: false,
+      disableRemovingUsers: false,
+      disableSettingWallpaper: false,
+      disableVolumeAdjust: false,
+  
+      // --- NetworkTab ---
+      disableWifiConfig: false,
+      disableWifiDirect: false,
+      disableBluetoothSharing: false,
+      disableBluetoothConfig: false,
+      disableMobileNetworkConfig: false,
+      disableDataRoaming: false,
+      disableHotspotConfig: false,
+      disableNetworkReset: false,
+      enforceVpnLockdown: false,
+      disableVpnConfig: false,
+  
+      // --- AppTab ---
+      disableAppUninstall: false,
+      disableAppInstall: false,
+  
         },
         {
             id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
@@ -60,6 +105,21 @@ const Policy=()=>{
         // Add more policy objects as needed...
       ]
       
+      const update=async (policy)=>{
+
+        try {
+          //const response=await axios.get(`${API_BASE_URL}/api/get_policy/${policy.id}`);
+          //const policyDataFromBackend=response.data;
+          navigate('/create-policy',{
+            state: { policyData: policy }, // 👈 pass backend data to CreatePolicy page
+          })
+
+        } catch (error) {
+          console.error("Failed to fetch the policy data",error);
+        }
+
+
+      }
      
 
     return(
@@ -126,8 +186,11 @@ const Policy=()=>{
         <TableCell className="py-4 text-center w-[80px]">{policy.version}</TableCell>
         <TableCell className="py-4 w-[180px]">{policy.updatedOn}</TableCell>
         <TableCell className="py-4 flex gap-4 justify-center w-[120px]">
-          <button className="text-blue-600 hover:text-blue-800">
+          <button className="text-blue-600 hover:text-blue-800"
+          onClick={()=>update(policy)}
+          >
             <Pencil size={20} />
+            
           </button>
           <button className="text-red-600 hover:text-red-800">
             <Trash2 size={20} />
@@ -145,7 +208,7 @@ const Policy=()=>{
         </TableFooter>
       </Table>
     </div>
-    
+       
         </div>
     )
 

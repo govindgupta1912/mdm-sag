@@ -4,7 +4,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import enroll from "../assets/enroll.png";
 import SecurityTab from "./tabs/SecurityTab";
 import { useEffect, useState } from "react";
@@ -35,19 +35,24 @@ const CreatePolicy = () => {
   const golbalPolicy = useSelector((state) => state.policy.policyData);
 
   const dispatch = useDispatch();
+  const location=useLocation();
+  const incomingPolicy = location.state?.policyData;
+    console.log("incomingPolicy=====",incomingPolicy);
+    
 
-  const [localPolicy, setLocalPolicy] = useState(golbalPolicy);
+  const [localPolicy, setLocalPolicy] = useState(incomingPolicy||golbalPolicy);
+  console.log("localPolicy=====",localPolicy);
 
   // Reset the Redux state to initialState when the page loads
   useEffect(() => {
+    if(!incomingPolicy)
+    {
     dispatch(resetPolicyData());
-  }, [dispatch]);
+    }
+  }, [dispatch,incomingPolicy]);
 
   // Then update local state from fresh Redux
-  useEffect(() => {
-    setLocalPolicy(policyData);
-  }, [policyData]);
-
+ 
   // console.log("PolicyData",policyData);
 
   // const Create=async()=>{
@@ -57,6 +62,9 @@ const CreatePolicy = () => {
   //  console.log("Rseponse_Send",response_send);
 
   // }
+  // useEffect(() => {
+  //   console.log("Global policyData updated:", policyData);
+  // }, [policyData]);
 
   const Create = async () => {
     dispatch(setPolicyData(localPolicy));
@@ -64,7 +72,7 @@ const CreatePolicy = () => {
     //   `${API_BASE_URL}/api/send_details_to_navkiran`,
     //   localPolicy
     // );
-    console.log("Response_Send", policyData);
+    console.log("local Response_send", localPolicy);
   };
 
   return (
@@ -95,16 +103,15 @@ const CreatePolicy = () => {
           </Label>
 
           <input
-  id="policyName"
-  type="text"
-  placeholder="Name your policy"
-  className="bg-gray-200 border border-gray-300 text-sm px-1 py-2  w-full"
-  value={localPolicy.policyName}
-  onChange={(e) =>
-    setLocalPolicy({ ...localPolicy, policyName: e.target.value })
-  }
-/>
-
+            id="policyName"
+            type="text"
+            placeholder="Name your policy"
+            className="bg-gray-200 border border-gray-300 text-sm px-1 py-2  w-full"
+            value={localPolicy.policyName}
+            onChange={(e) =>
+              setLocalPolicy({ ...localPolicy, policyName: e.target.value })
+            }
+          />
         </div>
 
         {/* Tabs */}

@@ -8,7 +8,9 @@ const Navbar = () => {
    const [menuOpen,setMenuOpen]=useState(false);
    
   return (
-    <nav className="bg-[#03A9FC] p-4 shadow-md">
+ 
+      <nav className="fixed top-0 left-0 w-full bg-[#03A9FC] p-4 shadow-md z-50">
+
       <div className='flex items-center justify-between'>
     <div className="flex items-center space-x-2">
       <img src={mdm} alt="Logo" className="h-7 w-7" />

@@ -1,53 +1,13 @@
-
-// import React from 'react'
-// import { Link } from 'react-router-dom';
-
-// const Application = ({details}) => {
-//     const data=details.application;
-//     //console.log("First app name:", details.application.applications[0].app_name);
-//     //console. */log("First app name:",  details.application.applications[0].app_name);
-//     let i=1;
-    
-//   return (
-//     <div className='ml-16'>
-//         <table>
-//             <thead className='bg-gray-200'>
-//                 <tr>
-//                     <th className='border px-4 py-2'>Sr.No</th>
-//                     <th className='border px-4 py-2'>App Name</th>
-//                     <th className='border px-4 py-2'>Version</th>
-//                     <th className='border px-4 py-2'>Source</th>
-//                     <th className='border px-4 py-2'>More</th>
-//                 </tr>
-//             </thead>
-//             <tbody>
-//                 {
-//                     data.map((item ,index)=>(
-//                         <tr key={index} className='hover:bg-gray-50'>
-//                             <td className='border px-4 py-2'>{i++}</td>
-//                             <td className='border px-4 py-2'>{item.app_name}</td>
-//                             <td className='border px-4 py-2'>{item.app_version}</td>
-//                             <td className='border px-4 py-2'>{item.package_name}</td>
-//                             <td className='border px-4 py-2'>
-//                                 <Link className=' hover:bg-gray-900 text-white bg-gray-700 duration-300 transition-colors px-4 py-1 text-sm font-bold rounded-sm'> More</Link>
-                                
-//                                 </td>
-//                         </tr>
-//                     ))
-//                 }
-
-                
-//             </tbody>
-//         </table>
-
-//     </div>
-//   )
-// }
-
-// export default Application
-
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import Permission from './Permission';
 
 const Application = ({ details }) => {
@@ -61,45 +21,43 @@ const Application = ({ details }) => {
   };
 
   return (
-    <div className='ml-8'>
-      <table className='ml-20'>
-        <thead className='bg-gray-200'>
-          <tr>
-            <th className='border px-4 py-2'>Sr.No</th>
-            <th className='border px-4 py-2'>App Name</th>
-            <th className='border px-4 py-2'>Version</th>
-            <th className='border px-4 py-2'>Source</th>
-            <th className='border px-4 py-2'>More</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            data.map((item, index) => (
-              <tr key={index} className='hover:bg-gray-50'>
-                <td className='border px-4 py-2'>{index + 1}</td>
-                <td className='border px-4 py-2'>{item.app_name}</td>
-                <td className='border px-4 py-2'>{item.app_version}</td>
-                <td className='border px-4 py-2'>{item.package_name}</td>
-                <td className='border px-4 py-2'>
-                  <button
-                    onClick={() => handleMoreClick(item)}
-                    className='hover:bg-gray-900 text-white bg-gray-700 duration-300 transition-colors px-4 py-1 text-sm font-bold rounded-sm'
-                  >
-                    More
-                  </button>
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-  
-     <Permission
-     isOpen={isModalOpen}
-     onClose={() => setIsModalOpen(false)}
-     data={selectedApp}
-     />
-      
+    <div className='p-8'>
+      <Table>
+        <TableHeader>
+          <TableRow className='text-lg '>
+            <TableHead>Sr. No</TableHead>
+            <TableHead>App Name</TableHead>
+            <TableHead>Version</TableHead>
+            <TableHead>Source</TableHead>
+            <TableHead>More</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((item, index) => (
+            <TableRow key={index} className="">
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{item.app_name}</TableCell>
+              <TableCell>{item.app_version}</TableCell>
+              <TableCell>{item.package_name}</TableCell>
+              <TableCell>
+                <Button
+                  variant='default'
+                  size='sm'
+                  onClick={() => handleMoreClick(item)}
+                >
+                  More
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <Permission
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        data={selectedApp}
+      />
     </div>
   );
 };
