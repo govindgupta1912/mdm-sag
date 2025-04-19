@@ -26,9 +26,10 @@ import { createSlice } from "@reduxjs/toolkit";
 //   };
 
   const initialState = {
+
     policyData: {
       policyName: '',
-  
+    
       // --- SecurityTab ---
       disabledLocation: false,
       disableFactoryReset: false,
@@ -46,14 +47,14 @@ import { createSlice } from "@reduxjs/toolkit";
       disableUsbDataTransfer: false,
       disableVoiceVideoCalling: false,
       disableSMS: false,
-  
-      // --- DeviceTab (new additions) ---
+    
+      // --- DeviceTab ---
       disabledAddingUsers: false,
       disableModifyAccount: false,
       disableRemovingUsers: false,
       disableSettingWallpaper: false,
       disableVolumeAdjust: false,
-  
+    
       // --- NetworkTab ---
       disableWifiConfig: false,
       disableWifiDirect: false,
@@ -65,14 +66,21 @@ import { createSlice } from "@reduxjs/toolkit";
       disableNetworkReset: false,
       enforceVpnLockdown: false,
       disableVpnConfig: false,
-  
+    
       // --- AppTab ---
       disableAppUninstall: false,
       disableAppInstall: false,
-  
-      
-    },
+    
+      // --- Password Policy ---
+      minimumPasswordLength: 6,
+      passwordComplexity: "numeric",
+      passwordHistroyLength: 3,
+      passwordMinimumUppercase: 1,
+      passwordMinimumSymbol: 1,
+      passwordFailedAttempts: 5,
+    }
   };
+  
   
 
 const policySlice=createSlice({

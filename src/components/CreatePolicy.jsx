@@ -35,24 +35,24 @@ const CreatePolicy = () => {
   const golbalPolicy = useSelector((state) => state.policy.policyData);
 
   const dispatch = useDispatch();
-  const location=useLocation();
+  const location = useLocation();
   const incomingPolicy = location.state?.policyData;
-    console.log("incomingPolicy=====",incomingPolicy);
-    
+  console.log("incomingPolicy=====", incomingPolicy);
 
-  const [localPolicy, setLocalPolicy] = useState(incomingPolicy||golbalPolicy);
-  console.log("localPolicy=====",localPolicy);
+  const [localPolicy, setLocalPolicy] = useState(
+    incomingPolicy || golbalPolicy
+  );
+  console.log("localPolicy=====", localPolicy);
 
   // Reset the Redux state to initialState when the page loads
   useEffect(() => {
-    if(!incomingPolicy)
-    {
-    dispatch(resetPolicyData());
+    if (!incomingPolicy) {
+      dispatch(resetPolicyData());
     }
-  }, [dispatch,incomingPolicy]);
+  }, [dispatch, incomingPolicy]);
 
   // Then update local state from fresh Redux
- 
+
   // console.log("PolicyData",policyData);
 
   // const Create=async()=>{
@@ -78,7 +78,7 @@ const CreatePolicy = () => {
   return (
     <div className="w-full bg-white">
       {/* Header */}
-      <div className="bg-black flex justify-between items-center px-4">
+      <div className="bg-black flex justify-between items-center px-4 w-full  ">
         <div className="h-20 text-white text-2xl font-bold p-6 flex gap-2 items-center">
           <img src={enroll} className="w-7 h-7" />
           Manage Policy
