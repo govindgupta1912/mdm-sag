@@ -24,12 +24,12 @@ const Application = ({ details }) => {
     <div className='p-8'>
       <Table>
         <TableHeader>
-          <TableRow className='text-lg '>
-            <TableHead>Sr. No</TableHead>
-            <TableHead>App Name</TableHead>
-            <TableHead>Version</TableHead>
-            <TableHead>Source</TableHead>
-            <TableHead>More</TableHead>
+          <TableRow className='text-lg text-black '>
+            <TableHead className="text-black">Sr. No</TableHead>
+            <TableHead className="text-black">App Name</TableHead>
+            <TableHead className="text-black">Version</TableHead>
+            <TableHead className="text-black">Source</TableHead>
+            <TableHead className="text-black">More</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
