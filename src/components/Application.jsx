@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,11 +7,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import Permission from './Permission';
+} from "@/components/ui/table";
+import Permission from "./Permission";
 
 const Application = ({ details }) => {
   const data = details.application;
+  console.log("package_name", data);
+
   const [selectedApp, setSelectedApp] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,28 +23,34 @@ const Application = ({ details }) => {
   };
 
   return (
-    <div className='p-8'>
+    <div className="p-8">
       <Table>
         <TableHeader>
-          <TableRow className='text-lg '>
-            <TableHead>Sr. No</TableHead>
-            <TableHead>App Name</TableHead>
-            <TableHead>Version</TableHead>
-            <TableHead>Source</TableHead>
-            <TableHead>More</TableHead>
+          <TableRow className="text-lg ">
+            <TableHead className="text-black">Sr. No</TableHead>
+            <TableHead className="text-black">App Name</TableHead>
+            <TableHead className="text-black">Version</TableHead>
+            <TableHead className="text-black">Source</TableHead>
+            <TableHead className="text-black">More</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map((item, index) => (
             <TableRow key={index} className="">
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{item.app_name}</TableCell>
+              <TableCell>
+                {item.package_name
+                  .split(".")
+                  .at(-1)
+                  .replace(/^./, (c) => c.toUpperCase())}
+              </TableCell>
+
               <TableCell>{item.app_version}</TableCell>
               <TableCell>{item.package_name}</TableCell>
               <TableCell>
                 <Button
-                  variant='default'
-                  size='sm'
+                  variant="default"
+                  size="sm"
                   onClick={() => handleMoreClick(item)}
                 >
                   More
