@@ -138,17 +138,17 @@ const Fetch = () => {
       setSend(response_send);
     } catch (error) {
       console.error("Failed to send the data", error);
-      toast.error("Unable to send the data");
+      toast.error("Unable to send thea data");
     }
     setProcessing(false);
   };
 
   return (
-      <div className="flex flex-col min-h-screen overflow-hidden p-2">
+      <div className="flex flex-col min-h-screen overflow-hidden  p-4 md:p-6">
 
       {/* Header Section */}
       <div className="flex items-center justify-between w-full  p-4 bg-white shadow-md rounded-md">
-        <h1 className="text-xl ">Fetch Device Details </h1>
+        <h1 className="text-xl md:text-2xl ">Fetch Device Details </h1>
         <div className="space-x-4">
           <button
             //className="text-white bg-[#03A9FC] hover:bg-blue-800 px-6 py-2 rounded-md"
@@ -189,7 +189,7 @@ const Fetch = () => {
 
       {/* Device Info Cards or No Data Image */}
       {details ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           <div className="bg-white p-4 shadow-md rounded-md">
             <HardwareInfo details={details} />
           </div>
