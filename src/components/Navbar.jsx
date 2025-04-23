@@ -9,7 +9,7 @@ const Navbar = () => {
    
   return (
  
-      <nav className="fixed top-0 left-0 w-full bg-[#03A9FC] p-4 shadow-md z-50">
+      <nav className="fixed top-0 left-0 w-full bg-[#03A9FC] p-4 shadow-md ">
 
       <div className='flex items-center justify-between'>
     <div className="flex items-center space-x-2">
@@ -38,6 +38,9 @@ const Navbar = () => {
       </Link>
       <Link to={'/policy'} className="border border-white text-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-black">
         Manage Policy
+      </Link>
+      <Link to={'/manage-application'} className="border border-white text-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-black">
+        Manage Application
       </Link>
     </div>
 

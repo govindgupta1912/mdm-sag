@@ -7,7 +7,9 @@ const ToggleItems = ({ title, description,value,onChange }) => (
       <p className="text-sm text-gray-500">{description}</p>
     </div>
     {/* <Switch defaultChecked /> */}
-    <Switch checked={value} onCheckedChange={onChange} />
+    <Switch checked={value} onCheckedChange={onChange}
+    className="data-[state=checked]:bg-[#03A9FC]"
+    />
   </div>
 );
 

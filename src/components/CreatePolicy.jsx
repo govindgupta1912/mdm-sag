@@ -15,20 +15,12 @@ import NetworkTab from "./tabs/NetworkTab";
 import AppTab from "./tabs/AppTab";
 import { TableDemo } from "./PolicyTable";
 import axios from "axios";
+import InstallAppTab from "./tabs/InstallAppTab";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Main Page
 const CreatePolicy = () => {
-  // const [policyData, setPolicyData] = useState({
-  //   disabledLocation: false,
-  //   disableFactoryReset: false,
-  //   disableMicrophone: false,
-  //   disableBluetooth: false,
-  //   disableKeyguard: false,
-  //   disableFingerprintUnlock: false,
-  //   disableScreenCapture: false,
-  //   disableCamera: false,
-  // });
+ 
 
   const policyData = useSelector((state) => state.policy.policyData);
 
@@ -43,6 +35,8 @@ const CreatePolicy = () => {
     incomingPolicy || golbalPolicy
   );
   console.log("localPolicy=====", localPolicy);
+  
+  
 
   // Reset the Redux state to initialState when the page loads
   useEffect(() => {
@@ -66,13 +60,22 @@ const CreatePolicy = () => {
   //   console.log("Global policyData updated:", policyData);
   // }, [policyData]);
 
-  const Create = async () => {
+  const Create_Policy = async () => {
     dispatch(setPolicyData(localPolicy));
     // const response_send = await axios.post(
     //   `${API_BASE_URL}/api/send_details_to_navkiran`,
     //   localPolicy
     // );
-    console.log("local Response_send", localPolicy);
+    console.log("Create_Policy Response_send", localPolicy);
+  };
+
+  const Update_Policy = async () => {
+    dispatch(setPolicyData(localPolicy));
+    // const response_send = await axios.post(
+    //   `${API_BASE_URL}/api/send_details_to_navkiran`,
+    //   localPolicy
+    // );
+    console.log("Update_Policy Response_send", localPolicy);
   };
 
   return (
@@ -84,17 +87,18 @@ const CreatePolicy = () => {
           Manage Policy
         </div>
         <button
-          onClick={Create}
+          onClick={incomingPolicy?Update_Policy:Create_Policy }
           className="w-30 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md shadow-sm px-4"
         >
-          <Link to={"/policy"}>Create Policy</Link>
+          <Link to={"/policy"}>{incomingPolicy?"Update Policy":"Create Policy "}</Link>
         </button>
       </div>
 
       {/* Body */}
-      <div className="p-6">
+      <div className="p-6 ">
         {/* Policy Name Input */}
-        <div className="mb-6 max-w-md">
+        {!incomingPolicy?
+        (<div className="mb-6 max-w-md">
           <Label
             htmlFor="policyName"
             className="block mb-2 font-semibold text-gray-700"
@@ -113,11 +117,34 @@ const CreatePolicy = () => {
             }
           />
         </div>
+        ):(
+        <div className="flex justify-around border border-gray-300 p-6 rounded-md mb-4">
+           <div className="flex flex-col">
+           <span className="font-bold">Policy ID:</span>
+           {localPolicy.id}
+           </div>
+           <div className="flex flex-col">
+           <span className="font-bold">Policy Name:</span>
+           {localPolicy.name}
+           </div>
+           <div className="flex flex-col">
+           <span className="font-bold">Version:</span>
+           {localPolicy.version}
+           </div>
+           <div className="flex flex-col">
+           <span className="font-bold">Updated ON:</span>
+           {localPolicy.updatedOn}
+           </div>
+
+
+          </div>
+        )
+       }
 
         {/* Tabs */}
-        <Tabs defaultValue="security" className="w-full">
+        <Tabs defaultValue="security" className="w-full flex flex-col">
           <TabsList className="grid grid-cols-6 gap-2 mb-4 w-[1000px] ">
-            {["security", "device", "network", "app", "device2", "kiosk"].map(
+            {["security", "device", "network", "app", "Install App", "kiosk"].map(
               (tab) => (
                 <TabsTrigger
                   key={tab}
@@ -138,7 +165,7 @@ const CreatePolicy = () => {
 
           {/* Tab Contents */}
           <TabsContent value="security">
-            <Card className="p-6 max-w-5xl">
+            <Card className="p-6 max-w-5xl ">
               <SecurityTab
                 policyData={localPolicy}
                 setPolicyData={setLocalPolicy}
@@ -166,9 +193,9 @@ const CreatePolicy = () => {
               <AppTab policyData={localPolicy} setPolicyData={setLocalPolicy} />
             </Card>
           </TabsContent>
-          <TabsContent value="device2">
+          <TabsContent value="Install App">
             <Card className="p-6 max-w-5xl">
-              <p>Device 2 settings here.</p>
+              <InstallAppTab policyData={localPolicy} setLocalPolicy={setLocalPolicy}/>
             </Card>
           </TabsContent>
           <TabsContent value="kiosk">

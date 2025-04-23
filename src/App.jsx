@@ -12,12 +12,13 @@ import {
 import Sidebar from "./components/Sidebar.jsx";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
-import Enroll from "./components/Enroll.jsx";
+import Enroll from "./pages/Enroll.jsx";
 import appStore from "./utilites/appStore.js";
 import Policy from "./pages/Policy.jsx";
 import CreatePolicy from "./components/CreatePolicy.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ManageApplication from "./pages/ManageApplication.jsx";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ const approuter = createBrowserRouter(
         <Route path="/enroll" element={<Enroll />} />
         <Route path="/policy" element={<Policy />} />
         <Route path="/create-policy" element={<CreatePolicy />} />
+        <Route path="/manage-application" element={<ManageApplication />} />
       </Route>
     </>
   )
