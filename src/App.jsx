@@ -20,6 +20,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ManageApplication from "./pages/ManageApplication.jsx";
 import ManageDevices from "./pages/ManageDevices.jsx";
+import DeviceDetails from "./components/DeviceDetails.jsx";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ const approuter = createBrowserRouter(
         <Route path="/create-policy" element={<CreatePolicy />} />
         <Route path="/manage-application" element={<ManageApplication />} />
         <Route path="/manage-devices" element={<ManageDevices/>}/>
+        <Route path="/devices-details" element={<DeviceDetails/>}/>
       </Route>
     </>
   )
