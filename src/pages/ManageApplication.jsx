@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import { Card } from "@/components/ui/card";
 import { fetchApplications } from "@/utilites/applicationsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ManageApplication = () => {
   const [open, setOpen] = useState(false);
@@ -30,7 +31,11 @@ const ManageApplication = () => {
   const [isVpnApp, setIsVpnApp] = useState(false);
 
   const dispatch = useDispatch();
-  const { data: apps, status, error } = useSelector((state) => state.applications);
+  const {
+    data: apps,
+    status,
+    error,
+  } = useSelector((state) => state.applications);
 
   useEffect(() => {
     dispatch(fetchApplications());
@@ -63,6 +68,17 @@ const ManageApplication = () => {
 
     // You can replace this console with an API call
     // axios.post("/api/upload_app", formData)
+
+    // axios
+    //   .post("/api/upload_app", formData)
+    //   .then(() => {
+    //     toast.success("APP IS ADDED SUCCESSFULLY");
+    //     dispatch(fetchApplications()); // fetch fresh list
+    //     setOpen(false); // close modal
+    //   })
+    //   .catch((error) => {
+    //     toast.error("Failed to add app");
+    //   });
 
     setOpen(false);
   };
@@ -212,7 +228,15 @@ const ManageApplication = () => {
       </div>
 
       {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 p-6">
-        {status === "loading" && <p>Loading...</p>}
+        {status === "loading" && (
+          <div className="flex flex-col space-y-3">
+            <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+        )}
         {status === "failed" && <p>Error: {error}</p>}
         {status === "succeeded" &&
           apps.map((app, index) => (
@@ -224,7 +248,8 @@ const ManageApplication = () => {
                 <h3 className="text-[#767676]">{app.version}</h3>
               </div>
               <div className="flex items-center">
-                <button className="bg-green-600 text-white p-4 h-10 w-44 flex items-center justify-center">
+                <button className="bg-green-600 text-white p-4 h-10 w-44 flex items-center justify-center"
+                >
                   Update
                 </button>
                 <button className="bg-red-600 text-white p-4 h-10 w-44 flex items-center justify-center">

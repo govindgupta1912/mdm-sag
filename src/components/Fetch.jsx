@@ -144,10 +144,10 @@ const Fetch = () => {
   };
 
   return (
-      <div className="flex flex-col min-h-screen overflow-hidden  p-4 md:p-6">
+      <div className="pt-20 flex flex-col min-h-screen   p-4 md:p-6">
 
       {/* Header Section */}
-      <div className="flex items-center justify-between w-full  p-4 bg-white shadow-md rounded-md">
+      <div className="sticky top-[74px] z-40 flex items-center justify-between w-full  p-4 bg-white shadow-md rounded-md">
         <h1 className="text-xl md:text-2xl ">Fetch Device Details </h1>
         <div className="space-x-4">
           <button
@@ -189,7 +189,7 @@ const Fetch = () => {
 
       {/* Device Info Cards or No Data Image */}
       {details ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           <div className="bg-white p-4 shadow-md rounded-md">
             <HardwareInfo details={details} />
           </div>

@@ -19,6 +19,7 @@ import CreatePolicy from "./components/CreatePolicy.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ManageApplication from "./pages/ManageApplication.jsx";
+import ManageDevices from "./pages/ManageDevices.jsx";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ const approuter = createBrowserRouter(
         <Route path="/policy" element={<Policy />} />
         <Route path="/create-policy" element={<CreatePolicy />} />
         <Route path="/manage-application" element={<ManageApplication />} />
+        <Route path="/manage-devices" element={<ManageDevices/>}/>
       </Route>
     </>
   )

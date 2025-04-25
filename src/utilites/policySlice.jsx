@@ -59,7 +59,12 @@ const initialState = {
     policyName: "Initial Policy",
     policyVersion: 1,
     enterpriseLockScreenInfo: "Mobisec Technologies",
-
+    
+    kioskPolicy: {
+    enabled: false,
+    multiApp: false,
+    allowedApps: []
+                 },
     restrictions: {
       locationSharingDisabled: false,
       factoryResetDisabled: false,

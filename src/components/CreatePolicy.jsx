@@ -13,9 +13,10 @@ import DeviceTab from "./tabs/DeviceTab";
 import { resetPolicyData, setPolicyData } from "@/utilites/policySlice";
 import NetworkTab from "./tabs/NetworkTab";
 import AppTab from "./tabs/AppTab";
-import { TableDemo } from "./PolicyTable";
+
 import axios from "axios";
 import InstallAppTab from "./tabs/InstallAppTab";
+import KioskTab from "./tabs/KioskTab";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Main Page
@@ -195,12 +196,12 @@ const CreatePolicy = () => {
           </TabsContent>
           <TabsContent value="Install App">
             <Card className="p-6 max-w-5xl">
-              <InstallAppTab policyData={localPolicy} setLocalPolicy={setLocalPolicy}/>
+              <InstallAppTab policyData={localPolicy} setPolicyDataPolicyData={setLocalPolicy}/>
             </Card>
           </TabsContent>
           <TabsContent value="kiosk">
             <Card className="p-6 max-w-5xl">
-              <p>Kiosk settings here.</p>
+              <KioskTab policyData={localPolicy} setPolicyData={setLocalPolicy}/>
             </Card>
           </TabsContent>
         </Tabs>

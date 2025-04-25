@@ -7,17 +7,28 @@ export const fetchApplications = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await axios.get("/api/applications"); // e.g., http://localhost:9001/api/apps
+      console.log("application api response;-",response);
+      
+      if (!Array.isArray(response.data)) {
+        return thunkAPI.rejectWithValue("Invalid data format from API");
+      }
+
+
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response.data || "Failed to fetch applications" );
     }
   }
+
+  
 );
 
 const applicationsSlice = createSlice({
   name: "applications",
   initialState: {
-    data: [],
+    data: [
+     
+    ],
     status: "idle", // 'loading' | 'succeeded' | 'failed'
     error: null,
   },
@@ -26,14 +37,20 @@ const applicationsSlice = createSlice({
     builder
       .addCase(fetchApplications.pending, (state) => {
         state.status = "loading";
+        console.log("Loading");
+        
       })
       .addCase(fetchApplications.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
+        console.log("succeeded");
+        
       })
       .addCase(fetchApplications.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Something went wrong";
+        console.log("Failed");
+        
       });
   },
 });

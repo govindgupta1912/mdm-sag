@@ -29,11 +29,16 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
 
   return (
     <div>
-      <div className="flex justify-end">
+      {/* <div className="flex justify-end">
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="flex justify-end gap-4">
-              <button className="bg-[#03A9FC]  hover:scale-105 ">
+              <button
+               className={`bg-[#03A9FC] hover:scale-105 ${
+                policyData.kioskPolicy.enabled && !policyData.kioskPolicy.multiApp ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={policyData.kioskPolicy.enabled && !policyData.kioskPolicy.multiApp}
+             >
                 <Plus size={30} className="text-white" />
               </button>
               <p className="text-xl">Add Application</p>
@@ -42,13 +47,45 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
           <DropdownMenuContent>
             <DropdownMenuLabel>Application List</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Whatshaap</DropdownMenuItem>
+            <DropdownMenuItem className="hover:bg-gray-400">Whatshaap</DropdownMenuItem>
             <DropdownMenuItem>Billing</DropdownMenuItem>
             <DropdownMenuItem>Team</DropdownMenuItem>
             <DropdownMenuItem>Subscription</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div> */}
+      <div className="flex justify-end">
+  {policyData.kioskPolicy.enabled && !policyData.kioskPolicy.multiApp ? (
+    // Render non-clickable disabled button with label
+    <div className="flex justify-end gap-4 opacity-50 cursor-not-allowed">
+      <button className="bg-[#03A9FC]" disabled>
+        <Plus size={30} className="text-white cursor-not-allowed" />
+      </button>
+      <p className="text-xl">Add Application</p>
+    </div>
+  ) : (
+    // Render actual dropdown when multiApp mode is allowed
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <div className="flex justify-end gap-4">
+          <button className="bg-[#03A9FC] hover:scale-105 transition-all duration-300">
+            <Plus size={30} className="text-white" />
+          </button>
+          <p className="text-xl">Add Application</p>
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>Application List</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="hover:bg-gray-400">Whatshaap</DropdownMenuItem>
+        <DropdownMenuItem>Billing</DropdownMenuItem>
+        <DropdownMenuItem>Team</DropdownMenuItem>
+        <DropdownMenuItem>Subscription</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )}
+</div>
+
       <div className="mt-6">
         <Table>
           <TableCaption>A list of your recent invoices.</TableCaption>

@@ -170,7 +170,7 @@ const Policy = () => {
         <Table className="table-fixed border-separate border-spacing-y-2 w-full text-sm sm:text-base">
           <TableCaption className="mb-4">A list of all policies.</TableCaption>
           <TableHeader>
-            <TableRow className="bg-blue-500 text-white  ">
+            <TableRow className="bg-[#03A9FC] text-white  ">
               <TableHead className="text-white min-w-[200px] w-[300px] py-4">
                 Policy ID
               </TableHead>
