@@ -71,7 +71,7 @@
 
 
 
-  import ToggleItems from "../ToggleItem";
+  import ToggleItems from "../Reuseable_Components/ToggleItem";
 
 const DeviceTab = ({ policyData, setPolicyData }) => {
 

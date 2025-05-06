@@ -1,9 +1,9 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 
-import serialReducer from './serialSlice'
-import policyReducer from './policySlice'
-import applicationsReducer from './applicationsSlice'
+import serialReducer from './slices/serialSlice'
+import policyReducer from './slices/policySlice'
+import applicationsReducer from './slices/applicationsSlice'
 const appStore = configureStore(
     {
         reducer:{

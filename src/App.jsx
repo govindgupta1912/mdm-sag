@@ -1,5 +1,5 @@
-import Navbar from "./components/Navbar.jsx";
-import Fetch from "./components/Fetch.jsx";
+import Navbar from "./components/layout/Navbar.jsx";
+import Fetch from "./pages/FetchDeviceInfo/Fetch.jsx";
 
 import {
   createBrowserRouter,
@@ -9,18 +9,18 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Sidebar from "./components/Sidebar.jsx";
+import Sidebar from "./components/layout/Sidebar.jsx";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
-import Enroll from "./pages/Enroll.jsx";
-import appStore from "./utilites/appStore.js";
-import Policy from "./pages/Policy.jsx";
+import Enroll from "./pages/EnrollDevice/Enroll.jsx";
+import appStore from "./utilites/store/appStore.js";
+import Policy from "./pages/ManageDevices/Policy.jsx";
 import CreatePolicy from "./components/CreatePolicy.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ManageApplication from "./pages/ManageApplication.jsx";
-import ManageDevices from "./pages/ManageDevices.jsx";
-import DeviceDetails from "./components/DeviceDetails.jsx";
+import ManageDevices from "./pages/ManageDevices/ManageDevices.jsx";
+import DeviceDetails from "./pages/ManageDevices/DeviceDetails.jsx";
 
 function App() {
   return (

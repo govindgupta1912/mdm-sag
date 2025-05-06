@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import ToggleItems from "../ToggleItem";
-import { setPolicyData } from "@/utilites/policySlice";
+import ToggleItems from "../Reuseable_Components/ToggleItem";
+import { setPolicyData } from "@/utilites/store/slices/policySlice";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";

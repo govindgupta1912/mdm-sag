@@ -1,4 +1,4 @@
-import ToggleItems from "../ToggleItem";
+import ToggleItems from "../Reuseable_Components/ToggleItem";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
 const KioskTab=({ policyData, setPolicyData })=>{

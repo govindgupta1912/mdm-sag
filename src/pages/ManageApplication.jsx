@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "react-toastify";
 import { Card } from "@/components/ui/card";
-import { fetchApplications } from "@/utilites/applicationsSlice";
+import { fetchApplications } from "@/utilites/store/slices/applicationsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
 

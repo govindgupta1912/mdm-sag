@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import CreatePolicy from "../components/CreatePolicy";
+import CreatePolicy from "../../components/CreatePolicy";
 
 import { Pencil, Trash2 } from "lucide-react";
 import axios from "axios";

@@ -1,4 +1,4 @@
-import { Switch } from "./ui/switch";
+import { Switch } from "../ui/switch";
 
 const ToggleItems = ({ title, description,value,onChange }) => (
   <div className="flex items-center justify-between py-2 border-b border-gray-200">

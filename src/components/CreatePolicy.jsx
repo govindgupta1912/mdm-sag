@@ -10,7 +10,7 @@ import SecurityTab from "./tabs/SecurityTab";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DeviceTab from "./tabs/DeviceTab";
-import { resetPolicyData, setPolicyData } from "@/utilites/policySlice";
+import { resetPolicyData, setPolicyData } from "@/utilites/store/slices/policySlice";
 import NetworkTab from "./tabs/NetworkTab";
 import AppTab from "./tabs/AppTab";
 

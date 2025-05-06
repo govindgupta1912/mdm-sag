@@ -1,5 +1,5 @@
 
-import ToggleItems from "../ToggleItem";
+import ToggleItems from "../Reuseable_Components/ToggleItem";
 
 const AppTab=({policyData,setPolicyData})=>{
 
@@ -37,7 +37,6 @@ const AppTab=({policyData,setPolicyData})=>{
                 }
 
             }))}
-            
             />
             )
             )}

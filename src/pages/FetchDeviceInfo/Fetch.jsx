@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import HardwareInfo from "./HardwareInfo";
-import SoftwareInfo from "./SoftwareInfo";
-import SensorInfo from "./SensorInfo";
+import HardwareInfo from "../../components/Reuseable_Components/HardwareInfo";
+import SoftwareInfo from "../../components/Reuseable_Components/SoftwareInfo";
+import SensorInfo from "../../components/Reuseable_Components/SensorInfo";
 import nodata from "../assets/no-data.png";
 import Application from "./Application";
-import NetworkInfo from "./NetworkInfo";
+import NetworkInfo from "../../components/Reuseable_Components/NetworkInfo";
 import { toast } from "react-toastify";
 import { use } from "react";
 
