@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-//import mdm from "../assets/mdm.png";
+import mdm from "../../assets/mdm.png";
 //import mdm from '.../assets/mdm.png'
 import { Link } from "react-router-dom";
 
@@ -10,7 +10,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 w-full  bg-[#03A9FC] p-4 shadow-md z-50">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          {/* <img src={mdm} alt="Logo" className="h-7 w-7" /> */}
+          <img src={mdm} alt="Logo" className="h-7 w-7" />
           <span className="text-white font-bold text-lg">mobiHEAL MDM</span>
         </div>
 

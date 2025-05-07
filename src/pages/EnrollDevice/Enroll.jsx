@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import enroll from "../assets/enroll.png";
+import enroll from "../../assets/enroll.png";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { ClipLoader } from "react-spinners";
@@ -27,9 +27,20 @@ const Enroll = () => {
       );
 
       console.log("Install Response", response1);
-      setStatus("Aget is Successfully Installed");
-      setStatusType("success");
-      setStep(1);
+      if(response1.data.status)
+      {
+        setStatus(response1.data.message)
+        setStatusType("success");
+        setStep(1);
+      }
+      else
+      {
+        setStatus(response1.data.message)
+        setStatusType("error");
+      }
+      // setStatus("Aget is Successfully Installed");
+      // setStatusType("success");
+      // setStep(1);
     } catch (error) {
       console.error("Install Error", error);
       setStatus("Failed to Install the SAG Agent");
@@ -51,9 +62,22 @@ const Enroll = () => {
         }
       );
       console.log("permission Response", response2);
-      setStatus("Permission granted successfully.");
-      setStatusType("success");
-      setStep(2);
+     
+      if(response2.data.status)
+        {
+          setStatus(response2.data.message)
+          setStatusType("success");
+          setStep(2);
+        }
+        else
+        {
+          setStatus(response2.data.message)
+          setStatusType("error");
+        }
+
+      // setStatus("Permission granted successfully.");
+      // setStatusType("success");
+      // setStep(2);
     } catch (error) {
       console.error("Permission Error", error);
       setStatus("Permission step failed.");
@@ -69,14 +93,27 @@ const Enroll = () => {
     setStatus("Registering device...");
     try {
       const response3 = await axios.post(
-        `${API_BASE_URL}/api/fetch_device_info`,
+        `${API_BASE_URL}/api/register_device_on_mobiheal`,
         {
           serial_number: Serial_number,
         }
       );
-      setStatus("Device registered successfully.");
-      setStatusType("success");
-      setStep(3);
+
+      if(response3.data.status)
+        {
+          setStatus(response3.data.message)
+          setStatusType("success");
+          setStep(3);
+        }
+        else
+        {
+          setStatus(response3.data.message)
+          setStatusType("error");
+        }
+
+      // setStatus("Device registered successfully.");
+      // setStatusType("success");
+      // setStep(3);
       console.log("register permission", response3);
     } catch (error) {
       console.error("Register Error", error);
@@ -183,10 +220,9 @@ const Enroll = () => {
             {/* {loading && <ClipLoader color="#03A9FC" size={24} />} */}
             <p>{status}</p>
           </div>
-        )}
+        )} 
       </div>
     </div>
   );
 };
-
 export default Enroll;

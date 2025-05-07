@@ -144,6 +144,19 @@ const NetworkTab=({policyData,setPolicyData})=>{
         },
       ]
 
+      const updateNestedPolicy = (section, key, value) => {
+        setPolicyData({
+          ...policyData,
+          data: {
+            ...policyData.data,
+            [section]: {
+              ...policyData.data[section],
+              [key]: value,
+            },
+          },
+        });
+      };
+    
       return (
         <div>
           {NetworkOptions.map(({ title, description, key, section }) => (
@@ -151,16 +164,8 @@ const NetworkTab=({policyData,setPolicyData})=>{
               key={key}
               title={title}
               description={description}
-              value={policyData[section]?.[key] || false}
-              onChange={(val) =>
-                setPolicyData({
-                  ...policyData,
-                  [section]: {
-                    ...policyData[section],
-                    [key]: val,
-                  },
-                })
-              }
+              value={policyData.data?.[section]?.[key] || false}
+              onChange={(val) => updateNestedPolicy(section, key, val)}
             />
           ))}
         </div>

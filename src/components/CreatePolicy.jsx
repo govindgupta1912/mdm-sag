@@ -63,20 +63,28 @@ const CreatePolicy = () => {
 
   const Create_Policy = async () => {
     dispatch(setPolicyData(localPolicy));
-    // const response_send = await axios.post(
-    //   `${API_BASE_URL}/api/send_details_to_navkiran`,
-    //   localPolicy
-    // );
+
+    try {
+      const response_send = await axios.post(
+        `${API_BASE_URL}/api/create_policy`,
+        localPolicy
+      );
+      console.log("Policy_response=======",response_send);
+      
+    } catch (error) {
+      console.log("error_Message",error);
+      
+    }
     console.log("Create_Policy Response_send", localPolicy);
   };
 
   const Update_Policy = async () => {
     dispatch(setPolicyData(localPolicy));
-    // const response_send = await axios.post(
-    //   `${API_BASE_URL}/api/send_details_to_navkiran`,
-    //   localPolicy
-    // );
-    console.log("Update_Policy Response_send", localPolicy);
+    const update_policy_response = await axios.post(
+      `${API_BASE_URL}/api/update_policy`,
+      localPolicy
+    );
+    console.log("Update_Policy Response", update_policy_response);
   };
 
   return (

@@ -1,6 +1,7 @@
 import { Lock, LockKeyhole, RefreshCcw, Trash2 } from "lucide-react";
-import devices from "../assets/devices.png";
-import changePwd from "../assets/changePwd.png";
+import devices from "../../assets/devices.png";
+
+import changePwd from "../../assets/changePwd.png";
 import Device_policy_info from "../../components/Reuseable_Components/Device_policy_info";
 const DeviceDetails = () => {
   return (

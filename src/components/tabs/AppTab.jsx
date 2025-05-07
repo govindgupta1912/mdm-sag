@@ -27,14 +27,18 @@ const AppTab=({policyData,setPolicyData})=>{
             key={key}
             title={title}
             description={description}
-            value={policyData[section]?.[key] || false}
+            value={policyData.data?.[section]?.[key] || false}
             onChange={(val)=>(
                 setPolicyData({ 
                 ...policyData,
-                [section]:{
-                ...policyData[section],
-                    [key]:val
+                data:{
+                    ...policyData.data,
+                    [section]:{
+                        ...policyData.data[section],
+                            [key]:val
+                        }
                 }
+                
 
             }))}
             />

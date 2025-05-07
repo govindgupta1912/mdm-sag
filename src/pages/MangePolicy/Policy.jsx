@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import enroll from "../assets/enroll.png";
+import enroll from "../../assets/enroll.png";
 import { Plus } from "lucide-react";
 import {
   Table,
@@ -16,108 +16,157 @@ import CreatePolicy from "../../components/CreatePolicy";
 
 import { Pencil, Trash2 } from "lucide-react";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Policy = () => {
   const navigate = useNavigate();
 
-  const policies = [
-    {
-      id: "f0906574-60ad-4a70-9dcb-5b0eb1db21cagovind",
-      name: "Office IT department devices",
-      version: 2,
-      updatedOn: "2024-09-24 15:01:44",
+  // const policies = [
+  //   {
+  //     id: "f0906574-60ad-4a70-9dcb-5b0eb1db21cagovind",
+  //     name: "Office IT department devices",
+  //     version: 2,
+  //     updatedOn: "2024-09-24 15:01:44",
 
-      restrictions: {
-        locationSharingDisabled: true,
-        factoryResetDisabled: true,
-        unmuteMicrophoneDisabled: false,
-        bluetoothDisabled: false,
-        debuggingFeaturesAllowed: false,
-        installUnknownSourcesAllowed: false,
-        mountPhysicalMediaDisabled: false,
-        usbFileTransferDisabled: false,
-        smsDisabled: false,
-        addUserDisabled: true,
-        modifyAccountsDisabled: false,
-        removeUserDisabled: false,
-        setWallpaperDisabled: false,
-        adjustVolumeDisabled: false,
-        wifiConfigDisabled: false,
-        wifiDirectDisabled: false,
-        bluetoothSharingDisabled: false,
-        bluetoothConfigDisabled: true,
-        mobileNetworksConfigDisabled: false,
-        dataRoamingDisabled: false,
-        wifiTetheringDisabled: false,
-        tetheringConfigDisabled: false,
-        vpnConfigDisabled: false,
-        installAppsDisabled: false,
-        uninstallAppsDisabled: false,
-      },
-      dpmConfig: {
-        keyguardDisabled: false,
-        keyguradFingerprintDisabled: false,
-        keyguradNotificationDisabled: false,
-        screenCaptureDisabled: false,
-        cameraDisabled: false,
-      },
+  //     restrictions: {
+  //       locationSharingDisabled: true,
+  //       factoryResetDisabled: true,
+  //       unmuteMicrophoneDisabled: false,
+  //       bluetoothDisabled: false,
+  //       debuggingFeaturesAllowed: false,
+  //       installUnknownSourcesAllowed: false,
+  //       mountPhysicalMediaDisabled: false,
+  //       usbFileTransferDisabled: false,
+  //       smsDisabled: false,
+  //       addUserDisabled: true,
+  //       modifyAccountsDisabled: false,
+  //       removeUserDisabled: false,
+  //       setWallpaperDisabled: false,
+  //       adjustVolumeDisabled: false,
+  //       wifiConfigDisabled: false,
+  //       wifiDirectDisabled: false,
+  //       bluetoothSharingDisabled: false,
+  //       bluetoothConfigDisabled: true,
+  //       mobileNetworksConfigDisabled: false,
+  //       dataRoamingDisabled: false,
+  //       wifiTetheringDisabled: false,
+  //       tetheringConfigDisabled: false,
+  //       vpnConfigDisabled: false,
+  //       installAppsDisabled: false,
+  //       uninstallAppsDisabled: false,
+  //     },
+  //     dpmConfig: {
+  //       keyguardDisabled: false,
+  //       keyguradFingerprintDisabled: false,
+  //       keyguradNotificationDisabled: false,
+  //       screenCaptureDisabled: false,
+  //       cameraDisabled: false,
+  //     },
 
-      passwordPolicy: {
-        passwordMinimumLength: 12,
-        passwordQuality: "ALPHANUMERIC",
-        passwordHistoryLength: 6,
-        maximumFailedPasswordsForWipe: 3,
-      },
+  //     passwordPolicy: {
+  //       passwordMinimumLength: 12,
+  //       passwordQuality: "ALPHANUMERIC",
+  //       passwordHistoryLength: 6,
+  //       maximumFailedPasswordsForWipe: 3,
+  //     },
 
-      controlConfig: {
-        disableCallingApps: false,
-        enableSystemUpdateDelay: false,
-      },
-      vpnConfig: {
-        lockdownEnabled: false,
-      },
-    },
-    {
-      id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
-      name: "Office IT department devices",
-      version: 2,
-      updatedOn: "2024-09-24 15:01:44",
-    },
-    {
-      id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
-      name: "Office IT department devices",
-      version: 2,
-      updatedOn: "2024-09-24 15:01:44",
-    },
-    {
-      id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
-      name: "Office IT department devices",
-      version: 2,
-      updatedOn: "2024-09-24 15:01:44",
-    },
-    {
-      id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
-      name: "Office IT department devices",
-      version: 2,
-      updatedOn: "2024-09-24 15:01:44",
-    },
-    {
-      id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
-      name: "Office IT department devices",
-      version: 2,
-      updatedOn: "2024-09-24 15:01:44",
-    },
-    // Add more policy objects as needed...
-  ];
+  //     controlConfig: {
+  //       disableCallingApps: false,
+  //       enableSystemUpdateDelay: false,
+  //     },
+  //     vpnConfig: {
+  //       lockdownEnabled: false,
+  //     },
+  //   },
+  //   {
+  //     id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
+  //     name: "Office IT department devices",
+  //     version: 2,
+  //     updatedOn: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
+  //     name: "Office IT department devices",
+  //     version: 2,
+  //     updatedOn: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
+  //     name: "Office IT department devices",
+  //     version: 2,
+  //     updatedOn: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
+  //     name: "Office IT department devices",
+  //     version: 2,
+  //     updatedOn: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "f0906574-60ad-4a70-9dcb-5b0eb1db21ca",
+  //     name: "Office IT department devices",
+  //     version: 2,
+  //     updatedOn: "2024-09-24 15:01:44",
+  //   },
+  //   // Add more policy objects as needed...
+  // ];
+
+  const [policies,setPolicies]=useState([])
+   const fetchPolicyData = async()=>{
+    try {
+      const Policy_response= await axios.get(`${API_BASE_URL}/api/get_all_policies`);
+      if(Policy_response.status)
+      {
+        console.log("get_all_policies",Policy_response);
+        
+        setPolicies(Policy_response.data.policies);
+      }
+      else{
+        toast.error("Failed to Fetch Data");
+      }
+    } catch (error) {
+      console.log("Failed to fetch Data",error);
+      
+    }
+   }
+  useEffect(() => {
+     fetchPolicyData()
+    }, []);
+  
 
   const update = async (policy) => {
     try {
       //const response=await axios.get(`${API_BASE_URL}/api/get_policy/${policy.id}`);
-      //const policyDataFromBackend=response.data;
+      const get_update_policy = await axios.post(
+        `${API_BASE_URL}/api/get_update_policy`,
+        {"policyId":policy.id}
+      );
+      console.log("get_update_policy_data",get_update_policy);
+      console.log("===========",get_update_policy.data.policy);
+      
+      const policyDataFromBackend=get_update_policy.data.policy;
       navigate("/create-policy", {
-        state: { policyData: policy }, // 👈 pass backend data to CreatePolicy page
+        state: { policyData: policyDataFromBackend }, // 👈 pass backend data to CreatePolicy page
       });
+    } catch (error) {
+      console.error("Failed to fetch the policy data", error);
+    }
+  };
+
+  const delete_policy= async (policy) => {
+    try {
+      //const response=await axios.get(`${API_BASE_URL}/api/get_policy/${policy.id}`);
+      const get_policy_after_delete = await axios.post(
+        `${API_BASE_URL}/api/delete_policy`,
+        {"policyId":policy.id}
+      );
+      fetchPolicyData();
+      console.log("get_delete_policy_data",get_policy_after_delete);
+      //console.log("===========",get_update_policy.data.policy);
+      
+      
     } catch (error) {
       console.error("Failed to fetch the policy data", error);
     }
@@ -187,7 +236,7 @@ const Policy = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {policies.map((policy, index) => (
+            { policies?.map((policy, index) => (
               <TableRow
                 key={index}
                 className=" bg-white shadow-sm hover:bg-gray-200"
@@ -209,7 +258,9 @@ const Policy = () => {
                   >
                     <Pencil size={20} />
                   </button>
-                  <button className="text-red-600 hover:text-red-800">
+                  <button className="text-red-600 hover:text-red-800"
+                  onClick={()=>delete_policy(policy)}
+                  >
                     <Trash2 size={20} />
                   </button>
                 </TableCell>
@@ -222,7 +273,7 @@ const Policy = () => {
                 colSpan={5}
                 className="text-center text-sm text-muted-foreground"
               >
-                Showing {policies.length} policies
+                Showing {policies?.length} policies
               </TableCell>
             </TableRow>
           </TableFooter>

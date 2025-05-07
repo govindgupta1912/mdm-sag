@@ -55,7 +55,7 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
         </DropdownMenu>
       </div> */}
       <div className="flex justify-end">
-  {policyData.kioskPolicy.enabled && !policyData.kioskPolicy.multiApp ? (
+  {policyData.data.kioskPolicy.enabled && !policyData.data.kioskPolicy.multiApp ? (
     // Render non-clickable disabled button with label
     <div className="flex justify-end gap-4 opacity-50 cursor-not-allowed">
       <button className="bg-[#03A9FC]" disabled>

@@ -76,11 +76,22 @@
 const DeviceTab = ({ policyData, setPolicyData }) => {
 
   const handelToogle = (key, section, val) => {
+    // setPolicyData(prev => ({
+    //   ...prev,
+
+    //   [section]: {
+    //     ...prev[section],
+    //     [key]: val,
+    //   },
+    // }));
     setPolicyData(prev => ({
       ...prev,
-      [section]: {
-        ...prev[section],
-        [key]: val,
+      data: {
+        ...prev.data,
+        [section]: {
+          ...prev.data?.[section],
+          [key]: val,
+        },
       },
     }));
   };
@@ -93,35 +104,35 @@ const DeviceTab = ({ policyData, setPolicyData }) => {
         <ToggleItems 
           title="Disable Adding Users"
           description="Prevent adding new users and profiles"
-          value={policyData.restrictions?.addUserDisabled || false}
+          value={policyData.data?.restrictions?.addUserDisabled || false}
           onChange={(val) => handelToogle("addUserDisabled", "restrictions", val)}
         />
 
         <ToggleItems 
           title="Disable Modify Account" 
           description="Prevents adding or removing accounts" 
-          value={policyData.restrictions?.modifyAccountsDisabled || false}
+          value={policyData.data?.restrictions?.modifyAccountsDisabled || false}
           onChange={(val) => handelToogle("modifyAccountsDisabled", "restrictions", val)}
         />
 
         <ToggleItems 
           title="Disable Removing Users" 
           description="Prevents removing other users" 
-          value={policyData.restrictions?.removeUserDisabled || false}
+          value={policyData.data?.restrictions?.removeUserDisabled || false}
           onChange={(val) => handelToogle("removeUserDisabled", "restrictions", val)}
         />
 
         <ToggleItems 
           title="Disable Setting Wallpaper" 
           description="Prevents wallpaper change."
-          value={policyData.restrictions?.setWallpaperDisabled || false}
+          value={policyData.data?.restrictions?.setWallpaperDisabled || false}
           onChange={(val) => handelToogle("setWallpaperDisabled", "restrictions", val)}
         />
 
         <ToggleItems
           title="Disable Volume Adjustment"
           description="Prevents master volume adjustment."
-          value={policyData.restrictions?.adjustVolumeDisabled || false}
+          value={policyData.data?.restrictions?.adjustVolumeDisabled || false}
           onChange={(val) => handelToogle("adjustVolumeDisabled", "restrictions", val)}
         />
       </div>

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import HardwareInfo from "../../components/Reuseable_Components/HardwareInfo";
 import SoftwareInfo from "../../components/Reuseable_Components/SoftwareInfo";
 import SensorInfo from "../../components/Reuseable_Components/SensorInfo";
-import nodata from "../assets/no-data.png";
+import nodata from "../../assets/no-data.png";
 import Application from "./Application";
 import NetworkInfo from "../../components/Reuseable_Components/NetworkInfo";
 import { toast } from "react-toastify";

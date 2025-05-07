@@ -8,11 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import devices from "../assets/devices.png";
+import devices from "../../assets/devices.png";
 import { Bell, Eye, FileText, ShieldCheck, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Select,
@@ -45,78 +45,117 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
-
+import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const ManageDevices = () => {
-  const devicesList = [
-    {
-      id: "RZ25OPULZ",
-      deviceName: "Microsoft",
-      model: "Royal",
-      policyName: "Office IT Policy",
-      lastSynced: "2024-09-24 15:01:44",
-    },
-    {
-      id: "RZ25OPULx",
-      deviceName: "Microsoft",
-      model: "Royal",
-      policyName: "Office IT Policy",
-      lastSynced: "2024-09-24 15:01:44",
-    },
-    {
-      id: "RZ25OPULf",
-      deviceName: "Microsoft",
-      model: "Royal",
-      policyName: "Office IT Policy",
-      lastSynced: "2024-09-24 15:01:44",
-    },
-    {
-      id: "RZ25OPULs",
-      deviceName: "Microsoft",
-      model: "Royal",
-      policyName: "Office IT Policy",
-      lastSynced: "2024-09-24 15:01:44",
-    },
-    {
-      id: "RZ25OPULr",
-      deviceName: "Microsoft",
-      model: "Royal",
-      policyName: "Office IT Policy",
-      lastSynced: "2024-09-24 15:01:44",
-    },
-    {
-      id: "RZ25OPULa",
-      deviceName: "Microsoft",
-      model: "Royal",
-      policyName: "Office IT Policy",
-      lastSynced: "2024-09-24 15:01:44",
-    },
-    {
-      id: "RZ25OPULq",
-      deviceName: "Microsoft",
-      model: "Royal",
-      policyName: "Office IT Policy",
-      lastSynced: "2024-09-24 15:01:44",
-    },
-    {
-      id: "RZ25OPULp",
-      deviceName: "Microsoft",
-      model: "Royal",
-      policyName: "Office IT Policy",
-      lastSynced: "2024-09-24 15:01:44",
-    },
-  ];
+  // const devicesList = [
+  //   {
+  //     id: "RZ25OPULZ",
+  //     deviceName: "Microsoft",
+  //     model: "Royal",
+  //     devicesName: "Office IT devices",
+  //     lastSynced: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "RZ25OPULx",
+  //     deviceName: "Microsoft",
+  //     model: "Royal",
+  //     devicesName: "Office IT devices",
+  //     lastSynced: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "RZ25OPULf",
+  //     deviceName: "Microsoft",
+  //     model: "Royal",
+  //     devicesName: "Office IT devices",
+  //     lastSynced: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "RZ25OPULs",
+  //     deviceName: "Microsoft",
+  //     model: "Royal",
+  //     devicesName: "Office IT devices",
+  //     lastSynced: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "RZ25OPULr",
+  //     deviceName: "Microsoft",
+  //     model: "Royal",
+  //     devicesName: "Office IT devices",
+  //     lastSynced: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "RZ25OPULa",
+  //     deviceName: "Microsoft",
+  //     model: "Royal",
+  //     devicesName: "Office IT devices",
+  //     lastSynced: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "RZ25OPULq",
+  //     deviceName: "Microsoft",
+  //     model: "Royal",
+  //     devicesName: "Office IT devices",
+  //     lastSynced: "2024-09-24 15:01:44",
+  //   },
+  //   {
+  //     id: "RZ25OPULp",
+  //     deviceName: "Microsoft",
+  //     model: "Royal",
+  //     devicesName: "Office IT devices",
+  //     lastSynced: "2024-09-24 15:01:44",
+  //   },
+  // ];
 
   const [selectedIds, setSelectedIds] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
+  const [devicesList,setDevicesList]=useState([]);
+  const isAllSelected = selectedIds.length === devicesList?.length;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  
+  const fetch_Device_List = async()=>{
+   try {
+     const devices_list_response= await axios.get(`${API_BASE_URL}/api/enrolled_device_list`);
+     if(devices_list_response.status)
+     {
+       console.log("get_all_policies",devices_list_response);
+       console.log("======================",devices_list_response.data.device_list);
+       
+       setDevicesList(devices_list_response.data.device_list
+       );
+     }
+     else{
+       toast.error("Failed to Fetch Data");
+     }
+   } catch (error) {
+     console.log("Failed to fetch Data",error);
+     
+   }
+  }
+   useEffect(()=>{
+     fetch_Device_List();
+   },[])
 
-  const isAllSelected = selectedIds.length === devicesList.length;
+
+  const delete_enroll_devices = async(devices)=>{
+   try {
+    const delete_enroll_devices_response = await axios.post(`${API_BASE_URL}/api/delete_device`,{"device_id":devices.device_id})
+    console.log("delete_response=======",delete_enroll_devices_response);
+    
+   fetch_Device_List();
+
+   } catch (error) {
+     console.log("faild to delete the devices",error);
+     
+   }
+  }
 
   // Toggle all checkboxes
   const toggleSelectAll = () => {
     if (isAllSelected) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(devicesList.map((device) => device.id));
+      setSelectedIds(devicesList?.map((device) => device.id));
     }
   };
 
@@ -138,8 +177,8 @@ const ManageDevices = () => {
 
   return (
     <>
-      {/* Change Policy Modal */}
-      {/* <Dialog open={activeModal === 'Policy'} onOpenChange={()=>setActiveModal(null)}>
+      {/* Change devices Modal */}
+      {/* <Dialog open={activeModal === 'devices'} onOpenChange={()=>setActiveModal(null)}>
   <DialogContent>
   <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -149,22 +188,22 @@ const ManageDevices = () => {
       className="bg-white p-6 rounded-xl shadow-xl"
     >
     <DialogHeader>
-      <DialogTitle>Change Policy</DialogTitle>
-      <DialogDescription>Select a new policy for selected devices.</DialogDescription>
+      <DialogTitle>Change devices</DialogTitle>
+      <DialogDescription>Select a new devices for selected devices.</DialogDescription>
     </DialogHeader>
  
   <Select>
      <SelectTrigger className="w-full">
-      <SelectValue placeholder="Select a Policy" className="text-white" />
+      <SelectValue placeholder="Select a devices" className="text-white" />
      </SelectTrigger>
      <SelectContent>
-     <SelectItem value="Office IT Policy">Office IT Policy</SelectItem>
-     <SelectItem value="Remote Work Policy">Remote Work Policy</SelectItem>
+     <SelectItem value="Office IT devices">Office IT devices</SelectItem>
+     <SelectItem value="Remote Work devices">Remote Work devices</SelectItem>
      </SelectContent>
   </Select>
   <DialogFooter>
     <Button onClick={()=>setActiveModal(null)}>Cancel</Button>
-    <Button>Apply Policy</Button>
+    <Button>Apply devices</Button>
   </DialogFooter>
   </motion.div>
   </DialogContent>
@@ -173,7 +212,7 @@ const ManageDevices = () => {
      */}
 
       <Dialog
-        open={activeModal === "Policy"}
+        open={activeModal === "devices"}
         onOpenChange={() => setActiveModal(null)}
       >
         <DialogContent>
@@ -184,22 +223,22 @@ const ManageDevices = () => {
             className="p-6"
           >
             <DialogHeader>
-              <DialogTitle>Change Policy</DialogTitle>
+              <DialogTitle>Change devices</DialogTitle>
               <DialogDescription>
-                Select a new policy for selected devices.
+                Select a new devices for selected devices.
               </DialogDescription>
             </DialogHeader>
 
             <Select>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a Policy" />
+                <SelectValue placeholder="Select a devices" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Office IT Policy">
-                  Office IT Policy
+                <SelectItem value="Office IT devices">
+                  Office IT devices
                 </SelectItem>
-                <SelectItem value="Remote Work Policy">
-                  Remote Work Policy
+                <SelectItem value="Remote Work devices">
+                  Remote Work devices
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -208,7 +247,7 @@ const ManageDevices = () => {
               <Button variant="outline" onClick={() => setActiveModal(null)}>
                 Cancel
               </Button>
-              <Button>Apply Policy</Button>
+              <Button>Apply devices</Button>
             </DialogFooter>
           </motion.div>
         </DialogContent>
@@ -260,10 +299,10 @@ const ManageDevices = () => {
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   className="flex items-center gap-2 px-2 py-2 rounded hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handelActionClick("Policy")}
+                  onClick={() => handelActionClick("devices")}
                 >
                   <ShieldCheck className="h-4 w-4" />
-                  Change Policy
+                  Change devices
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
@@ -310,7 +349,7 @@ const ManageDevices = () => {
                   Model
                 </TableHead>
                 <TableHead className="text-white  w-[100px]">
-                  Policy Name
+                  devices Name
                 </TableHead>
                 <TableHead className="text-white text-center w-[100px]">
                   Last Synced
@@ -321,27 +360,27 @@ const ManageDevices = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {devicesList.map((policy, index) => (
+              {devicesList?.map((devices, index) => (
                 <TableRow
                   key={index}
                   // className=" bg-white shadow-sm hover:bg-gray-200"
                   className={`bg-white shadow-sm hover:bg-gray-200 ${
-                    selectedIds.includes(policy.id) ? "bg-blue-50" : ""
+                    selectedIds.includes(devices.id) ? "bg-blue-50" : ""
                   }`}
                 >
                   <TableCell className="text-center">
                     {/* Individual Checkbox */}
                     <Checkbox
-                      checked={selectedIds.includes(policy.id)}
-                      onCheckedChange={() => toggleSelectOne(policy.id)}
+                      checked={selectedIds.includes(devices.id)}
+                      onCheckedChange={() => toggleSelectOne(devices.id)}
                       className="border-gray-400 data-[state=checked]:bg-[#03A9FC]"
                     />
                   </TableCell>
-                  <TableCell className="py-4 font-mono ">{policy.id}</TableCell>
-                  <TableCell className="py-4 ">{policy.deviceName}</TableCell>
-                  <TableCell className="py-4  ">{policy.model}</TableCell>
-                  <TableCell className="py-4 ">{policy.policyName}</TableCell>
-                  <TableCell className="py-4">{policy.lastSynced}</TableCell>
+                  <TableCell className="py-4 font-mono ">{devices.serial_no}</TableCell>
+                  <TableCell className="py-4 ">{devices.deviceName}</TableCell>
+                  <TableCell className="py-4  ">{devices.model}</TableCell>
+                  <TableCell className="py-4 ">{devices.devicesName}</TableCell>
+                  <TableCell className="py-4">{devices.lastSynced}</TableCell>
                   <TableCell className="py-4 flex gap-4 justify-end w-[120px] items-center">
                     <Link
                       className="text-blue-600 hover:text-blue-800"
@@ -349,7 +388,9 @@ const ManageDevices = () => {
                     >
                       <Eye size={20} />
                     </Link>
-                    <button className="text-red-600 hover:text-red-800">
+                    <button className="text-red-600 hover:text-red-800"
+                    onClick={()=>delete_enroll_devices(devices)}
+                    >
                       <Trash2 size={20} />
                     </button>
                   </TableCell>
