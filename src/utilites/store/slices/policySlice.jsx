@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  
   policyData: {
     policyName: "",
     policyVersion: 1,
@@ -11,6 +10,8 @@ const initialState = {
       kioskPolicy: {
         enabled: false,
         multiApp: false,
+        enableSystemUI: false,
+        enableSettings: false,
         allowedApps: [],
       },
       restrictions: {
@@ -61,7 +62,16 @@ const initialState = {
       },
       vpnConfig: {
         lockdownEnabled: false,
+        packageName: "",
       },
+      wifiConfig: [
+        {
+          ssid: "mobisec_5G",
+          password: "Cyber@2025",
+          autoConnect: false,
+        },
+      ],
+      applications: [],
     },
   },
 };

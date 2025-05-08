@@ -1,13 +1,14 @@
 import { Smartphone } from "lucide-react";
 
-const Device_policy_info = () => {
+const Device_policy_info = ({details}) => {
   const hardwareData = [
-    { label: "Manufacturer", value: "Samsung" },
-    { label: "Model", value: "S21+" },
-    { label: "RAM", value: "8 GB" },
-    { label: "ROM", value: "64 GB" },
-    { label: "CPU Architecture", value: "arm-v7" },
-    { label: "Serial No.", value: "ST03HU200" },
+    { label: "Device ID", value: details?.device_id || "N/A" },
+    { label: "Device Name", value: details?.device_name || "N/A" },
+    { label: "Policy Name", value: details?.policy_name || "N/A" },
+    { label: "Policy Version", value: details?.policy_version || "N/A" },
+    {label: "Policy ID",value: details?.policy_id || "N/A"},
+    { label: "Last Synced", value: details?.last_synced || "N/A" },
+
   ];
 
   return (
