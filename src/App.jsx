@@ -15,7 +15,7 @@ import { Provider } from "react-redux";
 import Enroll from "./pages/EnrollDevice/Enroll.jsx";
 import appStore from "./utilites/store/appStore.js";
 //import Policy from "./pages/MangePolicy/Policy.jsx";
-import CreatePolicy from "./components/CreatePolicy.jsx";
+import CreatePolicy from "./pages/MangePolicy/CreatePolicy.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ManageApplication from "./pages/ManageApplication.jsx";

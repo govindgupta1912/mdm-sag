@@ -21,6 +21,7 @@ import { Card } from "@/components/ui/card";
 import { fetchApplications } from "@/utilites/store/slices/applicationsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Skeleton } from "@/components/ui/skeleton";
+import axios from "axios";
 
 const ManageApplication = () => {
   const [open, setOpen] = useState(false);
@@ -29,6 +30,7 @@ const ManageApplication = () => {
   const [version, setVersion] = useState("");
   const [apkFile, setApkFile] = useState(null);
   const [isVpnApp, setIsVpnApp] = useState(false);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const dispatch = useDispatch();
   const {
@@ -41,47 +43,95 @@ const ManageApplication = () => {
     dispatch(fetchApplications());
   }, [dispatch]);
 
+  // const handleSave = () => {
+  //   if (!appTitle || !packageName || !version || !apkFile) {
+  //     //alert("Please fill in all the fields and upload the APK file.");
+  //     toast.error("Please fill in all the fields to add the APK");
+  //     return;
+  //   }
+
+  //   const formData = new FormData();
+  //   formData.append("title", appTitle);
+  //   formData.append("package_name", packageName);
+  //   formData.append("version", version);
+  //   formData.append("is_vpn_app", isVpnApp);
+  //   if (apkFile) {
+  //     formData.append("apk_file", apkFile);
+  //   }
+
+  //   console.log("Form Data:", {
+  //     title: appTitle,
+  //     packageName,
+  //     version,
+  //     isVpnApp,
+  //     apkFile,
+  //   });
+  //   console.log("Form Data==========:", formData);
+    
+  //   toast.success("APP IS ADDED SUCCESSFULLY");
+
+  //   // You can replace this console with an API call
+  //   //axios.post("/api/upload_app", formData)
+
+
+  //     axios.post(`${API_BASE_URL}/api/upload_app``, formData)
+  //     .then(() => {
+  //       toast.success("APP IS ADDED SUCCESSFULLY");
+  //       dispatch(fetchApplications()); // fetch fresh list
+  //       setOpen(false); // close modal
+  //     })
+  //     .catch((error) => {
+  //       toast.error("Failed to add app");
+  //     });
+
+  //   setOpen(false);
+  // };
+
+  console.log("apps=============", apps);
+  
   const handleSave = () => {
-    if (!appTitle || !packageName || !version || !apkFile) {
-      //alert("Please fill in all the fields and upload the APK file.");
-      toast.error("Please fill in all the fields to add the APK");
-      return;
-    }
+  if (!appTitle || !packageName || !version || !apkFile) {
+    toast.error("Please fill in all the fields to add the APK");
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append("title", appTitle);
-    formData.append("package_name", packageName);
-    formData.append("version", version);
-    formData.append("is_vpn_app", isVpnApp);
-    if (apkFile) {
-      formData.append("apk_file", apkFile);
-    }
+  const formData = new FormData();
+  formData.append("app_name", appTitle);
+  formData.append("package_name", packageName);
+  formData.append("version", version);
+  formData.append("is_vpn_app", isVpnApp);
+  formData.append("apk_file", apkFile);
 
-    console.log("Form Data:", {
-      title: appTitle,
-      packageName,
-      version,
-      isVpnApp,
-      apkFile,
+  console.log("Form Data Contents:");
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}:`, value);
+  }
+
+  axios.post(`${API_BASE_URL}/api/add_application`, formData)
+    .then(() => {
+      toast.success("APP IS ADDED SUCCESSFULLY");
+      dispatch(fetchApplications()); // refresh the list
+      setOpen(false); // close the modal
+    })
+    .catch((error) => {
+      console.error("Upload failed:", error);
+      toast.error("Failed to add app");
     });
-    toast.success("APP IS ADDED SUCCESSFULLY");
+};
 
-    // You can replace this console with an API call
-    // axios.post("/api/upload_app", formData)
+const deleteApp = async (id) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/api/delete_application`,
+      {"id": id});
+    console.log("Delete response:", response);
+    toast.success("App deleted successfully");
+    dispatch(fetchApplications()); // refresh the list
+  } catch (error) {
+    console.error("Delete failed:", error);
+    toast.error("Failed to delete app");
+  }
+}
 
-    // axios
-    //   .post("/api/upload_app", formData)
-    //   .then(() => {
-    //     toast.success("APP IS ADDED SUCCESSFULLY");
-    //     dispatch(fetchApplications()); // fetch fresh list
-    //     setOpen(false); // close modal
-    //   })
-    //   .catch((error) => {
-    //     toast.error("Failed to add app");
-    //   });
-
-    setOpen(false);
-  };
 
   return (
     <div>
@@ -208,7 +258,7 @@ const ManageApplication = () => {
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 p-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 p-6">
         <div>
           <div className="flex flex-col items-center p-4 bg-white">
             <img src={apk} alt="" />
@@ -225,17 +275,25 @@ const ManageApplication = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 p-6">
         {status === "loading" && (
-          <div className="flex flex-col space-y-3">
+          Array(12).fill().map((_,index)=>(
+            <div className="flex flex-col space-y-3">
             <Skeleton className="h-[125px] w-[250px] rounded-xl" />
             <div className="space-y-2">
               <Skeleton className="h-4 w-[250px]" />
               <Skeleton className="h-4 w-[200px]" />
             </div>
           </div>
+          ))
+          
+
+
+           
+          
+          
         )}
         {status === "failed" && <p>Error: {error}</p>}
         {status === "succeeded" &&
@@ -243,22 +301,25 @@ const ManageApplication = () => {
             <div key={index}>
               <div className="flex flex-col items-center p-4 bg-white">
                 <img src={apk} alt="" />
-                <h1 className="text-xl font-bold">{app.title}</h1>
+                <h1 className="text-xl font-bold">{app.app_name
+                }</h1>
                 <h2 className="text-[#767676]">{app.package_name}</h2>
                 <h3 className="text-[#767676]">{app.version}</h3>
               </div>
               <div className="flex items-center">
-                <button className="bg-green-600 text-white p-4 h-10 w-44 flex items-center justify-center"
+                <button className="bg-green-600 text-white p-4 h-10 w-44 flex items-center justify-center hover:bg-green-800"
                 >
                   Update
                 </button>
-                <button className="bg-red-600 text-white p-4 h-10 w-44 flex items-center justify-center">
+                <button className="bg-red-600 text-white p-4 h-10 w-44 flex items-center justify-center hover:bg-red-800"
+                onClick={()=>deleteApp(app.id)}
+                >
                   Delete
                 </button>
               </div>
             </div>
           ))}
-      </div> */}
+      </div>
     </div>
   );
 };

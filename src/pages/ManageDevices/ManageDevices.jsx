@@ -109,49 +109,56 @@ const ManageDevices = () => {
 
   const [selectedIds, setSelectedIds] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
-  const [devicesList,setDevicesList]=useState([]);
+  const [devicesList, setDevicesList] = useState([]);
   const [selectedPolicyId, setSelectedPolicyId] = useState(null);
   const [reloadDevices, setReloadDevices] = useState(false);
+  const [loading, setLoading] = useState(false);
   const isAllSelected = selectedIds.length === devicesList?.length;
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  
-  const fetch_Device_List = async()=>{
-   try {
-     const devices_list_response= await axios.get(`${API_BASE_URL}/api/enrolled_device_list`);
-     if(devices_list_response.status)
-     {
-       console.log("get_all_devices_list",devices_list_response);
-       console.log("======================",devices_list_response.data.device_list);
-       
-       setDevicesList(devices_list_response.data.device_list
-       );
-     }
-     else{
-       toast.error("Failed to Fetch Data");
-     }
-   } catch (error) {
-     console.log("Failed to fetch Data",error);
-     
-   }
-  }
-   useEffect(()=>{
-     fetch_Device_List();
-   },[reloadDevices])
 
+  const fetch_Device_List = async () => {
+    setLoading(true);
+    try {
+      const devices_list_response = await axios.get(
+        `${API_BASE_URL}/api/enrolled_device_list`
+      );
+      if (devices_list_response.status) {
+        console.log("get_all_devices_list", devices_list_response);
+        console.log(
+          "======================",
+          devices_list_response.data.device_list
+        );
 
-  const delete_enroll_devices = async(devices)=>{
-   try {
-    const delete_enroll_devices_response = await axios.post(`${API_BASE_URL}/api/delete_device`,{"device_id":devices.device_id})
-    console.log("delete_device_response=======",delete_enroll_devices_response);
-    setReloadDevices(prev => !prev);
-  // fetch_Device_List();
+        setDevicesList(devices_list_response.data.device_list);
+      } else {
+        toast.error("Failed to Fetch Data");
+      }
+    } catch (error) {
+      console.log("Failed to fetch Data", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetch_Device_List();
+  }, [reloadDevices]);
 
-   } catch (error) {
-     console.log("faild to delete the devices",error);
-     
-   }
-  }
-
+  const delete_enroll_devices = async (devices) => {
+    try {
+      const delete_enroll_devices_response = await axios.post(
+        `${API_BASE_URL}/api/delete_device`,
+        { device_id: devices.device_id }
+      );
+      console.log(
+        "delete_device_response=======",
+        delete_enroll_devices_response
+      );
+      setReloadDevices((prev) => !prev);
+      // fetch_Device_List();
+    } catch (error) {
+      console.log("faild to delete the devices", error);
+    }
+  };
 
   const [policies, setPolicies] = useState([]);
   const fetchPolicyData = async () => {
@@ -174,12 +181,12 @@ const ManageDevices = () => {
     fetchPolicyData();
   }, []);
 
-// Function to apply the selected policy to the selected devices
+  // Function to apply the selected policy to the selected devices
   const applyPolicyToDevices = async () => {
-     if (!selectedPolicyId) {
+    if (!selectedPolicyId) {
       toast.error("Please select a policy to apply.");
-      return; 
-     }
+      return;
+    }
     try {
       const applyPolicyResponse = await axios.post(
         `${API_BASE_URL}/api/change_policy`,
@@ -187,23 +194,22 @@ const ManageDevices = () => {
           policy_id: selectedPolicyId,
           device_ids: selectedIds,
         }
-      )
+      );
       console.log("applyPolicyResponse", applyPolicyResponse);
-      if (applyPolicyResponse.data.status){
+      if (applyPolicyResponse.data.status) {
         toast.success("policy applied successfully");
-      }
-      else {
+      } else {
         toast.error("Failed to apply policy");
       }
-     } catch (error) {
+    } catch (error) {
       console.log("Failed to apply policy", error);
       toast.error("Failed to apply policy");
     }
     console.log("Selected Policy ID:", selectedPolicyId);
     console.log("Selected Device IDs:", selectedIds);
     setActiveModal(null);
-    setReloadDevices(prev => !prev);
-  }
+    setReloadDevices((prev) => !prev);
+  };
 
   // Toggle all checkboxes
   const toggleSelectAll = () => {
@@ -221,14 +227,13 @@ const ManageDevices = () => {
     );
   };
 
-  const handelActionClick=(type)=>{
-    if(selectedIds.length===0)
-    {
-     toast.error("Please Select the Device Before Applying the action");
-     return;
+  const handelActionClick = (type) => {
+    if (selectedIds.length === 0) {
+      toast.error("Please Select the Device Before Applying the action");
+      return;
     }
-    setActiveModal(type)
-  }
+    setActiveModal(type);
+  };
 
   return (
     <>
@@ -284,17 +289,16 @@ const ManageDevices = () => {
               </DialogDescription>
             </DialogHeader>
 
-            <Select onValueChange={(value) =>setSelectedPolicyId(value)}>
+            <Select onValueChange={(value) => setSelectedPolicyId(value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a Policy" />
               </SelectTrigger>
               <SelectContent>
-                {policies.map((policy)=>(
+                {policies.map((policy) => (
                   <SelectItem value={policy.id} key={policy.id}>
-                 {policy.name}
-                </SelectItem>
+                    {policy.name}
+                  </SelectItem>
                 ))}
-                
               </SelectContent>
             </Select>
 
@@ -404,7 +408,7 @@ const ManageDevices = () => {
                   Model
                 </TableHead>
                 <TableHead className="text-white  w-[100px]">
-                    Policy Name
+                  Policy Name
                 </TableHead>
                 <TableHead className="text-white text-center w-[100px]">
                   Last Synced
@@ -415,45 +419,88 @@ const ManageDevices = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {devicesList?.map((devices, index) => (
-                <TableRow
-                  key={index}
-                  // className=" bg-white shadow-sm hover:bg-gray-200"
-                  className={`bg-white shadow-sm hover:bg-gray-200 ${
-                    selectedIds.includes(devices.id) ? "bg-blue-50" : ""
-                  }`}
-                >
-                  <TableCell className="text-center">
-                    {/* Individual Checkbox */}
-                    <Checkbox
-                      checked={selectedIds.includes(devices.device_id)}
-                      onCheckedChange={() => toggleSelectOne(devices.device_id)}
-                      className="border-gray-400 data-[state=checked]:bg-[#03A9FC]"
-                    />
-                  </TableCell>
-                  <TableCell className="py-4 font-mono ">{devices.serial_no}</TableCell>
-                  <TableCell className="py-4 ">{devices.device_id}</TableCell>
-                  <TableCell className="py-4  ">{devices.model}</TableCell>
-                  <TableCell className="py-4 ">{devices.policy_id}</TableCell>
-                  <TableCell className="py-4">{devices.lastSynced}</TableCell>
-                  <TableCell className="py-4 flex gap-4 justify-end w-[120px] items-center">
-                    <Link
-                      className="text-blue-600 hover:text-blue-800"
-                      to={"/devices-details"}
-                      state={{
-                        device: devices
-                    }}
+              {loading
+                ? Array(5)
+                    .fill()
+                    .map((_, index) => (
+                      <TableRow
+                        key={index}
+                        className="bg-white shadow-sm animate-pulse"
+                      >
+                        <TableCell className="text-center">
+                          <Checkbox className="border-gray-400 data-[state=checked]:bg-[#03A9FC]" />
+                        </TableCell>
+                        <TableCell className="py-4 font-mono ">
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                        </TableCell>
+                        <TableCell className="py-4 ">
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                        </TableCell>
+                        <TableCell className="py-4  ">
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                        </TableCell>
+                        <TableCell className="py-4 ">
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                        </TableCell>
+                        <TableCell className="py-4">
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                        </TableCell>
+                        <TableCell className="py-4 flex gap-4 justify-end w-[120px] items-center">
+                          <div className="h-4 bg-gray-200 rounded w-24"></div>
+                          <div className="h-4 bg-gray-200 rounded w-24"></div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                : devicesList?.map((devices, index) => (
+                    <TableRow
+                      key={index}
+                      // className=" bg-white shadow-sm hover:bg-gray-200"
+                      className={`bg-white shadow-sm hover:bg-gray-200 ${
+                        selectedIds.includes(devices.id) ? "bg-blue-50" : ""
+                      }`}
                     >
-                      <Eye size={20} />
-                    </Link>
-                    <button className="text-red-600 hover:text-red-800"
-                    onClick={()=>delete_enroll_devices(devices)}
-                    >
-                      <Trash2 size={20} />
-                    </button>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      <TableCell className="text-center">
+                        {/* Individual Checkbox */}
+                        <Checkbox
+                          checked={selectedIds.includes(devices.device_id)}
+                          onCheckedChange={() =>
+                            toggleSelectOne(devices.device_id)
+                          }
+                          className="border-gray-400 data-[state=checked]:bg-[#03A9FC]"
+                        />
+                      </TableCell>
+                      <TableCell className="py-4 font-mono ">
+                        {devices.serial_no}
+                      </TableCell>
+                      <TableCell className="py-4 ">
+                        {devices.device_id}
+                      </TableCell>
+                      <TableCell className="py-4  ">{devices.model}</TableCell>
+                      <TableCell className="py-4 ">
+                        {devices.policy_id}
+                      </TableCell>
+                      <TableCell className="py-4">
+                        {devices.lastSynced}
+                      </TableCell>
+                      <TableCell className="py-4 flex gap-4 justify-end w-[120px] items-center">
+                        <Link
+                          className="text-blue-600 hover:text-blue-800"
+                          to={"/devices-details"}
+                          state={{
+                            device: devices,
+                          }}
+                        >
+                          <Eye size={20} />
+                        </Link>
+                        <button
+                          className="text-red-600 hover:text-red-800"
+                          onClick={() => delete_enroll_devices(devices)}
+                        >
+                          <Trash2 size={20} />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
             </TableBody>
             <TableFooter>
               <TableRow>

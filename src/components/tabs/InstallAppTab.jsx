@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Table,
   TableBody,
@@ -19,13 +19,21 @@ import {
 } from "../ui/table";
 import { Switch } from "../ui/switch";
 import { Button } from "../ui/button";
+import { useEffect } from "react";
+import { fetchApplications } from "@/utilites/store/slices/applicationsSlice";
 
 const InstallAppTab = ({ policyData, setPolicyData }) => {
+  const dispatch = useDispatch();
   const {
     data: apps,
     status,
     error,
   } = useSelector((state) => state.applications);
+
+  useEffect(() => {
+      dispatch(fetchApplications());
+    }, [dispatch]);
+  
 
   return (
     <div>
@@ -88,18 +96,41 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
 
       <div className="mt-6">
         <Table>
-          <TableCaption>A list of your recent invoices.</TableCaption>
+          <TableCaption>A list of your Application.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="text-[#03A9FC] font-bold">Name</TableHead>
               <TableHead className="text-[#03A9FC] font-bold">Version</TableHead>
               <TableHead className="text-[#03A9FC] font-bold">Permission</TableHead>
               <TableHead className="text-[#03A9FC] font-bold">Configuration</TableHead>
-              <TableHead className="text-[#03A9FC] font-bold">Action</TableHead>
+              {/* <TableHead className="text-[#03A9FC] font-bold">Action</TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
+            {
+              apps.map((app) => (
+                <TableRow key={app.id}>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-3">
+                      <Switch   className="data-[state=checked]:bg-[#03A9FC]"/>
+                      <div>
+                        <h1 className="text-lg">{app.app_name}</h1>
+                        <h4 className="text-sm">{app.package_name}</h4>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>{app.version}</TableCell>
+                  <TableCell>
+                    <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC] hover:scale-105 transform transition-all duration-400">Manager</button>
+                  </TableCell>
+                  <TableCell >
+                    <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC]">Manager</button>
+                  </TableCell>
+                </TableRow>
+              ))
+            }
+            {/* <TableRow>
+             
               <TableCell className="font-medium">
                 <div className="flex items-center gap-3">
                   <Switch   className="data-[state=checked]:bg-[#03A9FC]"/>
@@ -116,12 +147,12 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
               <TableCell >
                 <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC]">Manager</button>
               </TableCell>
-              <TableCell className="">
+              {/* <TableCell className="">
                 <button className="text-red-600 hover:text-red-800">
                   <Trash2 size={20} />
                 </button>
-              </TableCell>
-            </TableRow>
+              </TableCell> 
+            </TableRow> */}
           </TableBody>
         </Table>
       </div>

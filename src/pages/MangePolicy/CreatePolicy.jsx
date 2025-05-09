@@ -5,18 +5,18 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
-import enroll from "../assets/enroll.png";
-import SecurityTab from "./tabs/SecurityTab";
+import enroll from "../../assets/enroll.png";
+import SecurityTab from "../../components/tabs/SecurityTab";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import DeviceTab from "./tabs/DeviceTab";
+import DeviceTab from "../../components/tabs/DeviceTab";
 import { resetPolicyData, setPolicyData } from "@/utilites/store/slices/policySlice";
-import NetworkTab from "./tabs/NetworkTab";
-import AppTab from "./tabs/AppTab";
+import NetworkTab from "../../components/tabs/NetworkTab";
+import AppTab from "../../components/tabs/AppTab";
 
 import axios from "axios";
-import InstallAppTab from "./tabs/InstallAppTab";
-import KioskTab from "./tabs/KioskTab";
+import InstallAppTab from "../../components/tabs/InstallAppTab";
+import KioskTab from "../../components/tabs/KioskTab";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Main Page

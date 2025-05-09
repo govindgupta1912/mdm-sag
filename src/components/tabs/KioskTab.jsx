@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import ToggleItems from "../Reuseable_Components/ToggleItem";
 import {
   Select,
@@ -10,21 +11,62 @@ import {
 } from "../ui/select";
 
 const KioskTab = ({ policyData, setPolicyData }) => {
-  const handleSingleAppSelect = (val) => {
+
+  const {
+    data: apps,
+    status,
+    error,
+  } = useSelector((state) => state.applications);
+  console.log("apps", apps);
+
+  // const handleSingleAppSelect = (val) => {
+  //   const transformedApp = {
+  //     title: val.app_name,
+  //     packageName: val.package_name,
+  //     permissionGrants: [],
+  //     managedConfiguration: [],
+  //     downloadUrl: val.download_url,
+  //   };
+  //   setPolicyData((prev) => ({
+  //     ...prev,
+  //     data: {
+  //       ...prev.data,
+  //       kioskPolicy: {
+  //         ...prev.data.kioskPolicy,
+  //         allowedApps: [transformedApp],
+  //         multiApp: false,
+  //         enabled: true,
+  //       },
+  //     },
+  //   }));
+  // };
+
+  const handleSingleAppSelect = (selectedId) => {
+    const selectedApp = apps.find(app => app.id.toString() === selectedId);
+    if (!selectedApp) return;
+  
+    const transformedApp = {
+      title: selectedApp.app_name,
+      packageName: selectedApp.package_name,
+      permissionGrants: [],
+      managedConfiguration: [],
+      downloadUrl: selectedApp.download_url,
+    };
+  
     setPolicyData((prev) => ({
       ...prev,
       data: {
         ...prev.data,
         kioskPolicy: {
           ...prev.data.kioskPolicy,
-          allowedApps: [val],
+          allowedApps: [transformedApp],
           multiApp: false,
           enabled: true,
         },
       },
     }));
   };
-
+  
   const handleToggle = (val) => {
     setPolicyData((prev) => ({
       ...prev,
@@ -39,6 +81,10 @@ const KioskTab = ({ policyData, setPolicyData }) => {
       },
     }));
   };
+
+  console.log("policyData.data.kioskPolicy?.allowedApps?.[0]?.packageName",policyData.data.kioskPolicy?.allowedApps?.[0]?.packageName)
+            
+  
 
   return (
     <div className="space-y-6">
@@ -57,8 +103,13 @@ const KioskTab = ({ policyData, setPolicyData }) => {
           </h2>
         </div>
         <Select
-          value={policyData.data.kioskPolicy?.allowedApps?.[0] || ""}
-          onValueChange={handleSingleAppSelect}
+          //value={policyData.data.kioskPolicy?.allowedApps?.[0]?.packageName|| ""}
+          value={
+            policyData.data.kioskPolicy?.allowedApps?.[0]
+              ? apps.find(app => app.package_name === policyData.data.kioskPolicy.allowedApps[0].packageName)?.id.toString() || ""
+              : ""
+          }
+          onValueChange={(value)=>handleSingleAppSelect(value)}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select an App" />
@@ -66,11 +117,14 @@ const KioskTab = ({ policyData, setPolicyData }) => {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Apps</SelectLabel>
-              <SelectItem value="WhatsApp">WhatsApp</SelectItem>
-              <SelectItem value="Facebook">Facebook</SelectItem>
-              <SelectItem value="Blueberry">Blueberry</SelectItem>
-              <SelectItem value="Grapes">Grapes</SelectItem>
-              <SelectItem value="Pineapple">Pineapple</SelectItem>
+              
+              {
+                apps.map((app)=>(
+                  <SelectItem key={app.id} value={app.id.toString()}>
+                    {app.app_name || "App Name"}
+                  </SelectItem>
+                ))
+              }
             </SelectGroup>
           </SelectContent>
         </Select>
