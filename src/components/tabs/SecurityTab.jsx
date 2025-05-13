@@ -43,7 +43,8 @@ const SecurityTab = ({ policyData, setPolicyData }) => {
 
   return (
     <div className="space-y-6">
-      <div>
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
+        <div>
         <h3 className="text-base font-semibold text-[#1A73E8] mb-2">
           Basic Security Restrictions
         </h3>
@@ -182,6 +183,8 @@ const SecurityTab = ({ policyData, setPolicyData }) => {
           }
         />
       </div>
+      </div>
+     
 
       {/* Password Policy Settings */}
       <Card className="w-full p-4 shadow-md rounded-2xl">

@@ -98,8 +98,7 @@ const DeviceTab = ({ policyData, setPolicyData }) => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-base font-semibold text-[#1A73E8] mb-2">Basic Security Restrictions</h3>
+      <div className="">
 
         <ToggleItems 
           title="Disable Adding Users"

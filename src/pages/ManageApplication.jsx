@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import application from "../assets/application.png";
 import apk from "../assets/apk.png";
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -25,12 +25,14 @@ import axios from "axios";
 
 const ManageApplication = () => {
   const [open, setOpen] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [appTitle, setAppTitle] = useState("");
   const [packageName, setPackageName] = useState("");
   const [version, setVersion] = useState("");
   const [apkFile, setApkFile] = useState(null);
   const [isVpnApp, setIsVpnApp] = useState(false);
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const fileInputRef = useRef(null);
 
   const dispatch = useDispatch();
   const {
@@ -67,12 +69,11 @@ const ManageApplication = () => {
   //     apkFile,
   //   });
   //   console.log("Form Data==========:", formData);
-    
+
   //   toast.success("APP IS ADDED SUCCESSFULLY");
 
   //   // You can replace this console with an API call
   //   //axios.post("/api/upload_app", formData)
-
 
   //     axios.post(`${API_BASE_URL}/api/upload_app``, formData)
   //     .then(() => {
@@ -88,50 +89,84 @@ const ManageApplication = () => {
   // };
 
   console.log("apps=============", apps);
-  
+
   const handleSave = () => {
-  if (!appTitle || !packageName || !version || !apkFile) {
-    toast.error("Please fill in all the fields to add the APK");
-    return;
-  }
+    if (!appTitle || !packageName || !version || !apkFile) {
+      toast.error("Please fill in all the fields to add the APK");
+      return;
+    }
+    setProcessing(true); // Set processing to true when starting the upload
+    const formData = new FormData();
+    formData.append("app_name", appTitle);
+    formData.append("package_name", packageName);
+    formData.append("version", version);
+    formData.append("is_vpn_app", isVpnApp);
+    formData.append("apk_file", apkFile);
 
-  const formData = new FormData();
-  formData.append("app_name", appTitle);
-  formData.append("package_name", packageName);
-  formData.append("version", version);
-  formData.append("is_vpn_app", isVpnApp);
-  formData.append("apk_file", apkFile);
+    console.log("Form Data Contents:");
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
 
-  console.log("Form Data Contents:");
-  for (let [key, value] of formData.entries()) {
-    console.log(`${key}:`, value);
-  }
+    axios
+      .post(`${API_BASE_URL}/api/add_application`, formData)
+      .then((response) => {
+        // toast.success("APP IS ADDED SUCCESSFULLY");
+        // dispatch(fetchApplications()); // refresh the list
+        // setOpen(false); // close the modal
+        console.log("response==========", response);
 
-  axios.post(`${API_BASE_URL}/api/add_application`, formData)
-    .then(() => {
-      toast.success("APP IS ADDED SUCCESSFULLY");
-      dispatch(fetchApplications()); // refresh the list
-      setOpen(false); // close the modal
-    })
-    .catch((error) => {
-      console.error("Upload failed:", error);
-      toast.error("Failed to add app");
-    });
-};
+        if (response.data.status === true) {
+          toast.success("APP IS ADDED SUCCESSFULLY");
+          dispatch(fetchApplications());
+          setOpen(false);
 
-const deleteApp = async (id) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/api/delete_application`,
-      {"id": id});
-    console.log("Delete response:", response);
-    toast.success("App deleted successfully");
-    dispatch(fetchApplications()); // refresh the list
-  } catch (error) {
-    console.error("Delete failed:", error);
-    toast.error("Failed to delete app");
-  }
-}
+          setAppTitle("");
+    setPackageName("");
+    setVersion("");
+    setApkFile(null);
+    setIsVpnApp(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+        } else {
+          toast.error(response.data.message || "Failed to add app");
+        }
+      })
+      .catch((error) => {
+        console.error("Upload failed:", error);
+        toast.error("Failed to add app");
+      })
+      .finally(() => {
+        setProcessing(false); // Set processing to false when done
+        // // Reset form fields
+        // setAppTitle("");
+        // setPackageName("");
+        // setVersion("");
+        // setApkFile(null);
+        // setIsVpnApp(false);
+        //setOpen(false); // close the modal
+      });
+  };
 
+  const deleteApp = async (app_id) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/delete_application`,
+        { app_id: app_id }
+      );
+      console.log("Delete response:", response);
+      if (response.data.status) {
+        toast.success("App deleted successfully");
+        dispatch(fetchApplications());
+      } else {
+        toast.error("Failed to delete app");
+      } // refresh the list
+    } catch (error) {
+      console.error("Delete failed:", error);
+      toast.error("Failed to delete app");
+    }
+  };
 
   return (
     <div>
@@ -153,7 +188,79 @@ const deleteApp = async (id) => {
             </Button>
           </DialogTrigger>
 
-          <DialogContent className="sm:max-w-[500px] rounded-2xl shadow-2xl p-6">
+          <DialogContent className="sm:max-w-[500px] rounded-2xl shadow-2xl p-6 ">
+            {processing && (
+              <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50">
+               
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                  <radialGradient
+                    id="a1"
+                    cx=".66"
+                    fx=".66"
+                    cy=".3125"
+                    fy=".3125"
+                    gradientTransform="scale(1.5)"
+                  >
+                    <stop offset="0" stop-color="#091C35"></stop>
+                    <stop
+                      offset=".3"
+                      stop-color="#091C35"
+                      stop-opacity=".9"
+                    ></stop>
+                    <stop
+                      offset=".6"
+                      stop-color="#091C35"
+                      stop-opacity=".6"
+                    ></stop>
+                    <stop
+                      offset=".8"
+                      stop-color="#091C35"
+                      stop-opacity=".3"
+                    ></stop>
+                    <stop
+                      offset="1"
+                      stop-color="#091C35"
+                      stop-opacity="0"
+                    ></stop>
+                  </radialGradient>
+                  <circle
+                    transform-origin="center"
+                    fill="none"
+                    stroke="url(#a1)"
+                    stroke-width="7"
+                    stroke-linecap="round"
+                    stroke-dasharray="200 1000"
+                    stroke-dashoffset="0"
+                    cx="100"
+                    cy="100"
+                    r="20"
+                  >
+                    <animateTransform
+                      type="rotate"
+                      attributeName="transform"
+                      calcMode="spline"
+                      dur="1.8"
+                      values="360;0"
+                      keyTimes="0;1"
+                      keySplines="0 0 1 1"
+                      repeatCount="indefinite"
+                    ></animateTransform>
+                  </circle>
+                  <circle
+                    transform-origin="center"
+                    fill="none"
+                    opacity=".2"
+                    stroke="#091C35"
+                    stroke-width="7"
+                    stroke-linecap="round"
+                    cx="100"
+                    cy="100"
+                    r="20"
+                  ></circle>
+                </svg>
+              </div>
+            )}
+
             <DialogHeader>
               <DialogTitle className="text-2xl font-semibold">
                 Add New Application
@@ -228,6 +335,7 @@ const deleteApp = async (id) => {
                     type="file"
                     id="apkFile"
                     accept=".apk"
+                    ref={fileInputRef}
                     onChange={(e) => setApkFile(e.target.files[0])}
                     className="hidden"
                   />
@@ -250,6 +358,7 @@ const deleteApp = async (id) => {
               <Button
                 onClick={handleSave}
                 className="w-full text-base py-2 rounded-xl"
+                disabled={processing}
               >
                 Save Application
               </Button>
@@ -278,41 +387,39 @@ const deleteApp = async (id) => {
       </div> */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 p-6">
-        {status === "loading" && (
-          Array(12).fill().map((_,index)=>(
-            <div className="flex flex-col space-y-3">
-            <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px]" />
-              <Skeleton className="h-4 w-[200px]" />
-            </div>
-          </div>
-          ))
-          
-
-
-           
-          
-          
-        )}
+        {status === "loading" &&
+          Array(12)
+            .fill()
+            .map((_, index) => (
+              <div className="flex flex-col space-y-3">
+                <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-[200px]" />
+                </div>
+              </div>
+            ))}
         {status === "failed" && <p>Error: {error}</p>}
         {status === "succeeded" &&
           apps.map((app, index) => (
             <div key={index}>
               <div className="flex flex-col items-center p-4 bg-white">
-                <img src={apk} alt="" />
-                <h1 className="text-xl font-bold">{app.app_name
-                }</h1>
+                <img
+                  className="h-20 w-20 rounded-full"
+                  src={app.icon ? `data:image/png;base64,${app.icon}` : apk}
+                  alt=""
+                />
+                <h1 className="text-xl font-bold">{app.app_name}</h1>
                 <h2 className="text-[#767676]">{app.package_name}</h2>
-                <h3 className="text-[#767676]">{app.version}</h3>
+                <h3 className="text-[#767676]">{app.version_name}</h3>
               </div>
               <div className="flex items-center">
-                <button className="bg-green-600 text-white p-4 h-10 w-44 flex items-center justify-center hover:bg-green-800"
-                >
+                <button className="bg-green-600 text-white p-4 h-10 w-44 flex items-center justify-center hover:bg-green-800">
                   Update
                 </button>
-                <button className="bg-red-600 text-white p-4 h-10 w-44 flex items-center justify-center hover:bg-red-800"
-                onClick={()=>deleteApp(app.id)}
+                <button
+                  className="bg-red-600 text-white p-4 h-10 w-44 flex items-center justify-center hover:bg-red-800"
+                  onClick={() => deleteApp(app.app_id)}
                 >
                   Delete
                 </button>

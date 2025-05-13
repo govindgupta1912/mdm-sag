@@ -9,9 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { use } from "react";
 
 const KioskTab = ({ policyData, setPolicyData }) => {
-
   const {
     data: apps,
     status,
@@ -42,9 +42,9 @@ const KioskTab = ({ policyData, setPolicyData }) => {
   // };
 
   const handleSingleAppSelect = (selectedId) => {
-    const selectedApp = apps.find(app => app.id.toString() === selectedId);
+    const selectedApp = apps.find((app) => app.id.toString() === selectedId);
     if (!selectedApp) return;
-  
+
     const transformedApp = {
       title: selectedApp.app_name,
       packageName: selectedApp.package_name,
@@ -52,7 +52,7 @@ const KioskTab = ({ policyData, setPolicyData }) => {
       managedConfiguration: [],
       downloadUrl: selectedApp.download_url,
     };
-  
+
     setPolicyData((prev) => ({
       ...prev,
       data: {
@@ -63,28 +63,70 @@ const KioskTab = ({ policyData, setPolicyData }) => {
           multiApp: false,
           enabled: true,
         },
-      },
-    }));
-  };
-  
-  const handleToggle = (val) => {
-    setPolicyData((prev) => ({
-      ...prev,
-      data: {
-        ...prev.data,
-        kioskPolicy: {
-          ...prev.data.kioskPolicy,
-          multiApp: val,
-          enabled: false,
-          allowedApps: val ? [] : prev.data.kioskPolicy.allowedApps,
-        },
+        applications: [], // Update this line to set the applications array
       },
     }));
   };
 
-  console.log("policyData.data.kioskPolicy?.allowedApps?.[0]?.packageName",policyData.data.kioskPolicy?.allowedApps?.[0]?.packageName)
-            
-  
+  // const handleToggle = (val) => {
+  //   setPolicyData((prev) => ({
+  //     ...prev,
+  //     data: {
+  //       ...prev.data,
+  //       kioskPolicy: {
+  //         ...prev.data.kioskPolicy,
+  //         multiApp: val,
+  //         enabled: false,
+  //         allowedApps: val ? [] : prev.data.kioskPolicy.allowedApps,
+  //       },
+  //        applications:[],
+  //     },
+  //   }));
+  // };
+
+  const handleToggle = (val) => {
+    setPolicyData((prev) => {
+      const prevKiosk = prev.data.kioskPolicy;
+      const prevAllowed = prevKiosk.allowedApps || [];
+      const prevApps = prev.data.applications || [];
+
+      return {
+        ...prev,
+        data: {
+          ...prev.data,
+          kioskPolicy: {
+            ...prevKiosk,
+            multiApp: val,
+            enabled: true,
+            allowedApps: val ? [...prevApps] : [],
+          },
+          applications: val ? [] : [...prevAllowed],
+        },
+      };
+    });
+  };
+  // const handleToggle = (val) => {
+  //   setPolicyData((prev) => {
+  //     return {
+  //       ...prev,
+  //       data: {
+  //         ...prev.data,
+  //         kioskPolicy: {
+  //           ...prev.data.kioskPolicy,
+  //           multiApp: val,
+  //           enabled: val, // Optional: enable if needed
+  //           allowedApps: val ? [] : prev.data.applications || [],
+  //         },
+  //         applications: val ? prev.data.kioskPolicy.allowedApps || [] : [],
+  //       },
+  //     };
+  //   });
+  // };
+
+  console.log(
+    "policyData.data.kioskPolicy?.allowedApps?.[0]?.packageName",
+    policyData.data.kioskPolicy?.allowedApps?.[0]?.packageName
+  );
 
   return (
     <div className="space-y-6">
@@ -103,13 +145,37 @@ const KioskTab = ({ policyData, setPolicyData }) => {
           </h2>
         </div>
         <Select
-          //value={policyData.data.kioskPolicy?.allowedApps?.[0]?.packageName|| ""}
           value={
+            !policyData.data.kioskPolicy?.multiApp &&
             policyData.data.kioskPolicy?.allowedApps?.[0]
-              ? apps.find(app => app.package_name === policyData.data.kioskPolicy.allowedApps[0].packageName)?.id.toString() || ""
+              ? apps
+                  .find(
+                    (app) =>
+                      app.package_name ===
+                      policyData.data.kioskPolicy.allowedApps[0].packageName
+                  )
+                  ?.id.toString() || ""
               : ""
           }
-          onValueChange={(value)=>handleSingleAppSelect(value)}
+          // onValueChange={(value)=>handleSingleAppSelect(value)}
+          onValueChange={(value) => {
+            if (value === "none") {
+              // Clear selection
+              setPolicyData((prev) => ({
+                ...prev,
+                data: {
+                  ...prev.data,
+                  kioskPolicy: {
+                    ...prev.data.kioskPolicy,
+                    allowedApps: [],
+                    enabled: false,
+                  },
+                },
+              }));
+            } else {
+              handleSingleAppSelect(value);
+            }
+          }}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select an App" />
@@ -117,14 +183,12 @@ const KioskTab = ({ policyData, setPolicyData }) => {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Apps</SelectLabel>
-              
-              {
-                apps.map((app)=>(
-                  <SelectItem key={app.id} value={app.id.toString()}>
-                    {app.app_name || "App Name"}
-                  </SelectItem>
-                ))
-              }
+              <SelectItem value="none">-- None --</SelectItem>
+              {apps.map((app) => (
+                <SelectItem key={app.id} value={app.id.toString()}>
+                  {app.app_name || "App Name"}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>
