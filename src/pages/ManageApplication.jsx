@@ -31,8 +31,10 @@ const ManageApplication = () => {
   const [version, setVersion] = useState("");
   const [apkFile, setApkFile] = useState(null);
   const [isVpnApp, setIsVpnApp] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [edittingApp, setEdittingApp] = useState(null);
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const dispatch = useDispatch();
   const {
@@ -89,9 +91,19 @@ const fileInputRef = useRef(null);
   // };
 
   console.log("apps=============", apps);
+  const openeditDialog = (app) => {
+    setIsEditMode(true);
+    setEdittingApp(app);
+    setAppTitle(app.app_name);
+    setPackageName(app.package_name);
+    setVersion(app.version_name);
+    setIsVpnApp(app.is_vpn_app);
+    setApkFile(null); // Reset the file input
+    setOpen(true);
+  };
 
   const handleSave = () => {
-    if (!appTitle || !packageName || !version || !apkFile) {
+    if (!appTitle || !packageName || !version || (!apkFile && !isEditMode)) {
       toast.error("Please fill in all the fields to add the APK");
       return;
     }
@@ -101,15 +113,23 @@ const fileInputRef = useRef(null);
     formData.append("package_name", packageName);
     formData.append("version", version);
     formData.append("is_vpn_app", isVpnApp);
-    formData.append("apk_file", apkFile);
 
+    if (apkFile) {
+      formData.append("apk_file", apkFile);
+    }
+    if (isEditMode && edittingApp) {
+      formData.append("app_id", edittingApp.app_id);
+    }
     console.log("Form Data Contents:");
     for (let [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
 
+    const url = isEditMode
+      ? `${API_BASE_URL}/api/update_application`
+      : `${API_BASE_URL}/api/add_application`;
     axios
-      .post(`${API_BASE_URL}/api/add_application`, formData)
+      .post(url, formData)
       .then((response) => {
         // toast.success("APP IS ADDED SUCCESSFULLY");
         // dispatch(fetchApplications()); // refresh the list
@@ -117,25 +137,21 @@ const fileInputRef = useRef(null);
         console.log("response==========", response);
 
         if (response.data.status === true) {
-          toast.success("APP IS ADDED SUCCESSFULLY");
+          toast.success(
+            isEditMode
+              ? "APP IS UPDATED SUCCESSFULLY"
+              : "APP IS ADDED SUCCESSFULLY"
+          );
           dispatch(fetchApplications());
           setOpen(false);
-
-          setAppTitle("");
-    setPackageName("");
-    setVersion("");
-    setApkFile(null);
-    setIsVpnApp(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+          resetForm(); // Reset form fields
         } else {
           toast.error(response.data.message || "Failed to add app");
         }
       })
       .catch((error) => {
         console.error("Upload failed:", error);
-        toast.error("Failed to add app");
+        toast.error("Failed to Process the request");
       })
       .finally(() => {
         setProcessing(false); // Set processing to false when done
@@ -147,6 +163,19 @@ const fileInputRef = useRef(null);
         // setIsVpnApp(false);
         //setOpen(false); // close the modal
       });
+  };
+
+  const resetForm = () => {
+    setAppTitle("");
+    setPackageName("");
+    setVersion("");
+    setApkFile(null);
+    setIsVpnApp(false);
+    setIsEditMode(false);
+    setEdittingApp(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const deleteApp = async (app_id) => {
@@ -177,7 +206,15 @@ const fileInputRef = useRef(null);
         </div>
         {/* ADD Application Modal*/}
 
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog
+          open={open}
+          onOpenChange={(isOpen) => {
+            setOpen(isOpen);
+            if (!isOpen) {
+              resetForm();
+            }
+          }}
+        >
           <DialogTrigger asChild>
             <Button
               variant="outline"
@@ -188,10 +225,9 @@ const fileInputRef = useRef(null);
             </Button>
           </DialogTrigger>
 
-          <DialogContent className="sm:max-w-[500px] rounded-2xl shadow-2xl p-6 ">
+          <DialogContent className="w-full sm:max-w-[500px] rounded-2xl shadow-2xl p-6 ">
             {processing && (
               <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50">
-               
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                   <radialGradient
                     id="a1"
@@ -385,47 +421,59 @@ const fileInputRef = useRef(null);
           </div>
         </div>
       </div> */}
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+          {/* App Cards */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 p-6">
-        {status === "loading" &&
-          Array(12)
-            .fill()
-            .map((_, index) => (
-              <div className="flex flex-col space-y-3">
-                <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-[250px]" />
-                  <Skeleton className="h-4 w-[200px]" />
+          {status === "loading" &&
+            Array(12)
+              .fill()
+              .map((_, index) => (
+                <div className="flex flex-col space-y-3">
+                  <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                  </div>
+                </div>
+              ))}
+          {status === "failed" && <p>Error: {error}</p>}
+          {status === "succeeded" &&
+            apps.map((app, index) => (
+              <div key={index}>
+                <div className="flex flex-col items-center p-4 bg-white  shadow-md max-w-sm w-full">
+                  <img
+                    className="h-20 w-20 sm:h-20 sm:w-20 rounded-full"
+                    src={app.icon ? `data:image/png;base64,${app.icon}` : apk}
+                    alt=""
+                  />
+                  <h1 className="text-lg sm:text-xl font-bold">
+                    {app.app_name}
+                  </h1>
+                  <h2 className="text-sm sm:text-lg text-[#767676]   truncate max-w-full overflow-hidden text-center">
+                    {app.package_name}
+                  </h2>
+                  <h3 className="text-sm sm:text-lg text-[#767676]  truncate max-w-full overflow-hidden text-center">
+                    {app.version_name}
+                  </h3>
+                </div>
+                <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-2 ">
+                  <button
+                    className="bg-green-600 text-white px-4 py-2 w-full sm:w-1/2 rounded hover:bg-green-800"
+                    onClick={() => openeditDialog(app)}
+                  >
+                    Update
+                  </button>
+                  <button
+                    className="bg-red-600 text-white px-4 py-2 w-full sm:w-1/2 rounded hover:bg-red-800"
+                    onClick={() => deleteApp(app.app_id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
-        {status === "failed" && <p>Error: {error}</p>}
-        {status === "succeeded" &&
-          apps.map((app, index) => (
-            <div key={index}>
-              <div className="flex flex-col items-center p-4 bg-white">
-                <img
-                  className="h-20 w-20 rounded-full"
-                  src={app.icon ? `data:image/png;base64,${app.icon}` : apk}
-                  alt=""
-                />
-                <h1 className="text-xl font-bold">{app.app_name}</h1>
-                <h2 className="text-[#767676]">{app.package_name}</h2>
-                <h3 className="text-[#767676]">{app.version_name}</h3>
-              </div>
-              <div className="flex items-center">
-                <button className="bg-green-600 text-white p-4 h-10 w-44 flex items-center justify-center hover:bg-green-800">
-                  Update
-                </button>
-                <button
-                  className="bg-red-600 text-white p-4 h-10 w-44 flex items-center justify-center hover:bg-red-800"
-                  onClick={() => deleteApp(app.app_id)}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+        </div>
       </div>
     </div>
   );

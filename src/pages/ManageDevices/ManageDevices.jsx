@@ -113,6 +113,7 @@ const ManageDevices = () => {
   const [selectedPolicyId, setSelectedPolicyId] = useState(null);
   const [reloadDevices, setReloadDevices] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
   const isAllSelected = selectedIds.length === devicesList?.length;
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -207,6 +208,36 @@ const ManageDevices = () => {
     }
     console.log("Selected Policy ID:", selectedPolicyId);
     console.log("Selected Device IDs:", selectedIds);
+    setActiveModal(null);
+    setReloadDevices((prev) => !prev);
+  };
+  // Function to send notification to selected devices
+  const sendNotificationToDevice = async () => {
+    
+    if (!message) {
+      toast.error("Please type a message to send.");
+      return;
+    }
+    try {
+      const sendNotificationResponse = await axios.post(
+        `${API_BASE_URL}/api/notification_device`,
+        {
+          device_ids: selectedIds,
+          message: message,
+        }
+      );
+      console.log("sendNotificationResponse", sendNotificationResponse);
+      if (sendNotificationResponse.data.status) {
+        toast.success("Notification sent successfully");
+      } else {
+        toast.error("Failed to send notification");
+      }
+    } catch (error) { 
+      console.log("Failed to send notification", error);
+      toast.error("Failed to send notification");
+    }
+    console.log("Selected Device IDs:", selectedIds);
+    setMessage("");
     setActiveModal(null);
     setReloadDevices((prev) => !prev);
   };
@@ -326,12 +357,14 @@ const ManageDevices = () => {
           </DialogHeader>
           <div className="grid w-full gap-1.5">
             <Label htmlFor="message">Your message</Label>
-            <Textarea placeholder="Type your message here." id="message" />
+            <Textarea placeholder="Type your message here." id="message" 
+            onChange={(e) => setMessage(e.target.value)}
+            />
           </div>
 
           <DialogFooter>
             <Button onClick={() => setActiveModal(null)}>Cancel</Button>
-            <Button>Send</Button>
+            <Button onClick={sendNotificationToDevice}>Send</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

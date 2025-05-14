@@ -97,7 +97,7 @@ const KioskTab = ({ policyData, setPolicyData }) => {
           kioskPolicy: {
             ...prevKiosk,
             multiApp: val,
-            enabled: true,
+            enabled: val,
             allowedApps: val ? [...prevApps] : [],
           },
           applications: val ? [] : [...prevAllowed],

@@ -116,14 +116,18 @@ const CreatePolicy = () => {
     <div className="w-full min-h-screen bg-white">
       <div className="w-full ">
         {/* Header */}
-        <div className="bg-black flex justify-between items-center px-4 w-full  ">
+        {/* <div className="bg-black flex justify-between items-center px-4 w-full  "> */}
+          <div className="bg-black flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 w-full space-y-2 sm:space-y-0">
+
           <div className="h-20 text-white text-2xl font-bold p-6 flex gap-2 items-center">
             <img src={enroll} className="w-7 h-7" />
             Manage Policy
           </div>
           <button
             onClick={incomingPolicy ? Update_Policy : Create_Policy}
-            className="w-30 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md shadow-sm px-4"
+            // className="w-30 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md shadow-sm px-4"
+             className="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm w-full sm:w-auto"
+
           >
             <Link to={"/policy"}>
               {incomingPolicy ? "Update Policy" : "Create Policy "}
@@ -133,6 +137,8 @@ const CreatePolicy = () => {
 
         {/* Body */}
         <div className="p-6 ">
+          {/* <div className="p-4 sm:p-6 max-w-screen-xl mx-auto"> */}
+
           {/* Policy Name Input */}
           {!incomingPolicy ? (
             <div className="mb-6 max-w-md">
@@ -155,7 +161,9 @@ const CreatePolicy = () => {
               />
             </div>
           ) : (
-            <div className="flex justify-around border border-gray-300 p-6 rounded-md mb-4">
+            // <div className="flex justify-around border border-gray-300 p-6 rounded-md mb-4">
+              <div className="flex flex-col md:flex-row justify-around gap-4 border border-gray-300 p-4 rounded-md mb-4">
+
               <div className="flex flex-col">
                 <span className="font-bold">Policy ID:</span>
                 {localPolicy.id}
@@ -177,7 +185,11 @@ const CreatePolicy = () => {
 
           {/* Tabs */}
           <Tabs defaultValue="security" className="w-full flex flex-col">
-            <TabsList className="grid grid-cols-6 gap-2 mb-4 w-[1400px] ">
+            {/* <TabsList className="grid grid-cols-6 gap-2 mb-4 w-[1400px] "> */}
+              <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mb-4 w-full  h-14 overflow-x-auto">
+                {/* <TabsList className="flex overflow-x-auto gap-2 mb-4 w-full"> */}
+
+
               {[
                 "security",
                 "device",
@@ -205,6 +217,8 @@ const CreatePolicy = () => {
             {/* Tab Contents */}
             <TabsContent value="security">
               <Card className="p-6 max-w-7xl border-none">
+                {/* <Card className="p-4 w-full max-w-5xl mx-auto border-none shadow-none"> */}
+
                 <SecurityTab
                   policyData={localPolicy}
                   setPolicyData={setLocalPolicy}

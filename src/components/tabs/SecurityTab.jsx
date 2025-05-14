@@ -54,6 +54,7 @@ const SecurityTab = ({ policyData, setPolicyData }) => {
           value={policyData.data.restrictions.locationSharingDisabled}
           onChange={(val) =>
             updateNestedPolicy("restrictions", "locationSharingDisabled", val)
+
           }
         />
         <ToggleItems
@@ -169,7 +170,7 @@ const SecurityTab = ({ policyData, setPolicyData }) => {
         <ToggleItems
           title="Disable voice and video calling"
           description="Blocks apps from making voice or video calls."
-          value={policyData.data.restrictions.disableCallingApps}
+          value={policyData.data.controlConfig.disableCallingApps}
           onChange={(val) =>
             updateNestedPolicy("controlConfig", "disableCallingApps", val)
           }
