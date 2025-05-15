@@ -244,6 +244,7 @@ const SecurityTab = ({ policyData, setPolicyData }) => {
                     <SelectItem value="COMPLEX">
                       Complex (symbols + cases)
                     </SelectItem>
+                    <SelectItem value="PASSWORD_QUALITY_UNSPECIFIED">None</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

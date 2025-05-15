@@ -8,13 +8,13 @@ const AppTab=({policyData,setPolicyData})=>{
         {
             title: "Disable Apps Installation",
             description: "Prevents apps from being installed by user.",
-            key: "disableAppInstall",
+            key: "installAppsDisabled",
             section: "restrictions",
           },
           {
             title: "Disable Apps Uninstallation",
             description: "Prevents apps from being uninstalled by user.",
-            key: "disableAppUninstall",
+            key: "uninstallAppsDisabled",
             section: "restrictions",
           },
     ]

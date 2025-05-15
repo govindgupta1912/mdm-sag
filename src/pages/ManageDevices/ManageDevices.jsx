@@ -46,6 +46,12 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
 import axios from "axios";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const ManageDevices = () => {
   // const devicesList = [
@@ -144,6 +150,9 @@ const ManageDevices = () => {
     fetch_Device_List();
   }, [reloadDevices]);
 
+
+  console.log("devicesList", devicesList);
+  
   const delete_enroll_devices = async (devices) => {
     try {
       const delete_enroll_devices_response = await axios.post(
@@ -213,7 +222,6 @@ const ManageDevices = () => {
   };
   // Function to send notification to selected devices
   const sendNotificationToDevice = async () => {
-    
     if (!message) {
       toast.error("Please type a message to send.");
       return;
@@ -232,7 +240,7 @@ const ManageDevices = () => {
       } else {
         toast.error("Failed to send notification");
       }
-    } catch (error) { 
+    } catch (error) {
       console.log("Failed to send notification", error);
       toast.error("Failed to send notification");
     }
@@ -266,6 +274,269 @@ const ManageDevices = () => {
     setActiveModal(type);
   };
 
+
+//   const flattenDeviceData = (device) => ({
+//   device_id: device?.device_id || "",
+//   model: device.model || "",
+//   manufacturer: device.manufacturer  || "",
+//   android_version: device.android_version || "",
+//   api_level: device.api_level   || "",
+//   cpu: device.cpu   || "",
+//   gpu: device.gpu || "",
+//   architecture: device.architecture || "",
+//   total_ram: device.total_ram || "",
+//   total_storage: device.total_storage || "",
+//   kernel_version: device.kernel_version || "",
+//   security_patch: device.security_patch   || "N/A",
+//   serial_no: device.serial_no || "",
+//   accelerometer: device.accelerometer || "",
+//   gyroscope: device.gyroscope || "",
+//   magnetometer: device.magnetometer || "",
+//   proximity: device.proximity  || "",
+//   fingerprint: device.fingerprint || "",
+//   camera: device.camera || "",
+//   microphone: device.microphone || "",
+//   gps: device.gps || "",
+//   encryption_status: device.encryption_status || "",
+//   is_registered: device.is_registered ? "Yes" : "No",
+//   policy_id: device.policy_id || "",
+//   policy_name: device.policy_name || "",
+//   policy_version: device.policy_version || "",
+//   wifi_ssid: device.wifi_info?.ssid || "",
+//   wifi_mac: device.wifi_info?.mac || "",
+//   wifi_bssid: device.wifi_info?.bssid || "",
+//   wifi_enabled: device.wifi_info?.enabled || "",
+//   wifi_state: device.wifi_info?.state || "",
+//   network_operator: device.network_info?.operator || "",
+//   network_in_service: device.network_info?.in_service || "",
+//   network_type: device.network_info?.network_type || "",
+//   signal_strength: device.network_info?.signal_strength || "",
+//   applications_count: device.application?.length || 0,
+// });
+const flattenDeviceData = (device) => ({
+ 
+  MODEL: device?.model || "",
+  MANUFACTURER: device?.manufacturer || "",
+  "ANDROID VERSION": device?.android_version || "",
+  "API LEVEL": device?.api_level || "",
+  // cpu: device?.cpu || "",
+  //gpu: device?.gpu || "",
+  ARCHITECTURE: device?.architecture || "",
+  "TOTAL RAM": device?.total_ram || "",
+  "TOTAL STORAGE": device?.total_storage || "",
+  // kernel_version: device?.kernel_version || "",
+  // security_patch: device?.security_patch || "N/A",
+    "SERIAL NO": device?.serial_no || "",
+  // accelerometer: device?.accelerometer || "",
+  // gyroscope: device?.gyroscope || "",
+  // magnetometer: device?.magnetometer || "",
+  // proximity: device?.proximity || "",
+  // fingerprint: device?.fingerprint || "",
+  // camera: device?.camera || "",
+  // microphone: device?.microphone || "",
+  // gps: device?.gps || "",
+  // encryption_status: device?.encryption_status || "",
+  // is_registered: device?.is_registered ? "Yes" : "No",
+    
+     "POLICY NAME": device?.policy_name || "",
+     "POLICY VERSION": device?.policy_version || "",
+ 
+});
+
+
+ console.log("flattenedData", flattenDeviceData(devicesList[0]));
+  
+console.log("deviceList=======",devicesList[0]);
+
+
+  // const exportToPDF = (data, fileName = "data.pdf") => {
+  //   const doc = new jsPDF();
+  //   const headers = [Object.keys(data[0])];
+  //   const rows = data.map((obj) => Object.values(obj));
+  //   doc.autoTable({
+  //     head: headers,
+  //     body: rows,
+  //     startY: 10,
+  //     styles: { fontSize: 7 },
+  //   });
+  //   doc.save(fileName);
+  // };
+
+//   const exportToPDF = async (data, fileName = "data.pdf") => {
+//   const jsPDFModule = await import("jspdf");
+//   const jsPDF = jsPDFModule.default;
+//   await import("jspdf-autotable");
+
+//   const doc = new jsPDF();
+//   const headers = [Object.keys(data[0])];
+//   const rows = data.map((obj) => Object.values(obj));
+
+//   doc.autoTable({
+//     head: headers,
+//     body: rows,
+//     startY: 10,
+//     // styles: { fontSize: 7 },
+//      styles: {
+//           cellPadding: 3, // Padding for cells
+//           lineColor: [44, 62, 80], // Border color (RGB)
+//           lineWidth: 0.1, // Border width
+//         },
+//         headStyles: {
+//           fillColor: [52, 73, 94], // Header background color
+//           textColor: 255, // Header text color
+//           halign: "center", // Center align header text
+//           lineWidth: 0.5, // Border width for header
+//         },
+//         bodyStyles: {
+//           lineColor: [44, 62, 80], // Row border color
+//           lineWidth: 0.1, // Border width for rows
+//         },
+//         alternateRowStyles: {
+//           fillColor: [240, 240, 240], // Background color for alternate rows
+//         },
+      
+//   });
+
+//   doc.save(fileName);
+// };
+
+const exportToPDF = async (data, fileName = "devices.pdf") => {
+  const jsPDFModule = await import("jspdf");
+  const jsPDF = jsPDFModule.default;
+  const autoTable = (await import("jspdf-autotable")).default;
+
+  const doc = new jsPDF("landscape"); // 👈 use landscape for wide tables
+
+  // Add a title
+  doc.setFontSize(16);
+  doc.text("Device List", 14, 14);
+
+  // Extract headers and rows
+  const headers = Object.keys(data[0] || {});
+  const rows = data.map((row) => headers.map((key) => row[key]));
+
+  // Configure the table
+  // autoTable(doc, {
+  //   startY: 20,
+  //   head: [headers],
+  //   body: rows,
+  //   styles: {
+  //     fontSize: 8,
+  //     cellPadding: 3,
+  //     halign: "left",
+  //     valign: "middle",
+  //   },
+  //   headStyles: {
+  //     fillColor: [52, 73, 94],
+  //     textColor: 255,
+  //     halign: "center",
+  //   },
+  //   alternateRowStyles: {
+  //     fillColor: [245, 245, 245],
+  //   },
+  //   columnStyles: {
+  //     // Use fixed widths for key columns to avoid vertical wrapping
+  //     0: { cellWidth: 40 }, // device_id
+  //     1: { cellWidth: 20 }, // model
+  //     2: { cellWidth: 30 }, // manufacturer
+  //     3: { cellWidth: 20 }, // android_version
+  //     4: { cellWidth: 20 }, // api_level
+  //     5: { cellWidth: 30 }, // cpu
+  //     6: { cellWidth: 30 }, // architecture
+  //     7: { cellWidth: 20 }, // total_ram
+  //     8: { cellWidth: 20 }, // total_storage
+  //     9: { cellWidth: 30 }, // kernel_version
+  //     10: { cellWidth: 30 }, // serial_no
+  //     11: { cellWidth: 30 }, // policy_id
+  //     12: { cellWidth: 30 }, // policy_name
+  //     13: { cellWidth: 30 }, // policy_version
+  //     // Add more columns as needed
+  //     // All others can auto-fit or set custom widths similarly...
+  //   },
+  //   didDrawPage: (data) => {
+  //     // Footer or page number if needed
+  //     const pageCount = doc.internal.getNumberOfPages();
+  //     doc.setFontSize(10);
+  //     doc.text(`Page ${pageCount}`, doc.internal.pageSize.getWidth() - 20, doc.internal.pageSize.getHeight() - 10);
+  //   },
+  // });
+
+  autoTable(doc, {
+  head: [headers],
+  body: rows,
+  startY: 20,
+  styles: {
+    fontSize: 10,
+    cellPadding: 1,
+  },
+  headStyles: {
+     lineColor: [55, 75, 96],
+    lineWidth: 0.1,
+    fillColor: [52, 73, 94],
+    textColor: 255,
+    halign: "center",
+  },
+  bodyStyles: {
+    lineColor: [44, 62, 80],
+    lineWidth: 0.1,
+    cellPadding: 3,
+    halign: "center",
+  },
+  alternateRowStyles: {
+    fillColor: [240, 240, 240],
+    cellPadding: 3,
+  },
+  didDrawPage: (data) => {
+      // Footer or page number if needed
+      const pageCount = doc.internal.getNumberOfPages();
+      doc.setFontSize(10);
+      doc.text(`Page ${pageCount}`, doc.internal.pageSize.getWidth() - 20, doc.internal.pageSize.getHeight() - 10);
+    },
+  horizontalPageBreak: false,
+ // horizontalPageBreakRepeat: 0, // repeat headers
+});
+
+
+  doc.save(fileName);
+};
+
+
+  const handelExportPdf = () => {
+    const flatData = devicesList.map(flattenDeviceData);
+    exportToPDF(flatData, "devices.pdf");
+  };
+
+
+  
+
+const exportToExcel = (data, fileName = "devices.xlsx") => {
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Devices");
+
+  const excelBuffer = XLSX.write(workbook, {
+    bookType: "xlsx",
+    type: "array",
+  });
+
+  const dataBlob = new Blob([excelBuffer], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+
+  saveAs(dataBlob, fileName);
+};
+
+
+  const handelExportToExcel = () => {
+    // const flatData = devicesList.map(flattenDeviceData);
+    // const worksheet = XLSX.utils.json_to_sheet(flatData); 
+    // const workbook = XLSX.utils.book_new();
+    // XLSX.utils.book_append_sheet(workbook, worksheet, "Devices");
+    // XLSX.writeFile(workbook, "devices.xlsx");
+    const flatData = devicesList.map(flattenDeviceData);
+  exportToExcel(flatData, "devices.xlsx");
+  }
   return (
     <>
       {/* Change devices Modal */}
@@ -357,8 +628,10 @@ const ManageDevices = () => {
           </DialogHeader>
           <div className="grid w-full gap-1.5">
             <Label htmlFor="message">Your message</Label>
-            <Textarea placeholder="Type your message here." id="message" 
-            onChange={(e) => setMessage(e.target.value)}
+            <Textarea
+              placeholder="Type your message here."
+              id="message"
+              onChange={(e) => setMessage(e.target.value)}
             />
           </div>
 
@@ -415,6 +688,18 @@ const ManageDevices = () => {
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
+          <Button
+            className="border border-white text-white px-4 py-2 rounded-md cursor-pointer hover:bg-white hover:text-black transition duration-200"
+            onClick={handelExportPdf}
+          >
+            PDF
+          </Button>
+          <Button className="border border-white text-white px-4 py-2 rounded-md cursor-pointer hover:bg-white hover:text-black transition duration-200"
+          
+            onClick={handelExportToExcel}
+          >
+            EXCEL
+          </Button>
         </div>
 
         <div className="overflow-x-auto w-full p-4">

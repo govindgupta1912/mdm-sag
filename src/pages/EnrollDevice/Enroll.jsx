@@ -159,7 +159,7 @@ const Enroll = () => {
               : "hover:shadow-lg hover:bg-sky-700 hover:scale-105 transform"
           }`}
           onClick={permission}
-          //disabled={step !== 1}
+          disabled={step !== 1}
         >
           Allow
         </button>
