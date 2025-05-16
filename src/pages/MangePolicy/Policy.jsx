@@ -161,6 +161,7 @@ const Policy = () => {
 
   const delete_policy = async (policy) => {
     setProcessing(true);
+    setLoading(true);
     try {
       //const response=await axios.get(`${API_BASE_URL}/api/get_policy/${policy.id}`);
       const delete_policy_response = await axios.post(
@@ -185,6 +186,7 @@ const Policy = () => {
      
     }
     setProcessing(false);
+    setLoading(false);
   };
 
   return (

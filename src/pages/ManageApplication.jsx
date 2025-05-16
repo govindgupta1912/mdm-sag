@@ -457,7 +457,7 @@ const ManageApplication = () => {
                     {app.version_name}
                   </h3>
                 </div>
-                <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-2 ">
+                <div className="flex flex-col sm:flex-row items-center  ">
                   <button
                     className="bg-green-600 text-white px-4 py-2 w-full sm:w-1/2 rounded hover:bg-green-800"
                     onClick={() => openeditDialog(app)}

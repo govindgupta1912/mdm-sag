@@ -18,7 +18,7 @@ import NetworkTab from "../../components/tabs/NetworkTab";
 import AppTab from "../../components/tabs/AppTab";
 
 import axios from "axios";
-import InstallAppTab from "../../components/tabs/InstallAppTab";
+import InstallAppTab from "../../components/tabs/InstallAppTab/InstallAppTab";
 import KioskTab from "../../components/tabs/KioskTab";
 import { toast } from "react-toastify";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;

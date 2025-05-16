@@ -648,10 +648,22 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
             <img src={devices} alt="" />
             <p className="text-white text-2xl font-bold">Manage Devices</p>
           </div>
-
+          <div className="flex gap-4">
+              <Button
+            className="border border-white text-white px-4 py-4 rounded-md cursor-pointer hover:bg-green-600 hover:text-white transition duration-200"
+            onClick={handelExportPdf}
+          >
+            PDF
+          </Button>
+          <Button className="border border-white text-white px-4 py-2 rounded-md cursor-pointer hover:bg-red-600 hover:text-white transition duration-200"
+          
+            onClick={handelExportToExcel}
+          >
+            EXCEL
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="border border-white text-white px-4 py-2 rounded-md cursor-pointer hover:bg-white hover:text-black transition duration-200">
+              <div className="border border-white text-white px-4 py-1 rounded-md cursor-pointer hover:bg-white hover:text-black transition duration-200">
                 Actions
               </div>
             </DropdownMenuTrigger>
@@ -688,18 +700,8 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button
-            className="border border-white text-white px-4 py-2 rounded-md cursor-pointer hover:bg-white hover:text-black transition duration-200"
-            onClick={handelExportPdf}
-          >
-            PDF
-          </Button>
-          <Button className="border border-white text-white px-4 py-2 rounded-md cursor-pointer hover:bg-white hover:text-black transition duration-200"
-          
-            onClick={handelExportToExcel}
-          >
-            EXCEL
-          </Button>
+        
+          </div>
         </div>
 
         <div className="overflow-x-auto w-full p-4">

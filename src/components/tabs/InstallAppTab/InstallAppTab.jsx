@@ -6,7 +6,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "../../ui/dropdown-menu";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Table,
@@ -16,13 +16,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import { Switch } from "../ui/switch";
-import { Button } from "../ui/button";
+} from "../../ui/table";
+import { Switch } from "../../ui/switch";
+import { Button } from "../../ui/button";
 import { useEffect, useState } from "react";
 import { fetchApplications } from "@/utilites/store/slices/applicationsSlice";
+import AppConfigModal from "./AppConfigModal";
 
 const InstallAppTab = ({ policyData, setPolicyData }) => {
+  const [selectedApp, setSelectedApp] = useState([]);
+  const [ConfigModalOpen, setConfigModalOpen] = useState(false);
   const [toggleApps, setToggleApps] = useState({});
 
   const dispatch = useDispatch();
@@ -87,6 +90,16 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
     setToggleApps((prev) => ({ ...prev, [app.app_id]: ischecked }));
   };
 
+  const openAppConfigModal = (app) => {
+   // console.log("AppConfigModal", app);
+    
+    setSelectedApp(app);
+    setConfigModalOpen(true);
+  }
+
+
+  console.log("AppConfigModalSelectedApp===",selectedApp);
+  
   return (
     <div>
       {/* <div className="flex justify-end">
@@ -115,8 +128,7 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
         </DropdownMenu>
       </div> */}
       <div className="flex justify-end">
-        {
-           policyData.data.kioskPolicy.enabled &&
+        {policyData.data.kioskPolicy.enabled &&
         !policyData.data.kioskPolicy.multiApp ? (
           // Render non-clickable disabled button with label
           <div className="flex justify-end gap-4 opacity-50 cursor-not-allowed">
@@ -198,47 +210,41 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className=" text-sm font-semibold">{app.version_name}</TableCell>
+                <TableCell className=" text-sm font-semibold">
+                  {app.version_name}
+                </TableCell>
                 <TableCell>
                   <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC] hover:scale-105 transform transition-all duration-400">
                     Manager
                   </button>
                 </TableCell>
                 <TableCell>
-                  <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC]">
+                  <button
+                    className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC]"
+                    onClick={() => openAppConfigModal(app)}
+                  >
                     Manager
                   </button>
                 </TableCell>
               </TableRow>
             ))}
-            {/* <TableRow>
-             
-              <TableCell className="font-medium">
-                <div className="flex items-center gap-3">
-                  <Switch   className="data-[state=checked]:bg-[#03A9FC]"/>
-                  <div>
-                    <h1 className="text-lg">Whatshaap Massenger</h1>
-                    <h4 className="text-sm">com.whatshap.android</h4>
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell>v2.00</TableCell>
-              <TableCell>
-                <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC] hover:scale-105 transform transition-all duration-400">Manager</button>
-              </TableCell>
-              <TableCell >
-                <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC]">Manager</button>
-              </TableCell>
-              {/* <TableCell className="">
-                <button className="text-red-600 hover:text-red-800">
-                  <Trash2 size={20} />
-                </button>
-              </TableCell> 
-            </TableRow> */}
           </TableBody>
         </Table>
       </div>
+     
+      
+       <AppConfigModal
+   policyData={policyData}
+  setPolicyData={setPolicyData}    
+  open={ConfigModalOpen}
+  onOpenChange={setConfigModalOpen}
+  app={selectedApp}
+  
+  
+/>
+
     </div>
+   
   );
 };
 
