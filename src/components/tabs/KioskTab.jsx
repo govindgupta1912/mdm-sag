@@ -51,6 +51,7 @@ const KioskTab = ({ policyData, setPolicyData }) => {
       permissionGrants: [],
       managedConfiguration: [],
       downloadUrl: selectedApp.download_url,
+       isBlocked: false
     };
 
     setPolicyData((prev) => ({

@@ -22,10 +22,12 @@ import { Button } from "../../ui/button";
 import { useEffect, useState } from "react";
 import { fetchApplications } from "@/utilites/store/slices/applicationsSlice";
 import AppConfigModal from "./AppConfigModal";
+import AppPermissionModal from "./AppPermissionModal";
 
 const InstallAppTab = ({ policyData, setPolicyData }) => {
   const [selectedApp, setSelectedApp] = useState([]);
   const [ConfigModalOpen, setConfigModalOpen] = useState(false);
+  const [appPermissionModalOpen, setAppPermissionModalOpen] = useState(false);
   const [toggleApps, setToggleApps] = useState({});
 
   const dispatch = useDispatch();
@@ -59,6 +61,7 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
       permissionGrants: [],
       managedConfiguration: [],
       downloadUrl: app.download_url,
+      isBlocked: false
     };
     //const updatePolicyData = { ...policyData };
     const updatePolicyData = structuredClone(policyData);
@@ -96,7 +99,11 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
     setSelectedApp(app);
     setConfigModalOpen(true);
   }
-
+ const openAppPermissionModal = (app) => {
+  setSelectedApp(app);
+  setAppPermissionModalOpen(true);
+  console.log("AppPermissionModal", app);
+ }
 
   console.log("AppConfigModalSelectedApp===",selectedApp);
   
@@ -214,7 +221,9 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
                   {app.version_name}
                 </TableCell>
                 <TableCell>
-                  <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC] hover:scale-105 transform transition-all duration-400">
+                  <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC] hover:scale-105 transform transition-all duration-400"
+                  onClick={() => openAppPermissionModal(app)}
+                  >
                     Manager
                   </button>
                 </TableCell>
@@ -242,6 +251,20 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
   
   
 />
+
+      <AppPermissionModal
+        policyData={policyData}
+        setPolicyData={setPolicyData}
+        app={selectedApp}
+        open={appPermissionModalOpen}
+        onOpenChange={setAppPermissionModalOpen}
+      />
+      {/* {appPermissionModalOpen && (
+        <AppPermissionModal
+          app={selectedApp}
+          onClose={() => setAppPermissionModalOpen(false)}
+        />
+      )} */}
 
     </div>
    

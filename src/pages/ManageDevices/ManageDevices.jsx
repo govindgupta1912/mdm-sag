@@ -123,6 +123,9 @@ const ManageDevices = () => {
   const isAllSelected = selectedIds.length === devicesList?.length;
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+    console.log("selectedIds========", selectedIds);
+    
+
   const fetch_Device_List = async () => {
     setLoading(true);
     try {
@@ -255,7 +258,7 @@ const ManageDevices = () => {
     if (isAllSelected) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(devicesList?.map((device) => device.id));
+      setSelectedIds(devicesList?.map((device) => device.device_id));
     }
   };
 
@@ -349,7 +352,13 @@ const flattenDeviceData = (device) => ({
 console.log("deviceList=======",devicesList[0]);
 
 
-  // const exportToPDF = (data, fileName = "data.pdf") => {
+ const getExportData = () =>{
+  const dataToExport = selectedIds.length > 0
+  ? devicesList.filter((device)=> selectedIds.includes(device.device_id))
+  : devicesList;
+
+  return dataToExport.map(flattenDeviceData);
+ }
   //   const doc = new jsPDF();
   //   const headers = [Object.keys(data[0])];
   //   const rows = data.map((obj) => Object.values(obj));
@@ -501,10 +510,19 @@ const exportToPDF = async (data, fileName = "devices.pdf") => {
 };
 
 
-  const handelExportPdf = () => {
-    const flatData = devicesList.map(flattenDeviceData);
-    exportToPDF(flatData, "devices.pdf");
-  };
+  // const handelExportPdf = () => {
+  //   const flatData = devicesList.map(flattenDeviceData);
+  //   exportToPDF(flatData, "devices.pdf");
+  // };
+
+  const handleExportPdf = async () => {
+  const exportData = getExportData();
+  if (exportData.length === 0) {
+    toast.error("No data available to export.");
+    return;
+  }
+  await exportToPDF(exportData, "devices.pdf");
+};
 
 
   
@@ -528,15 +546,22 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
 };
 
 
-  const handelExportToExcel = () => {
+  const handleExportToExcel = () => {
     // const flatData = devicesList.map(flattenDeviceData);
     // const worksheet = XLSX.utils.json_to_sheet(flatData); 
     // const workbook = XLSX.utils.book_new();
     // XLSX.utils.book_append_sheet(workbook, worksheet, "Devices");
     // XLSX.writeFile(workbook, "devices.xlsx");
-    const flatData = devicesList.map(flattenDeviceData);
-  exportToExcel(flatData, "devices.xlsx");
+   const exportData = getExportData();
+    if (exportData.length === 0) {
+      toast.error("No data available to export.");
+      return;
+    }
+    
+  exportToExcel(exportData, "devices.xlsx");
   }
+
+
   return (
     <>
       {/* Change devices Modal */}
@@ -651,13 +676,13 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
           <div className="flex gap-4">
               <Button
             className="border border-white text-white px-4 py-4 rounded-md cursor-pointer hover:bg-green-600 hover:text-white transition duration-200"
-            onClick={handelExportPdf}
+            onClick={handleExportPdf}
           >
             PDF
           </Button>
           <Button className="border border-white text-white px-4 py-2 rounded-md cursor-pointer hover:bg-red-600 hover:text-white transition duration-200"
           
-            onClick={handelExportToExcel}
+            onClick={handleExportToExcel}
           >
             EXCEL
           </Button>
