@@ -163,6 +163,13 @@ const AppPermissionModal = ({
     "android.permission.CALL_PHONE",
     "android.permission.READ_CONTACTS",
     "android.permission.READ_CALL_LOG",
+    "android.permission.CAMERA",
+    "android.permission.READ_MEDIA_VIDEO",
+    "android.permission.READ_MEDIA_AUDIO",
+    "android.permission.POST_NOTIFICATIONS",
+    "android.permission.READ_MEDIA_IMAGES",
+    "android.permission.BLUETOOTH",
+
   ];
   
   const editablePermissions = app?.permissions?.filter((p) =>

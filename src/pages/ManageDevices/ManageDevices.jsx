@@ -50,9 +50,12 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDeviceList } from "@/utilites/store/slices/devicesListSlice";
+import { list } from "postcss";
 
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const ManageDevices = () => {
   // const devicesList = [
   //   {
@@ -126,34 +129,62 @@ const ManageDevices = () => {
     console.log("selectedIds========", selectedIds);
     
 
-  const fetch_Device_List = async () => {
-    setLoading(true);
-    try {
-      const devices_list_response = await axios.get(
-        `${API_BASE_URL}/api/enrolled_device_list`
-      );
-      if (devices_list_response.status) {
-        console.log("get_all_devices_list", devices_list_response);
-        console.log(
-          "======================",
-          devices_list_response.data.device_list
-        );
+  // const fetch_Device_List = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const devices_list_response = await axios.get(
+  //       `${API_BASE_URL}/api/enrolled_device_list`
+  //     );
+  //     if (devices_list_response.status) {
+  //       console.log("get_all_devices_list", devices_list_response);
+  //       console.log(
+  //         "======================",
+  //         devices_list_response.data.device_list
+  //       );
 
-        setDevicesList(devices_list_response.data.device_list);
-      } else {
-        toast.error("Failed to Fetch Data");
-      }
-    } catch (error) {
-      console.log("Failed to fetch Data", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //       setDevicesList(devices_list_response.data.device_list);
+  //     } else {
+  //       toast.error("Failed to Fetch Data");
+  //     }
+  //   } catch (error) {
+  //     console.log("Failed to fetch Data", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetch_Device_List();
+  // }, [reloadDevices]);
+
+
+  const dispatch = useDispatch();
+  const { list: devices, status, error } = useSelector((state) => state.devicesList);
+
   useEffect(() => {
-    fetch_Device_List();
-  }, [reloadDevices]);
+    dispatch(fetchDeviceList());
+  }, [dispatch,reloadDevices]);
 
 
+
+
+
+useEffect(() => {
+  if (status === 'succeeded') {
+    setDevicesList(devices);
+  }
+  if(status === 'failed'){  
+      toast.error("Failed to fetch devices");
+    }
+}, [status, devices]);
+
+
+
+
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error}</p>;
+
+  console.log("devicesListasync====", devices);
+  
   console.log("devicesList", devicesList);
   
   const delete_enroll_devices = async (devices) => {
@@ -162,14 +193,23 @@ const ManageDevices = () => {
         `${API_BASE_URL}/api/delete_device`,
         { device_id: devices.device_id }
       );
+      if (delete_enroll_devices_response.status) {
+        toast.success("Device deleted successfully");
+        setReloadDevices((prev) => !prev);
+      }
+      else {
+        toast.error("Failed to delete device");
+      }
+
       console.log(
         "delete_device_response=======",
         delete_enroll_devices_response
       );
-      setReloadDevices((prev) => !prev);
+      
       // fetch_Device_List();
     } catch (error) {
       console.log("faild to delete the devices", error);
+      toast.error("Failed to delete device");
     }
   };
 
@@ -764,7 +804,7 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {loading
+              {status === "loading"
                 ? Array(5)
                     .fill()
                     .map((_, index) => (

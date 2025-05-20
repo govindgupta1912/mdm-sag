@@ -90,30 +90,62 @@ const handelSaveConfig = () => {
     : updatedPolicyData.data.applications;
 
   // Convert the value based on its valueType
+  // const transformedConfig = configuration.map((config) => {
+  //   let transformedValue;
+
+  //   switch (config.valueType) {
+  //     case "STRING_ARRAY":
+  //       // Split by comma and trim whitespace
+  //       transformedValue = config.value.split(',').map((item) => item.trim());
+  //       break;
+  //     case "INTEGER":
+  //       transformedValue = parseInt(config.value, 10);
+  //       break;
+  //     case "BOOLEAN":
+  //       transformedValue = config.value.toLowerCase() === "true";
+  //       break;
+  //     case "STRING":
+  //     default:
+  //       transformedValue = config.value;
+  //   }
+
+  //   return {
+  //     ...config,
+  //     value: transformedValue,
+  //   };
+  // });
+
   const transformedConfig = configuration.map((config) => {
-    let transformedValue;
+  let transformedValue;
 
-    switch (config.valueType) {
-      case "STRING_ARRAY":
-        // Split by comma and trim whitespace
-        transformedValue = config.value.split(',').map((item) => item.trim());
-        break;
-      case "INTEGER":
-        transformedValue = parseInt(config.value, 10);
-        break;
-      case "BOOLEAN":
-        transformedValue = config.value.toLowerCase() === "true";
-        break;
-      case "STRING":
-      default:
-        transformedValue = config.value;
-    }
+  switch (config.valueType) {
+    case "STRING_ARRAY":
+      transformedValue = typeof config.value === "string"
+        ? config.value.split(',').map((item) => item.trim())
+        : Array.isArray(config.value)
+        ? config.value
+        : [];
+      break;
 
-    return {
-      ...config,
-      value: transformedValue,
-    };
-  });
+    case "INTEGER":
+      transformedValue = parseInt(config.value, 10);
+      break;
+
+    case "BOOLEAN":
+      transformedValue = String(config.value).toLowerCase() === "true";
+      break;
+
+    case "STRING":
+    default:
+      transformedValue = String(config.value);
+  }
+
+  return {
+    ...config,
+    value: transformedValue,
+  };
+});
+
 
   // Find and update the app's config
   const appIndex = targetApps.findIndex(
@@ -250,6 +282,8 @@ console.log("configuration", configuration);
         <strong>Version:</strong> <span className="text-gray-700">{app?.version_name}</span>
       </p>
     </div>
+
+    
 
     <div className="mt-6 space-y-6 max-h-[400px] overflow-y-auto pr-2">
       {configuration.map((config, index) => (
