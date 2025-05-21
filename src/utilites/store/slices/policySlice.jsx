@@ -66,9 +66,11 @@ const initialState = {
       },
       wifiConfig: [
         {
-          ssid: "mobisec_5G",
-          password: "Cyber@2025",
+          ssid: "",
+          password: "",
           autoConnect: false,
+          hiddenNetwork: false,
+          securityType: "none",
         },
       ],
       applications: [],

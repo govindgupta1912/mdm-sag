@@ -23,6 +23,8 @@ import { useEffect, useState } from "react";
 import { fetchApplications } from "@/utilites/store/slices/applicationsSlice";
 import AppConfigModal from "./AppConfigModal";
 import AppPermissionModal from "./AppPermissionModal";
+import { Checkbox } from "@/components/ui/checkbox";
+
 
 const InstallAppTab = ({ policyData, setPolicyData }) => {
   const [selectedApp, setSelectedApp] = useState([]);
@@ -93,6 +95,33 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
     setToggleApps((prev) => ({ ...prev, [app.app_id]: ischecked }));
   };
 
+  const handelBlockAppChange = (app, ischecked) => {
+    const updatedPolicyData = structuredClone(policyData);
+    const isMulitiApp =updatedPolicyData.data.kioskPolicy.multiApp;
+    const targetArray = isMulitiApp
+      ? updatedPolicyData.data.kioskPolicy.allowedApps
+      :updatedPolicyData.data.applications;
+
+      const updatedApps = targetArray.map((item) => {
+        if(item.packageName === app.package_name){
+          return{
+            ...item,
+            isBlocked: ischecked
+          }
+        }
+        return item;
+      });
+      if(isMulitiApp){
+        updatedPolicyData.data.kioskPolicy.allowedApps = updatedApps;
+      }
+      else{
+        updatedPolicyData.data.applications = updatedApps;
+      }
+      setPolicyData(updatedPolicyData);
+    
+
+  }
+
   const openAppConfigModal = (app) => {
    // console.log("AppConfigModal", app);
     
@@ -108,7 +137,11 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
   console.log("AppConfigModalSelectedApp===",selectedApp);
   
   return (
-    <div>
+    <div className="p-4">
+      <h2 className="text-2xl font-semibold mb-6 text-center md:text-left">
+        Manage Applications
+      </h2>
+
       {/* <div className="flex justify-end">
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -134,7 +167,9 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div> */}
-      <div className="flex justify-end">
+
+      {/* Implement it later if required */}
+      {/* <div className="flex justify-end">
         {policyData.data.kioskPolicy.enabled &&
         !policyData.data.kioskPolicy.multiApp ? (
           // Render non-clickable disabled button with label
@@ -167,10 +202,12 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
             </DropdownMenuContent>
           </DropdownMenu>
         )}
-      </div>
+      </div> */}
+{/* 
+      <div className="mt-6 w-full"> */}
+        <div className="overflow-x-auto">
 
-      <div className="mt-6 w-full">
-        <Table className="w-full">
+        <Table className="m-w-[800px]">
           <TableCaption>A list of your Application.</TableCaption>
           <TableHeader>
             <TableRow>
@@ -184,40 +221,34 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
               <TableHead className="text-[#03A9FC] font-bold">
                 Configuration
               </TableHead>
+              <TableHead className="text-[#03A9FC] font-bold">
+                 Block App
+                </TableHead>
               {/* <TableHead className="text-[#03A9FC] font-bold">Action</TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
             {apps.map((app) => (
               <TableRow key={app.id}>
-                <TableCell className="font-medium">
-                  <div className="flex items-center gap-3">
-                    {/* <Switch
-                      checked={!!toggleApps[app.app_id]}
-                      onCheckedChange={(checked) =>
-                        handelToggleApp(app, checked)
-                      }
-                      className="data-[state=checked]:bg-[#03A9FC]"
-                    /> */}
+                
+                 <TableCell>
+                  <div className="flex flex-col md:flex-row md:items-center gap-2">
                     <Switch
                       checked={!!toggleApps[app.package_name]}
-                      onCheckedChange={(checked) =>
-                        handelToggleApp(app, checked)
-                      }
+                      onCheckedChange={(checked) => handelToggleApp(app, checked)}
                       className="data-[state=checked]:bg-[#03A9FC]"
                       disabled={
                         policyData.data.kioskPolicy.enabled &&
                         !policyData.data.kioskPolicy.multiApp
                       }
                     />
-
                     <div>
-                      <h1 className="text-lg">{app.app_name}</h1>
-                      <h4 className="text-sm">{app.package_name}</h4>
+                      <p className="font-semibold">{app.app_name}</p>
+                      <p className="text-xs text-gray-500">{app.package_name}</p>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className=" text-sm font-semibold">
+                <TableCell className=" text-sm font-medium">
                   {app.version_name}
                 </TableCell>
                 <TableCell>
@@ -235,6 +266,19 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
                     Manager
                   </button>
                 </TableCell>
+                <TableCell>
+                  <Checkbox
+                  //  className="data-[state=checked]:bg-[#03A9FC]"
+                   checked={policyData.data.kioskPolicy.multiApp
+                    ? policyData.data.kioskPolicy.allowedApps.find(
+                      (item) => item.packageName === app.package_name
+                    )?.isBlocked || false
+                    : policyData.data.applications.find(
+                      (item)=> item.packageName === app.package_name)?.isBlocked || false
+                   }
+                   onCheckedChange={(checked) =>handelBlockAppChange(app,checked)}
+                  />
+                  </TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -27,8 +27,8 @@ const ManageApplication = () => {
   const [open, setOpen] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [appTitle, setAppTitle] = useState("");
-  const [packageName, setPackageName] = useState("");
-  const [version, setVersion] = useState("");
+  // const [packageName, setPackageName] = useState("");
+  // const [version, setVersion] = useState("");
   const [apkFile, setApkFile] = useState(null);
   const [isVpnApp, setIsVpnApp] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -47,7 +47,6 @@ const ManageApplication = () => {
     dispatch(fetchApplications());
   }, [dispatch]);
 
-  // const handleSave = () => {
   //   if (!appTitle || !packageName || !version || !apkFile) {
   //     //alert("Please fill in all the fields and upload the APK file.");
   //     toast.error("Please fill in all the fields to add the APK");
@@ -95,23 +94,23 @@ const ManageApplication = () => {
     setIsEditMode(true);
     setEdittingApp(app);
     setAppTitle(app.app_name);
-    setPackageName(app.package_name);
-    setVersion(app.version_name);
+    // setPackageName(app.package_name);
+    // setVersion(app.version_name);
     setIsVpnApp(app.is_vpn_app);
     setApkFile(null); // Reset the file input
     setOpen(true);
   };
 
   const handleSave = () => {
-    if (!appTitle || !packageName || !version || (!apkFile && !isEditMode)) {
+    if (!appTitle || (!apkFile && !isEditMode)) {
       toast.error("Please fill in all the fields to add the APK");
       return;
     }
     setProcessing(true); // Set processing to true when starting the upload
     const formData = new FormData();
     formData.append("app_name", appTitle);
-    formData.append("package_name", packageName);
-    formData.append("version", version);
+    // formData.append("package_name", packageName);
+    // formData.append("version", version);
     formData.append("is_vpn_app", isVpnApp);
 
     if (apkFile) {
@@ -167,8 +166,8 @@ const ManageApplication = () => {
 
   const resetForm = () => {
     setAppTitle("");
-    setPackageName("");
-    setVersion("");
+    //setPackageName("");
+    //setVersion("");
     setApkFile(null);
     setIsVpnApp(false);
     setIsEditMode(false);
@@ -227,74 +226,80 @@ const ManageApplication = () => {
 
           <DialogContent className="w-full sm:max-w-[500px] rounded-2xl shadow-2xl p-6 ">
             {processing && (
-              <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-                  <radialGradient
-                    id="a1"
-                    cx=".66"
-                    fx=".66"
-                    cy=".3125"
-                    fy=".3125"
-                    gradientTransform="scale(1.5)"
-                  >
-                    <stop offset="0" stop-color="#091C35"></stop>
-                    <stop
-                      offset=".3"
-                      stop-color="#091C35"
-                      stop-opacity=".9"
-                    ></stop>
-                    <stop
-                      offset=".6"
-                      stop-color="#091C35"
-                      stop-opacity=".6"
-                    ></stop>
-                    <stop
-                      offset=".8"
-                      stop-color="#091C35"
-                      stop-opacity=".3"
-                    ></stop>
-                    <stop
-                      offset="1"
-                      stop-color="#091C35"
-                      stop-opacity="0"
-                    ></stop>
-                  </radialGradient>
-                  <circle
-                    transform-origin="center"
-                    fill="none"
-                    stroke="url(#a1)"
-                    stroke-width="7"
-                    stroke-linecap="round"
-                    stroke-dasharray="200 1000"
-                    stroke-dashoffset="0"
-                    cx="100"
-                    cy="100"
-                    r="20"
-                  >
-                    <animateTransform
-                      type="rotate"
-                      attributeName="transform"
-                      calcMode="spline"
-                      dur="1.8"
-                      values="0;360"
+              // <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50">
+              //   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+              //     <radialGradient
+              //       id="a1"
+              //       cx=".66"
+              //       fx=".66"
+              //       cy=".3125"
+              //       fy=".3125"
+              //       gradientTransform="scale(1.5)"
+              //     >
+              //       <stop offset="0" stop-color="#091C35"></stop>
+              //       <stop
+              //         offset=".3"
+              //         stopcolor="#091C35"
+              //         stop-opacity=".9"
+              //       ></stop>
+              //       <stop
+              //         offset=".6"
+              //         stop-color="#091C35"
+              //         stop-opacity=".6"
+              //       ></stop>
+              //       <stop
+              //         offset=".8"
+              //         stop-color="#091C35"
+              //         stop-opacity=".3"
+              //       ></stop>
+              //       <stop
+              //         offset="1"
+              //         stop-color="#091C35"
+              //         stop-opacity="0"
+              //       ></stop>
+              //     </radialGradient>
+              //     <circle
+              //       transform-origin="center"
+              //       fill="none"
+              //       stroke="url(#a1)"
+              //       stroke-width="7"
+              //       stroke-linecap="round"
+              //       stroke-dasharray="200 1000"
+              //       stroke-dashoffset="0"
+              //       cx="100"
+              //       cy="100"
+              //       r="20"
+              //     >
+              //       <animateTransform
+              //         type="rotate"
+              //         attributeName="transform"
+              //         calcMode="spline"
+              //         dur="1.8"
+              //         values="0;360"
 
-                      keyTimes="0;1"
-                      keySplines="0 0 1 1"
-                      repeatCount="indefinite"
-                    ></animateTransform>
-                  </circle>
-                  <circle
-                    transform-origin="center"
-                    fill="none"
-                    opacity=".2"
-                    stroke="#091C35"
-                    stroke-width="7"
-                    stroke-linecap="round"
-                    cx="100"
-                    cy="100"
-                    r="20"
-                  ></circle>
-                </svg>
+              //         keyTimes="0;1"
+              //         keySplines="0 0 1 1"
+              //         repeatCount="indefinite"
+              //       ></animateTransform>
+              //     </circle>
+              //     <circle
+              //       transform-origin="center"
+              //       fill="none"
+              //       opacity=".2"
+              //       stroke="#091C35"
+              //       stroke-width="7"
+              //       stroke-linecap="round"
+              //       cx="100"
+              //       cy="100"
+              //       r="20"
+              //     ></circle>
+              //   </svg>
+              // </div>
+              <div className="absolute inset-0 bg-white bg-opacity-80 flex flex-col gap-4 items-center justify-center z-50">
+                <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-blue-500"></div>
+                <p className="text-sm text-gray-700 font-medium">
+                  Uploading APK...
+                </p>
               </div>
             )}
 
@@ -325,7 +330,7 @@ const ManageApplication = () => {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <Label
                   htmlFor="packageName"
                   className="text-sm mb-1 block text-gray-700"
@@ -355,7 +360,7 @@ const ManageApplication = () => {
                   placeholder="e.g. 2.1.0"
                   className="rounded-xl"
                 />
-              </div>
+              </div> */}
 
               <div>
                 <Label
@@ -430,7 +435,7 @@ const ManageApplication = () => {
             Array(12)
               .fill()
               .map((_, index) => (
-                <div className="flex flex-col space-y-3">
+                <div key={index} className="flex flex-col space-y-3">
                   <Skeleton className="h-[125px] w-[250px] rounded-xl" />
                   <div className="space-y-2">
                     <Skeleton className="h-4 w-[250px]" />

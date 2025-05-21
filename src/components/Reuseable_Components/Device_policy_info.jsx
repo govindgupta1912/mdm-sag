@@ -20,7 +20,7 @@ const Device_policy_info = ({details}) => {
      
       <div className="space-y-2">
         {hardwareData.map((item, index) => (
-          <div key={index} className="grid grid-cols-3 pb-1 gap-3 ">
+          <div key={index} className="grid grid-cols-3 pb-1 border-b gap-3 ">
             <span className="text-gray-600 col-span-1">{item.label}</span>
             <span className="font-medium col-span-2">{item.value}</span>
           </div>
