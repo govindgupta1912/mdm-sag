@@ -174,6 +174,7 @@
 
 
 import {
+  Bluetooth,
   LockKeyhole,
   MoreVertical,
   RefreshCcw,
@@ -189,7 +190,9 @@ import Device_policy_info from "../../components/Reuseable_Components/Device_pol
 import HardwareInfo from "@/components/Reuseable_Components/HardwareInfo";
 import NetworkInfo from "@/components/Reuseable_Components/NetworkInfo";
 import SensorInfo from "@/components/Reuseable_Components/SensorInfo";
+import Wifi_info from "@/components/Reuseable_Components/Wifi_info";
 import SoftwareInfo from "@/components/Reuseable_Components/SoftwareInfo";
+import Bluetooth_info from "@/components/Reuseable_Components/Bluetooth_info";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -355,6 +358,12 @@ const AppList = ({ title, apps, icon }) => (
             <div className="bg-white rounded-xl p-4 shadow">
               <SensorInfo details={deviceData} />
             </div>
+             <div className="bg-white rounded-xl p-4 shadow">
+              <Wifi_info details={deviceData} />
+            </div>
+            <div className="bg-white rounded-xl p-4 shadow">
+              <Bluetooth_info details={deviceData} />
+              </div>
           </div>
         </div>
 

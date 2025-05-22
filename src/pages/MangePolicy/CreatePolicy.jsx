@@ -178,7 +178,16 @@ const CreatePolicy = () => {
               </div>
               <div className="flex flex-col">
                 <span className="font-bold">Updated ON:</span>
-                {localPolicy.updatedOn}
+                {/* {localPolicy.updatedOn} */}
+                  {new Date(localPolicy.updated_on).toLocaleString("en-IN", {
+                        timeZone: "Asia/Kolkata",
+                        year: "numeric",
+                        month: "short",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      })}
               </div>
             </div>
           )}

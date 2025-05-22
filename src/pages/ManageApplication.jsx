@@ -453,7 +453,7 @@ const ManageApplication = () => {
                     src={app.icon ? `data:image/png;base64,${app.icon}` : apk}
                     alt=""
                   />
-                  <h1 className="text-lg sm:text-xl font-bold">
+                  <h1 className="text-lg sm:text-xl font-bold truncate max-w-full overflow-hidden text-center">
                     {app.app_name}
                   </h1>
                   <h2 className="text-sm sm:text-lg text-[#767676]   truncate max-w-full overflow-hidden text-center">

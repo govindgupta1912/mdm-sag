@@ -210,7 +210,7 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
         <Table className="m-w-[800px]">
           <TableCaption>A list of your Application.</TableCaption>
           <TableHeader>
-            <TableRow>
+            <TableRow >
               <TableHead className="text-[#03A9FC] font-bold ">Name</TableHead>
               <TableHead className="text-[#03A9FC] font-bold ">
                 Version

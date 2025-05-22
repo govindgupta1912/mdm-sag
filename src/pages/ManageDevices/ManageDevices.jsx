@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import devices from "../../assets/devices.png";
+import devices_icon from "../../assets/devices.png";
 import { Bell, Eye, FileText, ShieldCheck, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -175,6 +176,8 @@ useEffect(() => {
   if(status === 'failed'){  
       toast.error("Failed to fetch devices");
     }
+    console.log("devicesList========================");
+    
 }, [status, devices]);
 
 
@@ -604,39 +607,7 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
 
   return (
     <>
-      {/* Change devices Modal */}
-      {/* <Dialog open={activeModal === 'devices'} onOpenChange={()=>setActiveModal(null)}>
-  <DialogContent>
-  <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.2 }}
-      className="bg-white p-6 rounded-xl shadow-xl"
-    >
-    <DialogHeader>
-      <DialogTitle>Change devices</DialogTitle>
-      <DialogDescription>Select a new devices for selected devices.</DialogDescription>
-    </DialogHeader>
- 
-  <Select>
-     <SelectTrigger className="w-full">
-      <SelectValue placeholder="Select a devices" className="text-white" />
-     </SelectTrigger>
-     <SelectContent>
-     <SelectItem value="Office IT devices">Office IT devices</SelectItem>
-     <SelectItem value="Remote Work devices">Remote Work devices</SelectItem>
-     </SelectContent>
-  </Select>
-  <DialogFooter>
-    <Button onClick={()=>setActiveModal(null)}>Cancel</Button>
-    <Button>Apply devices</Button>
-  </DialogFooter>
-  </motion.div>
-  </DialogContent>
-</Dialog>
-
-     */}
+     
 
       <Dialog
         open={activeModal === "devices"}
@@ -708,19 +679,19 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
       </Dialog>
 
       <div>
-        <div className="flex justify-between items-center bg-black p-6 ">
-          <div className="flex justify-start gap-2 bg-black text-center">
-            <img src={devices} alt="" />
-            <p className="text-white text-2xl font-bold">Manage Devices</p>
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-black p-4 sm:p-6 sm:gap-0 gap-4 ">
+          <div className="flex items-center gap-2 text-center">
+            <img src={devices_icon} alt="" className="w-6 h-6 sm:w-8 sm:h-8" />
+            <p className="text-white text-lg sm:text-2xl font-bold">Manage Devices</p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-2 sm:gap-4">
               <Button
-            className="border border-white text-white px-4 py-4 rounded-md cursor-pointer hover:bg-green-600 hover:text-white transition duration-200"
+            className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-green-600 transition duration-200"
             onClick={handleExportPdf}
           >
             PDF
           </Button>
-          <Button className="border border-white text-white px-4 py-2 rounded-md cursor-pointer hover:bg-red-600 hover:text-white transition duration-200"
+          <Button className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-red-600 transition duration-200"
           
             onClick={handleExportToExcel}
           >
@@ -728,12 +699,12 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="border border-white text-white px-4 py-1 rounded-md cursor-pointer hover:bg-white hover:text-black transition duration-200">
+              < Button className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-white hover:text-black transition duration-200">
                 Actions
-              </div>
+              </  Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md p-2 w-52 mr-7 mt-5">
+            <DropdownMenuContent className="bg-white text-black shadow-lg rounded-md p-2 w-52 mr-0 sm:mr-7 mt-2 sm:mt-5">
               <DropdownMenuLabel className="text-gray-500 text-sm px-2">
                 Device Control
               </DropdownMenuLabel>
@@ -756,7 +727,7 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  className=" gap-2 px-2 py-2 cursor-pointer"
+                  className="flex items-center rounded hover:bg-gray-100 gap-2 px-2 py-2 cursor-pointer"
                   onClick={() => handelActionClick("Content")}
                 >
                   <FileText className="h-4 w-4" />
@@ -769,136 +740,149 @@ const exportToExcel = (data, fileName = "devices.xlsx") => {
           </div>
         </div>
 
-        <div className="overflow-x-auto w-full p-4">
-          <Table className="table-fixed border-separate border-spacing-y-2 w-full text-sm sm:text-base">
-            <TableCaption className="mb-4">A list of all Devices.</TableCaption>
-            <TableHeader>
-              <TableRow className="bg-[#03A9FC] text-white  ">
-                <TableHead className="w-12 text-center">
-                  {/* Select All Checkbox */}
-                  <Checkbox
-                    checked={isAllSelected}
-                    // indeterminate={selectedIds.length > 0 && !isAllSelected}
-                    onCheckedChange={toggleSelectAll}
-                    className="border-white bg-white data-[state=checked]:bg-[#03A9FC]"
-                  />
-                </TableHead>
-                <TableHead className="text-white min-w-[100px] w-[100px] py-4">
-                  Serial No.
-                </TableHead>
-                <TableHead className="text-white min-w-[100px] w-[100px]">
-                  Device Name
-                </TableHead>
-                <TableHead className="text-white min-w-[180px] w-[100px]">
-                  Model
-                </TableHead>
-                <TableHead className="text-white  w-[100px]">
-                  Policy Name
-                </TableHead>
-                <TableHead className="text-white text-center w-[100px]">
-                  Last Synced
-                </TableHead>
-                <TableHead className="text-white text-center w-[100px]">
-                  Action
-                </TableHead>
+
+
+
+  <div className="w-full p-4">
+  <div className="hidden sm:block overflow-x-auto">
+    {/* Standard table for tablets and up */}
+    <Table className="table-auto border-separate border-spacing-y-2 w-full text-sm sm:text-base">
+      <TableCaption className="mb-4 text-gray-600">A list of all Devices.</TableCaption>
+      <TableHeader>
+        <TableRow className="bg-[#03A9FC] text-white rounded-md">
+          <TableHead className="w-12 text-center">
+            <Checkbox
+              checked={isAllSelected}
+              onCheckedChange={toggleSelectAll}
+              className="border-white bg-white data-[state=checked]:bg-[#03A9FC]"
+            />
+          </TableHead>
+          <TableHead className="py-4 text-white text-center">Serial No.</TableHead>
+          <TableHead className="py-4 text-white text-center">Device ID</TableHead>
+          <TableHead className="py-4 text-white text-center">Model</TableHead>
+          <TableHead className="py-4 text-white text-center">Policy Name</TableHead>
+          <TableHead className="py-4 text-white text-center">Action</TableHead>
+        </TableRow>
+      </TableHeader>
+
+      <TableBody>
+        {status === "loading"
+          ? Array(5).fill().map((_, index) => (
+              <TableRow key={index} className="bg-white shadow-md animate-pulse rounded-lg">
+                {[...Array(6)].map((_, i) => (
+                  <TableCell key={i} className="py-4 text-center">
+                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  </TableCell>
+                ))}
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {status === "loading"
-                ? Array(5)
-                    .fill()
-                    .map((_, index) => (
-                      <TableRow
-                        key={index}
-                        className="bg-white shadow-sm animate-pulse"
-                      >
-                        <TableCell className="text-center">
-                          <Checkbox className="border-gray-400 data-[state=checked]:bg-[#03A9FC]" />
-                        </TableCell>
-                        <TableCell className="py-4 font-mono ">
-                          <div className="h-4 bg-gray-200 rounded w-full"></div>
-                        </TableCell>
-                        <TableCell className="py-4 ">
-                          <div className="h-4 bg-gray-200 rounded w-full"></div>
-                        </TableCell>
-                        <TableCell className="py-4  ">
-                          <div className="h-4 bg-gray-200 rounded w-full"></div>
-                        </TableCell>
-                        <TableCell className="py-4 ">
-                          <div className="h-4 bg-gray-200 rounded w-full"></div>
-                        </TableCell>
-                        <TableCell className="py-4">
-                          <div className="h-4 bg-gray-200 rounded w-full"></div>
-                        </TableCell>
-                        <TableCell className="py-4 flex gap-4 justify-end w-[120px] items-center">
-                          <div className="h-4 bg-gray-200 rounded w-24"></div>
-                          <div className="h-4 bg-gray-200 rounded w-24"></div>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                : devicesList?.map((devices, index) => (
-                    <TableRow
-                      key={index}
-                      // className=" bg-white shadow-sm hover:bg-gray-200"
-                      className={`bg-white shadow-sm hover:bg-gray-200 ${
-                        selectedIds.includes(devices.id) ? "bg-blue-50" : ""
-                      }`}
+            ))
+          : devicesList?.map((device, index) => (
+              <TableRow
+                key={index}
+                className={`bg-white shadow-sm transition-colors duration-200 rounded-lg hover:bg-blue-50 ${
+                  selectedIds.includes(device.device_id) ? "bg-blue-100" : ""
+                }`}
+              >
+                <TableCell className="text-center">
+                  <Checkbox
+                    checked={selectedIds.includes(device.device_id)}
+                    onCheckedChange={() => toggleSelectOne(device.device_id)}
+                    className="border-gray-400 data-[state=checked]:bg-[#03A9FC]"
+                  />
+                </TableCell>
+                <TableCell className="py-4 text-center font-mono">{device.serial_no}</TableCell>
+                <TableCell className="py-4 text-center">{device.device_id}</TableCell>
+                <TableCell className="py-4 text-center">{device.model}</TableCell>
+                <TableCell className="py-4 text-center">{device.policy_name || "-"}</TableCell>
+                <TableCell className="py-4 text-center">
+                  <div className="flex justify-center gap-4">
+                    <Link
+                      to="/devices-details"
+                      state={{ device }}
+                      className="text-blue-600 hover:text-blue-800 transition"
+                      title="View Device Details"
                     >
-                      <TableCell className="text-center">
-                        {/* Individual Checkbox */}
-                        <Checkbox
-                          checked={selectedIds.includes(devices.device_id)}
-                          onCheckedChange={() =>
-                            toggleSelectOne(devices.device_id)
-                          }
-                          className="border-gray-400 data-[state=checked]:bg-[#03A9FC]"
-                        />
-                      </TableCell>
-                      <TableCell className="py-4 font-mono ">
-                        {devices.serial_no}
-                      </TableCell>
-                      <TableCell className="py-4 ">
-                        {devices.device_id}
-                      </TableCell>
-                      <TableCell className="py-4  ">{devices.model}</TableCell>
-                      <TableCell className="py-4 ">
-                        {devices.policy_id}
-                      </TableCell>
-                      <TableCell className="py-4">
-                        {devices.lastSynced}
-                      </TableCell>
-                      <TableCell className="py-4 flex gap-4 justify-end w-[120px] items-center">
-                        <Link
-                          className="text-blue-600 hover:text-blue-800"
-                          to={"/devices-details"}
-                          state={{
-                            device: devices,
-                          }}
-                        >
-                          <Eye size={20} />
-                        </Link>
-                        <button
-                          className="text-red-600 hover:text-red-800"
-                          onClick={() => delete_enroll_devices(devices)}
-                        >
-                          <Trash2 size={20} />
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell
-                  colSpan={7}
-                  className="text-center text-sm text-muted-foreground"
-                >
-                  Showing {devicesList.length} policies
+                      <Eye size={20} />
+                    </Link>
+                    <button
+                      onClick={() => delete_enroll_devices(device)}
+                      className="text-red-600 hover:text-red-800 transition"
+                      title="Delete Device"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
                 </TableCell>
               </TableRow>
-            </TableFooter>
-          </Table>
+            ))}
+      </TableBody>
+
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={6} className="text-center text-sm text-muted-foreground pt-6">
+            Showing {devicesList.length} device{devicesList.length !== 1 ? "s" : ""}
+          </TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
+  </div>
+
+  {/* Mobile Version - Cards */}
+  <div className="sm:hidden space-y-4">
+    {devicesList?.map((device, index) => (
+      <div
+        key={index}
+        className={`rounded-xl border shadow-sm p-4 ${
+          selectedIds.includes(device.device_id) ? "bg-blue-50" : "bg-white"
+        }`}
+      >
+        <div className="flex justify-between items-center mb-2">
+          <Checkbox
+            checked={selectedIds.includes(device.device_id)}
+            onCheckedChange={() => toggleSelectOne(device.device_id)}
+            className="border-gray-400 data-[state=checked]:bg-[#03A9FC]"
+          />
+          <div className="flex gap-4">
+            <Link
+              to="/devices-details"
+              state={{ device }}
+              className="text-blue-600 hover:text-blue-800"
+              title="View"
+            >
+              <Eye size={20} />
+            </Link>
+            <button
+              onClick={() => delete_enroll_devices(device)}
+              className="text-red-600 hover:text-red-800"
+              title="Delete"
+            >
+              <Trash2 size={20} />
+            </button>
+          </div>
         </div>
+        <div className="text-sm">
+          <div>
+            <span className="font-semibold">Serial No:</span> {device.serial_no}
+          </div>
+          <div>
+            <span className="font-semibold">Device ID:</span> {device.device_id}
+          </div>
+          <div>
+            <span className="font-semibold">Model:</span> {device.model}
+          </div>
+          <div>
+            <span className="font-semibold">Policy:</span>{" "}
+            {device.policy_name || "-"}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+
+
+        
       </div>
     </>
   );
