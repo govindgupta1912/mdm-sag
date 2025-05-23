@@ -168,22 +168,20 @@ const Policy = () => {
         `${API_BASE_URL}/api/delete_policy`,
         { policyId: policy.id }
       );
-      if (delete_policy_response.status){
+      if (delete_policy_response.status) {
         toast.success("Policy Deleted Successfully");
-         fetchPolicyData();
-      }
-      else{
+        fetchPolicyData();
+      } else {
         toast.error(delete_policy_response.data.message);
       }
-     
+
       console.log("delete_policy_response==", delete_policy_response);
       //console.log("===========",get_update_policy.data.policy);
     } catch (error) {
       console.error("Failed to fetch the policy data", error);
       console.log("knjvdhskjhgsdhbkhlajnhzk");
-      
+
       toast.error("Failed to delete the policy due to some error");
-     
     }
     setProcessing(false);
     setLoading(false);
@@ -194,8 +192,7 @@ const Policy = () => {
       {/* <div className="bg-black w-full flex justify-between items-center  px-4"> */}
       <div className="bg-black w-full flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 py-2 space-y-2 sm:space-y-0">
         {/* <div className=" h-20 text-white  text-2xl font-bold  p-6 flex "> */}
-         <div className="text-white text-xl sm:text-2xl h-20 font-bold flex items-center gap-2">
-          
+        <div className="text-white text-xl sm:text-2xl h-20 font-bold flex items-center gap-2">
           <img src={enroll} className="w-7 h-7" />
           Manage Policy
         </div>
@@ -235,111 +232,142 @@ const Policy = () => {
                      </TableFooter>
                    </Table>
             </div> */}
-      <div className="overflow-x-auto w-full p-4">
-        
-      {/* <Table className="table-fixed border-separate border-spacing-y-2 w-full text-sm sm:text-base"> */}
-       <Table className="min-w-full text-sm sm:text-base">
-          <TableCaption className="mb-4">A list of all policies.</TableCaption>
-          <TableHeader>
-            <TableRow className="bg-[#03A9FC] text-white  ">
-              <TableHead className="text-white min-w-[150px] sm:min-w-[200px] lg:w-[300px]">
-                Policy ID
-              </TableHead>
-              <TableHead className="text-white min-w-[150px] sm:min-w-[200px] lg:w-[300px]">
-                Policy Name
-              </TableHead>
-              <TableHead className="text-white min-w-[150px] sm:min-w-[200px] lg:w-[300px]">Version</TableHead>
-              <TableHead className="text-white min-w-[150px] sm:min-w-[200px] lg:w-[300px]">
-                Updated On
-              </TableHead>
-              <TableHead className="text-white min-w-[150px] sm:min-w-[200px] lg:w-[300px]">Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading
-              ? Array.from({ length: 5 }).map((_, index) => (
-                  <TableRow
-                    key={index}
-                    className=" bg-white shadow-sm hover:bg-gray-200 animate-pulse"
-                  >
-                    <TableCell className="py-4 font-mono w-[300px]">
-                      <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    </TableCell>
-                    <TableCell className="py-4 w-[250px]">
-                      <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    </TableCell>
-                    <TableCell className="py-4 text-center w-[80px]">
-                      <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    </TableCell>
-                    <TableCell className="py-4 w-[180px]">
-                      <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    </TableCell>
-                    <TableCell className="py-4 flex gap-4 justify-center w-[120px]">
-                      <div className="h-4 bg-gray-200 rounded w-full"></div>
-                    </TableCell>
-                   
-                   
-                    <TableCell className="py-4 flex gap-4 justify-end w-[120px] items-center">
-                          <div className="h-4 bg-gray-200 rounded w-24"></div>
-                          <div className="h-4 bg-gray-200 rounded w-24"></div>
-                        </TableCell>
-                  </TableRow>
-                ))
-              : policies?.map((policy, index) => (
-                  <TableRow
-                    key={index}
-                    className=" bg-white shadow-sm hover:bg-gray-200"
-                  >
-                    <TableCell className="py-4 flex gap-2 flex-wrap sm:flex-nowrap w-full justify-start sm:justify-center">
-                      {policy.id}
-                    </TableCell>
-                    <TableCell className="py-4 w-[250px]">
-                      {policy.name}
-                    </TableCell>
-                    <TableCell className="py-4  w-[80px] ">
-                      {policy.version}
-                    </TableCell>
-                    <TableCell className="py-4 w-[180px]">
-                      {new Date(policy.updated_on).toLocaleString("en-IN", {
-                        timeZone: "Asia/Kolkata",
-                        year: "numeric",
-                        month: "short",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      })}
-                    </TableCell>
-                    <TableCell className="py-4 flex gap-4  w-[120px] items-center justify-center">
-                      <button
-                        className="text-blue-600 hover:text-blue-800"
-                        onClick={() => update(policy)}
-                      >
-                        <Pencil size={20} />
-                      </button>
-                      <button
-                        className="text-red-600 hover:text-red-800"
-                        onClick={() => delete_policy(policy)}
-                        disabled={processing}
-                      >
-                        <Trash2 size={20} />
-                      </button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell
-                colSpan={5}
-                className="text-center text-sm text-muted-foreground"
+
+            <div className="w-full p-4">
+  {/* TABLE VIEW (Tablet and above) */}
+  <div className="hidden sm:block overflow-auto max-h-[600px]">
+    <Table className="table-auto border-separate border-spacing-y-2 w-full text-sm sm:text-base">
+      <TableCaption className="mb-4 text-gray-600">
+        A list of all policies.
+      </TableCaption>
+      <TableHeader className="sticky top-0 z-10 bg-[#03A9FC] text-white">
+        <TableRow className="bg-[#03A9FC] text-white ">
+          <TableHead className="text-white">Policy ID</TableHead>
+          <TableHead className="text-white">Policy Name</TableHead>
+          <TableHead className="text-center text-white">Version</TableHead>
+          <TableHead className="text-center text-white">Updated On</TableHead>
+          <TableHead className="text-center text-white">Action</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {loading
+          ? Array.from({ length: 5 }).map((_, index) => (
+              <TableRow
+                key={index}
+                className="bg-white shadow-sm hover:bg-gray-200 animate-pulse"
               >
-                Showing {policies?.length} policies
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+                {[...Array(5)].map((_, i) => (
+                  <TableCell key={i} className="py-4 text-center">
+                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          : policies?.map((policy, index) => (
+              <TableRow
+                key={index}
+                className="bg-white shadow-sm transition-colors duration-200 hover:bg-blue-50"
+              >
+                <TableCell className="py-4">{policy.id}</TableCell>
+                <TableCell className="py-4">{policy.name}</TableCell>
+                <TableCell className="py-4 text-center">
+                  {policy.version}
+                </TableCell>
+                <TableCell className="py-4 text-center">
+                  {new Date(policy.updated_on).toLocaleString("en-IN", {
+                    timeZone: "Asia/Kolkata",
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  })}
+                </TableCell>
+                <TableCell className="py-4">
+                  <div className="flex justify-center gap-4">
+                    <button
+                      className="text-blue-600 hover:text-blue-800 transition"
+                      onClick={() => update(policy)}
+                    >
+                      <Pencil size={20} />
+                    </button>
+                    <button
+                      className="text-red-600 hover:text-red-800 transition"
+                      onClick={() => delete_policy(policy)}
+                      disabled={processing}
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell
+            colSpan={5}
+            className="text-center text-sm text-muted-foreground pt-6"
+          >
+            Showing {policies?.length} polic{policies?.length === 1 ? "y" : "ies"}
+          </TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
+  </div>
+
+  {/* MOBILE VIEW (Card layout) */}
+  <div className="sm:hidden space-y-4">
+    {policies?.map((policy, index) => (
+      <div
+        key={index}
+        className="rounded-xl border shadow-sm p-4 bg-white"
+      >
+        <div className="text-sm mb-2 space-y-1">
+          <div>
+            <span className="font-semibold">Policy ID:</span> {policy.id}
+          </div>
+          <div>
+            <span className="font-semibold">Name:</span> {policy.name}
+          </div>
+          <div>
+            <span className="font-semibold">Version:</span> {policy.version}
+          </div>
+          <div>
+            <span className="font-semibold">Updated:</span>{" "}
+            {new Date(policy.updated_on).toLocaleString("en-IN", {
+              timeZone: "Asia/Kolkata",
+              year: "numeric",
+              month: "short",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
+        </div>
+        <div className="flex justify-end gap-4 pt-2">
+          <button
+            className="text-blue-600 hover:text-blue-800 transition"
+            onClick={() => update(policy)}
+          >
+            <Pencil size={20} />
+          </button>
+          <button
+            className="text-red-600 hover:text-red-800 transition"
+            onClick={() => delete_policy(policy)}
+            disabled={processing}
+          >
+            <Trash2 size={20} />
+          </button>
+        </div>
       </div>
+    ))}
+  </div>
+</div>
+
+    
+      
     </div>
   );
 };
