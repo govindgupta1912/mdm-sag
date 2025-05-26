@@ -4,7 +4,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import enroll from "../../assets/enroll.png";
 import SecurityTab from "../../components/tabs/SecurityTab";
 import { useEffect, useState } from "react";
@@ -31,6 +31,7 @@ const CreatePolicy = () => {
 
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const incomingPolicy = location.state?.policyData;
   console.log("incomingPolicy=====", incomingPolicy);
 
@@ -69,12 +70,12 @@ const CreatePolicy = () => {
         `${API_BASE_URL}/api/create_policy`,
         localPolicy
       );
-       console.log("Policy_response=======", response_send);
-      if(response_send.data.status){
-         toast.success("Policy Created Successfully");
-         dispatch(resetPolicyData());
-      }
-      else{ 
+      console.log("Policy_response=======", response_send);
+      if (response_send.data.status) {
+        toast.success("Policy Created Successfully");
+        dispatch(resetPolicyData());
+        navigate("/policy");
+      } else {
         toast.error(response_send.data.message);
       }
     } catch (error) {
@@ -88,37 +89,34 @@ const CreatePolicy = () => {
     dispatch(setPolicyData(localPolicy));
 
     try {
-       const update_policy_response = await axios.post(
-      `${API_BASE_URL}/api/update_policy`,
-      localPolicy
-    );
+      const update_policy_response = await axios.post(
+        `${API_BASE_URL}/api/update_policy`,
+        localPolicy
+      );
       console.log("Update_Policy Response", update_policy_response);
-    // Check if the response contains a status property
-    // and if it's true
-    if (update_policy_response.data.status) {
-      toast.success("Policy Updated Successfully");
-          dispatch(resetPolicyData());
-    }
-    else {
-      toast.error(update_policy_response.data.message);  
-    }
+      // Check if the response contains a status property
+      // and if it's true
+      if (update_policy_response.data.status) {
+        toast.success("Policy Updated Successfully");
+        dispatch(resetPolicyData());
+        navigate("/policy");
+      } else {
+        toast.error(update_policy_response.data.message);
+      }
     } catch (error) {
       console.log("error_Message", error);
       toast.error("Something went wrong");
-      
     }
 
-   
     console.log("Update_Policy_send", localPolicy);
   };
 
   return (
-    <div className="w-full min-h-screen bg-white">
-      <div className="w-full ">
+    <div className="w-full  space-y-4 min-h-screen bg-white">
+      <div className="w-full">
         {/* Header */}
         {/* <div className="bg-black flex justify-between items-center px-4 w-full  "> */}
-          <div className="bg-black flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 w-full space-y-2 sm:space-y-0">
-
+        <div className="sticky top-[74px] z-40 bg-black flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 w-full space-y-2 sm:space-y-0">
           <div className="h-20 text-white text-2xl font-bold p-6 flex gap-2 items-center">
             <img src={enroll} className="w-7 h-7" />
             Manage Policy
@@ -126,22 +124,21 @@ const CreatePolicy = () => {
           <button
             onClick={incomingPolicy ? Update_Policy : Create_Policy}
             // className="w-30 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md shadow-sm px-4"
-             className="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm w-full sm:w-auto"
-
+            className="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm w-full sm:w-auto hover:bg-gray-100 transition-colors hover:scale-105 duration-200 flex items-center justify-center"
           >
-            <Link to={"/policy"}>
+            
               {incomingPolicy ? "Update Policy" : "Create Policy "}
-            </Link>
+            
           </button>
         </div>
 
         {/* Body */}
-        <div className="p-6 ">
+        <div className="p-6 mt-4">
           {/* <div className="p-4 sm:p-6 max-w-screen-xl mx-auto"> */}
 
           {/* Policy Name Input */}
           {!incomingPolicy ? (
-            <div className="mb-6 max-w-md">
+            <div className=" mb-6 max-w-md bg-white">
               <Label
                 htmlFor="policyName"
                 className="block mb-2 font-semibold text-gray-700"
@@ -162,8 +159,7 @@ const CreatePolicy = () => {
             </div>
           ) : (
             // <div className="flex justify-around border border-gray-300 p-6 rounded-md mb-4">
-              <div className="flex flex-col md:flex-row justify-around gap-4 border border-gray-300 p-4 rounded-md mb-4">
-
+            <div className="sticky top-[160px] z-60 flex flex-col md:flex-row justify-around gap-4 bg-white border border-gray-300 p-4 rounded-md mb-4">
               <div className="flex flex-col">
                 <span className="font-bold">Policy ID:</span>
                 {localPolicy.id}
@@ -179,15 +175,15 @@ const CreatePolicy = () => {
               <div className="flex flex-col">
                 <span className="font-bold">Updated ON:</span>
                 {/* {localPolicy.updatedOn} */}
-                  {new Date(localPolicy.updated_on).toLocaleString("en-IN", {
-                        timeZone: "Asia/Kolkata",
-                        year: "numeric",
-                        month: "short",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      })}
+                {new Date(localPolicy.updated_on).toLocaleString("en-IN", {
+                  timeZone: "Asia/Kolkata",
+                  year: "numeric",
+                  month: "short",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                })}
               </div>
             </div>
           )}
@@ -195,9 +191,8 @@ const CreatePolicy = () => {
           {/* Tabs */}
           <Tabs defaultValue="security" className="w-full flex flex-col">
             {/* <TabsList className="grid grid-cols-6 gap-2 mb-4 w-[1400px] "> */}
-              <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mb-4 w-full  h-14 overflow-x-auto">
-                {/* <TabsList className="flex overflow-x-auto gap-2 mb-4 w-full"> */}
-
+            <TabsList className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mb-4 w-full  h-14 overflow-x-auto bg-white                     ">
+              {/* <TabsList className="flex overflow-x-auto gap-2 mb-4 w-full"> */}
 
               {[
                 "security",

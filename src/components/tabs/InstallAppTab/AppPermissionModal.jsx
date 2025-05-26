@@ -136,6 +136,7 @@ import {
 } from "@/components/ui/select";
 import { Dialog } from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const AppPermissionModal = ({
   open,
@@ -225,11 +226,17 @@ const AppPermissionModal = ({
   if (appIndex !== -1) {
     targetApps[appIndex].permissionGrants = updatedPermissionGrants;
     setPolicyData(updatedPolicyData);
+    toast.success("Permissions updated successfully");
+     onOpenChange(false);
   }
+  else {
+    toast.error("App not found in policy data");
+  }
+ 
 
 
   //setPolicyData(updatedPolicy);
-  onOpenChange(false); // close modal
+  // onOpenChange(false); // close modal
     // Reset selected permissions
   setSelectedPermissions({});
   // Close the modal        

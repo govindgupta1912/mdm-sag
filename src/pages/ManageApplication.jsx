@@ -198,7 +198,7 @@ const ManageApplication = () => {
 
   return (
     <div>
-      <div className="flex justify-between bg-black p-6 items-center">
+      <div className=" sticky top-[74px] z-40 flex justify-between bg-black p-6 items-center">
         <div className="flex text-white text-2xl font-bold">
           <img src={application} alt="" />
           <h1>Manage Application</h1>
@@ -218,7 +218,8 @@ const ManageApplication = () => {
             <Button
               variant="outline"
               onClick={() => setOpen(true)}
-              className="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md shadow-sm"
+              className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors hover:scale-105 duration-200 
+            bg-white border border-gray-300 rounded-md shadow-sm"
             >
               <Plus size={30} className="text-black" />
             </Button>
@@ -226,75 +227,7 @@ const ManageApplication = () => {
 
           <DialogContent className="w-full sm:max-w-[500px] rounded-2xl shadow-2xl p-6 ">
             {processing && (
-              // <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50">
-              //   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-              //     <radialGradient
-              //       id="a1"
-              //       cx=".66"
-              //       fx=".66"
-              //       cy=".3125"
-              //       fy=".3125"
-              //       gradientTransform="scale(1.5)"
-              //     >
-              //       <stop offset="0" stop-color="#091C35"></stop>
-              //       <stop
-              //         offset=".3"
-              //         stopcolor="#091C35"
-              //         stop-opacity=".9"
-              //       ></stop>
-              //       <stop
-              //         offset=".6"
-              //         stop-color="#091C35"
-              //         stop-opacity=".6"
-              //       ></stop>
-              //       <stop
-              //         offset=".8"
-              //         stop-color="#091C35"
-              //         stop-opacity=".3"
-              //       ></stop>
-              //       <stop
-              //         offset="1"
-              //         stop-color="#091C35"
-              //         stop-opacity="0"
-              //       ></stop>
-              //     </radialGradient>
-              //     <circle
-              //       transform-origin="center"
-              //       fill="none"
-              //       stroke="url(#a1)"
-              //       stroke-width="7"
-              //       stroke-linecap="round"
-              //       stroke-dasharray="200 1000"
-              //       stroke-dashoffset="0"
-              //       cx="100"
-              //       cy="100"
-              //       r="20"
-              //     >
-              //       <animateTransform
-              //         type="rotate"
-              //         attributeName="transform"
-              //         calcMode="spline"
-              //         dur="1.8"
-              //         values="0;360"
-
-              //         keyTimes="0;1"
-              //         keySplines="0 0 1 1"
-              //         repeatCount="indefinite"
-              //       ></animateTransform>
-              //     </circle>
-              //     <circle
-              //       transform-origin="center"
-              //       fill="none"
-              //       opacity=".2"
-              //       stroke="#091C35"
-              //       stroke-width="7"
-              //       stroke-linecap="round"
-              //       cx="100"
-              //       cy="100"
-              //       r="20"
-              //     ></circle>
-              //   </svg>
-              // </div>
+             
               <div className="absolute inset-0 bg-white bg-opacity-80 flex flex-col gap-4 items-center justify-center z-50">
                 <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-blue-500"></div>
                 <p className="text-sm text-gray-700 font-medium">

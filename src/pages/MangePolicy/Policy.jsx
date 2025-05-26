@@ -19,7 +19,16 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const ITEMS_PER_PAGE = 8; // Number of items to display per page
 
 const Policy = () => {
   const navigate = useNavigate();
@@ -117,6 +126,7 @@ const Policy = () => {
   const [policies, setPolicies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const fetchPolicyData = async () => {
     setLoading(true); // Set loading to true before the API call
     try {
@@ -139,6 +149,15 @@ const Policy = () => {
   useEffect(() => {
     fetchPolicyData();
   }, []);
+
+  const totalPages = Math.ceil((policies?.length || 0) / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedPolicies = policies.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+
+  console.log(`Total policies: ${policies.length}, Total pages: ${totalPages}`);
 
   const update = async (policy) => {
     try {
@@ -190,7 +209,7 @@ const Policy = () => {
   return (
     <div>
       {/* <div className="bg-black w-full flex justify-between items-center  px-4"> */}
-      <div className="bg-black w-full flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 py-2 space-y-2 sm:space-y-0">
+      <div className=" sticky top-[74px] z-40 bg-black w-full flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 py-1 space-y-2 sm:space-y-0">
         {/* <div className=" h-20 text-white  text-2xl font-bold  p-6 flex "> */}
         <div className="text-white text-xl sm:text-2xl h-20 font-bold flex items-center gap-2">
           <img src={enroll} className="w-7 h-7" />
@@ -198,7 +217,7 @@ const Policy = () => {
         </div>
         <Link
           to={"/create-policy"}
-          className="w-10 h-10 flex items-center justify-center bg-white border border-gray-300 rounded-md shadow-sm"
+          className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors hover:scale-105 duration-200  bg-white border border-gray-300 rounded-md shadow-sm"
         >
           <Plus size={20} className="text-black" />
         </Link>
@@ -233,78 +252,82 @@ const Policy = () => {
                    </Table>
             </div> */}
 
-            <div className="w-full p-4">
-  {/* TABLE VIEW (Tablet and above) */}
-  <div className="hidden sm:block overflow-auto max-h-[600px]">
-    <Table className="table-auto border-separate border-spacing-y-2 w-full text-sm sm:text-base">
-      <TableCaption className="mb-4 text-gray-600">
-        A list of all policies.
-      </TableCaption>
-      <TableHeader className="sticky top-0 z-10 bg-[#03A9FC] text-white">
-        <TableRow className="bg-[#03A9FC] text-white ">
-          <TableHead className="text-white">Policy ID</TableHead>
-          <TableHead className="text-white">Policy Name</TableHead>
-          <TableHead className="text-center text-white">Version</TableHead>
-          <TableHead className="text-center text-white">Updated On</TableHead>
-          <TableHead className="text-center text-white">Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {loading
-          ? Array.from({ length: 5 }).map((_, index) => (
-              <TableRow
-                key={index}
-                className="bg-white shadow-sm hover:bg-gray-200 animate-pulse"
-              >
-                {[...Array(5)].map((_, i) => (
-                  <TableCell key={i} className="py-4 text-center">
-                    <div className="h-4 bg-gray-200 rounded w-full"></div>
-                  </TableCell>
-                ))}
+      <div className="w-full p-4">
+        {/* TABLE VIEW (Tablet and above) */}
+        <div className="hidden sm:block max-h-[600px]">
+          <Table className="table-auto border-separate border-spacing-y-2 w-full text-sm sm:text-base">
+            <TableCaption className="mb-4 text-gray-600">
+              A list of all policies.
+            </TableCaption>
+            <TableHeader className="sticky top-0 z-10 bg-[#03A9FC] text-white">
+              <TableRow className="bg-[#03A9FC] text-white ">
+                <TableHead className="text-white">Policy ID</TableHead>
+                <TableHead className="text-white">Policy Name</TableHead>
+                <TableHead className="text-center text-white">
+                  Version
+                </TableHead>
+                <TableHead className="text-center text-white">
+                  Updated On
+                </TableHead>
+                <TableHead className="text-center text-white">Action</TableHead>
               </TableRow>
-            ))
-          : policies?.map((policy, index) => (
-              <TableRow
-                key={index}
-                className="bg-white shadow-sm transition-colors duration-200 hover:bg-blue-50"
-              >
-                <TableCell className="py-4">{policy.id}</TableCell>
-                <TableCell className="py-4">{policy.name}</TableCell>
-                <TableCell className="py-4 text-center">
-                  {policy.version}
-                </TableCell>
-                <TableCell className="py-4 text-center">
-                  {new Date(policy.updated_on).toLocaleString("en-IN", {
-                    timeZone: "Asia/Kolkata",
-                    year: "numeric",
-                    month: "short",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
-                </TableCell>
-                <TableCell className="py-4">
-                  <div className="flex justify-center gap-4">
-                    <button
-                      className="text-blue-600 hover:text-blue-800 transition"
-                      onClick={() => update(policy)}
+            </TableHeader>
+            <TableBody>
+              {loading
+                ? Array.from({ length: 5 }).map((_, index) => (
+                    <TableRow
+                      key={index}
+                      className="bg-white shadow-sm hover:bg-gray-200 animate-pulse"
                     >
-                      <Pencil size={20} />
-                    </button>
-                    <button
-                      className="text-red-600 hover:text-red-800 transition"
-                      onClick={() => delete_policy(policy)}
-                      disabled={processing}
+                      {[...Array(5)].map((_, i) => (
+                        <TableCell key={i} className="py-4 text-center">
+                          <div className="h-4 bg-gray-200 rounded w-full"></div>
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                : paginatedPolicies?.map((policy, index) => (
+                    <TableRow
+                      key={index}
+                      className="bg-white shadow-sm transition-colors duration-200 hover:bg-blue-50"
                     >
-                      <Trash2 size={20} />
-                    </button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-      </TableBody>
-      <TableFooter>
+                      <TableCell className="py-4">{policy.id}</TableCell>
+                      <TableCell className="py-4">{policy.name}</TableCell>
+                      <TableCell className="py-4 text-center">
+                        {policy.version}
+                      </TableCell>
+                      <TableCell className="py-4 text-center">
+                        {new Date(policy.updated_on).toLocaleString("en-IN", {
+                          timeZone: "Asia/Kolkata",
+                          year: "numeric",
+                          month: "short",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })}
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <div className="flex justify-center gap-4">
+                          <button
+                            className="text-blue-600 hover:text-blue-800 transition"
+                            onClick={() => update(policy)}
+                          >
+                            <Pencil size={20} />
+                          </button>
+                          <button
+                            className="text-red-600 hover:text-red-800 transition"
+                            onClick={() => delete_policy(policy)}
+                            disabled={processing}
+                          >
+                            <Trash2 size={20} />
+                          </button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+            </TableBody>
+            {/* <TableFooter>
         <TableRow>
           <TableCell
             colSpan={5}
@@ -313,61 +336,101 @@ const Policy = () => {
             Showing {policies?.length} polic{policies?.length === 1 ? "y" : "ies"}
           </TableCell>
         </TableRow>
-      </TableFooter>
-    </Table>
-  </div>
-
-  {/* MOBILE VIEW (Card layout) */}
-  <div className="sm:hidden space-y-4">
-    {policies?.map((policy, index) => (
-      <div
-        key={index}
-        className="rounded-xl border shadow-sm p-4 bg-white"
-      >
-        <div className="text-sm mb-2 space-y-1">
-          <div>
-            <span className="font-semibold">Policy ID:</span> {policy.id}
-          </div>
-          <div>
-            <span className="font-semibold">Name:</span> {policy.name}
-          </div>
-          <div>
-            <span className="font-semibold">Version:</span> {policy.version}
-          </div>
-          <div>
-            <span className="font-semibold">Updated:</span>{" "}
-            {new Date(policy.updated_on).toLocaleString("en-IN", {
-              timeZone: "Asia/Kolkata",
-              year: "numeric",
-              month: "short",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </div>
+      </TableFooter> */}
+          </Table>
         </div>
-        <div className="flex justify-end gap-4 pt-2">
-          <button
-            className="text-blue-600 hover:text-blue-800 transition"
-            onClick={() => update(policy)}
-          >
-            <Pencil size={20} />
-          </button>
-          <button
-            className="text-red-600 hover:text-red-800 transition"
-            onClick={() => delete_policy(policy)}
-            disabled={processing}
-          >
-            <Trash2 size={20} />
-          </button>
+
+        {/* Pagination Controls */}
+        {!loading && totalPages >= 2 && (
+          <div className="mt-6 flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage((prev) => Math.max(prev - 1, 1));
+                    }}
+                  />
+                </PaginationItem>
+                {Array.from({ length: totalPages }).map((_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      href="#"
+                      isActive={i + 1 === currentPage}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage(i + 1);
+                      }}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                    }}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
+
+        {/* MOBILE VIEW (Card layout) */}
+        <div className="sm:hidden space-y-4">
+          {paginatedPolicies?.map((policy, index) => (
+            <div
+              key={index}
+              className="rounded-xl border shadow-sm p-4 bg-white"
+            >
+              <div className="text-sm mb-2 space-y-1">
+                <div>
+                  <span className="font-semibold">Policy ID:</span> {policy.id}
+                </div>
+                <div>
+                  <span className="font-semibold">Name:</span> {policy.name}
+                </div>
+                <div>
+                  <span className="font-semibold">Version:</span>{" "}
+                  {policy.version}
+                </div>
+                <div>
+                  <span className="font-semibold">Updated:</span>{" "}
+                  {new Date(policy.updated_on).toLocaleString("en-IN", {
+                    timeZone: "Asia/Kolkata",
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </div>
+              </div>
+              <div className="flex justify-end gap-4 pt-2">
+                <button
+                  className="text-blue-600 hover:text-blue-800 transition"
+                  onClick={() => update(policy)}
+                >
+                  <Pencil size={20} />
+                </button>
+                <button
+                  className="text-red-600 hover:text-red-800 transition"
+                  onClick={() => delete_policy(policy)}
+                  disabled={processing}
+                >
+                  <Trash2 size={20} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    ))}
-  </div>
-</div>
-
-    
-      
     </div>
   );
 };

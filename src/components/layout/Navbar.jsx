@@ -53,6 +53,12 @@ const Navbar = () => {
           >
             Manage Application
           </Link>
+          <Link
+            to={"/manage-content"}
+            className="border border-white text-white px-4 py-2 rounded-md font-medium hover:bg-white hover:text-black"
+          >
+            Content Management
+          </Link>
         </div>
       </div>
 

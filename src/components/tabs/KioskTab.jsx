@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ToggleItems from "../Reuseable_Components/ToggleItem";
 import {
   Select,
@@ -9,9 +9,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { use } from "react";
+import { use, useEffect } from "react";
+import apk from "../../assets/apk.png"; // Assuming you have a default APK icon
+import { fetchApplications } from "@/utilites/store/slices/applicationsSlice";
 
 const KioskTab = ({ policyData, setPolicyData }) => {
+    const dispatch = useDispatch();
   const {
     data: apps,
     status,
@@ -19,6 +22,9 @@ const KioskTab = ({ policyData, setPolicyData }) => {
   } = useSelector((state) => state.applications);
   console.log("apps", apps);
 
+  useEffect(() => {
+      dispatch(fetchApplications());
+    }, [dispatch]);
   // const handleSingleAppSelect = (val) => {
   //   const transformedApp = {
   //     title: val.app_name,
@@ -51,7 +57,7 @@ const KioskTab = ({ policyData, setPolicyData }) => {
       permissionGrants: [],
       managedConfiguration: [],
       downloadUrl: selectedApp.download_url,
-       isBlocked: false
+      isBlocked: false,
     };
 
     setPolicyData((prev) => ({
@@ -181,17 +187,70 @@ const KioskTab = ({ policyData, setPolicyData }) => {
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select an App" />
           </SelectTrigger>
-          <SelectContent>
+          {/* <SelectContent>
             <SelectGroup>
               <SelectLabel>Apps</SelectLabel>
               <SelectItem value="none">-- None --</SelectItem>
               {apps.map((app) => (
                 <SelectItem key={app.id} value={app.id.toString()}>
-                  {app.app_name || "App Name"}
+                  {
+                    <div className="flex items-center gap-2">
+                       
+                  
+                    <img
+                      className="h-10 w-15 sm:h-15 sm:w-15 rounded-full"
+                      src={app.icon ? `data:image/png;base64,${app.icon}` : apk}
+                      alt=""
+                    />
+
+                    {app.app_name || "App Name"}
+                    <span className="text-xs text-gray-500">
+                      {app.package_name || "Package Name"}
+                    </span>
+                    {app.version_name && (
+                      <span className="text-xs text-gray-500">
+                        {app.version_name || "Version Name"}
+                      </span>
+                    )}
+                    </div>
+                  }
+                  
                 </SelectItem>
               ))}
             </SelectGroup>
-          </SelectContent>
+          </SelectContent> */}
+          <SelectContent>
+  <SelectGroup>
+    <SelectLabel className="text-base font-semibold text-gray-700 mb-2">Apps</SelectLabel>
+    <SelectItem value="none">-- None --</SelectItem>
+
+    {apps.map((app) => (
+      <SelectItem key={app.id} value={app.id.toString()}>
+        <div className="flex items-center gap-3 p-2  rounded-md hover:bg-gray-50 transition-all">
+          <img
+            className="h-10 w-10 rounded-md object-cover border"
+            src={app.icon ? `data:image/png;base64,${app.icon}` : apk}
+            alt="App Icon"
+          />
+          <div className="flex flex-col">
+            <span className="font-medium text-sm text-gray-900">
+              {app.app_name || "App Name"}
+            </span>
+            <span className="text-xs text-gray-500">
+              {app.package_name || "Package Name"}
+            </span>
+            {app.version_name && (
+              <span className="text-xs text-gray-400">
+                {app.version_name}
+              </span>
+            )}
+          </div>
+        </div>
+      </SelectItem>
+    ))}
+  </SelectGroup>
+</SelectContent>
+
         </Select>
       </div>
     </div>

@@ -56,65 +56,7 @@ import { fetchDeviceList } from "@/utilites/store/slices/devicesListSlice";
 import { list } from "postcss";
 
 const ManageDevices = () => {
-  // const devicesList = [
-  //   {
-  //     id: "RZ25OPULZ",
-  //     deviceName: "Microsoft",
-  //     model: "Royal",
-  //     devicesName: "Office IT devices",
-  //     lastSynced: "2024-09-24 15:01:44",
-  //   },
-  //   {
-  //     id: "RZ25OPULx",
-  //     deviceName: "Microsoft",
-  //     model: "Royal",
-  //     devicesName: "Office IT devices",
-  //     lastSynced: "2024-09-24 15:01:44",
-  //   },
-  //   {
-  //     id: "RZ25OPULf",
-  //     deviceName: "Microsoft",
-  //     model: "Royal",
-  //     devicesName: "Office IT devices",
-  //     lastSynced: "2024-09-24 15:01:44",
-  //   },
-  //   {
-  //     id: "RZ25OPULs",
-  //     deviceName: "Microsoft",
-  //     model: "Royal",
-  //     devicesName: "Office IT devices",
-  //     lastSynced: "2024-09-24 15:01:44",
-  //   },
-  //   {
-  //     id: "RZ25OPULr",
-  //     deviceName: "Microsoft",
-  //     model: "Royal",
-  //     devicesName: "Office IT devices",
-  //     lastSynced: "2024-09-24 15:01:44",
-  //   },
-  //   {
-  //     id: "RZ25OPULa",
-  //     deviceName: "Microsoft",
-  //     model: "Royal",
-  //     devicesName: "Office IT devices",
-  //     lastSynced: "2024-09-24 15:01:44",
-  //   },
-  //   {
-  //     id: "RZ25OPULq",
-  //     deviceName: "Microsoft",
-  //     model: "Royal",
-  //     devicesName: "Office IT devices",
-  //     lastSynced: "2024-09-24 15:01:44",
-  //   },
-  //   {
-  //     id: "RZ25OPULp",
-  //     deviceName: "Microsoft",
-  //     model: "Royal",
-  //     devicesName: "Office IT devices",
-  //     lastSynced: "2024-09-24 15:01:44",
-  //   },
-  // ];
-
+ 
   const [selectedIds, setSelectedIds] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
   const [devicesList, setDevicesList] = useState([]);
@@ -183,6 +125,7 @@ const ManageDevices = () => {
   console.log("devicesList", devicesList);
 
   const delete_enroll_devices = async (devices) => {
+    setLoading(true);
     try {
       const delete_enroll_devices_response = await axios.post(
         `${API_BASE_URL}/api/delete_device`,
@@ -205,6 +148,7 @@ const ManageDevices = () => {
       console.log("faild to delete the devices", error);
       toast.error("Failed to delete device");
     }
+    setLoading(false);
   };
 
   const [policies, setPolicies] = useState([]);
@@ -349,33 +293,60 @@ const ManageDevices = () => {
   //   signal_strength: device.network_info?.signal_strength || "",
   //   applications_count: device.application?.length || 0,
   // });
-  const flattenDeviceData = (device) => ({
-    MODEL: device?.model || "",
-    MANUFACTURER: device?.manufacturer || "",
-    "ANDROID VERSION": device?.android_version || "",
-    "API LEVEL": device?.api_level || "",
-    // cpu: device?.cpu || "",
-    //gpu: device?.gpu || "",
-    ARCHITECTURE: device?.architecture || "",
-    "TOTAL RAM": device?.total_ram || "",
-    "TOTAL STORAGE": device?.total_storage || "",
-    // kernel_version: device?.kernel_version || "",
-    // security_patch: device?.security_patch || "N/A",
-    "SERIAL NO": device?.serial_no || "",
-    // accelerometer: device?.accelerometer || "",
-    // gyroscope: device?.gyroscope || "",
-    // magnetometer: device?.magnetometer || "",
-    // proximity: device?.proximity || "",
-    // fingerprint: device?.fingerprint || "",
-    // camera: device?.camera || "",
-    // microphone: device?.microphone || "",
-    // gps: device?.gps || "",
-    // encryption_status: device?.encryption_status || "",
-    // is_registered: device?.is_registered ? "Yes" : "No",
+  // const flattenDeviceData = (device) => ({
+  //   MODEL: device?.model || "",
+  //   MANUFACTURER: device?.manufacturer || "",
+  //   "ANDROID VERSION": device?.android_version || "",
+  //   "API LEVEL": device?.api_level || "",
+  //   // cpu: device?.cpu || "",
+  //   //gpu: device?.gpu || "",
+  //   ARCHITECTURE: device?.architecture || "",
+  //   "TOTAL RAM": device?.total_ram || "",
+  //   "TOTAL STORAGE": device?.total_storage || "",
+  //   // kernel_version: device?.kernel_version || "",
+  //   // security_patch: device?.security_patch || "N/A",
+  //   "SERIAL NO": device?.serial_no || "",
+  //   // accelerometer: device?.accelerometer || "",
+  //   // gyroscope: device?.gyroscope || "",
+  //   // magnetometer: device?.magnetometer || "",
+  //   // proximity: device?.proximity || "",
+  //   // fingerprint: device?.fingerprint || "",
+  //   // camera: device?.camera || "",
+  //   // microphone: device?.microphone || "",
+  //   // gps: device?.gps || "",
+  //   // encryption_status: device?.encryption_status || "",
+  //   // is_registered: device?.is_registered ? "Yes" : "No",
 
-    "POLICY NAME": device?.policy_name || "",
-    "POLICY VERSION": device?.policy_version || "",
-  });
+  //   "POLICY NAME": device?.policy_name || "",
+  //   "POLICY VERSION": device?.policy_version || "",
+  // });
+
+
+  const toTitleCase = (str) =>
+  str
+    .toLowerCase()
+    .replace(/\w\S*/g, (word) => word.charAt(0).toUpperCase() + word.slice(1));
+
+const flattenDeviceData = (device) => {
+  const data = {
+    "Model": device?.model || "",
+    "Manufacturer": device?.manufacturer || "",
+    "Android Version": device?.android_version || "",
+    "Api Level": device?.api_level || "",
+    "Architecture": device?.architecture || "",
+    "Total Ram": device?.total_ram || "",
+    "Total Storage": device?.total_storage || "",
+    "Serial No": device?.serial_no || "",
+    "Policy Name": device?.policy_name || "",
+    "Policy Version": device?.policy_version || "",
+  };
+
+  // Optionally, apply formatting programmatically to all keys
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [toTitleCase(key), value])
+  );
+};
+
 
   console.log("flattenedData", flattenDeviceData(devicesList[0]));
 
@@ -661,7 +632,7 @@ const ManageDevices = () => {
       </Dialog>
 
       <div>
-        <div className="flex flex-col sm:flex-row justify-between items-center bg-black p-4 sm:p-6 sm:gap-0 gap-4 ">
+        <div className="sticky top-[80px] z-40 flex flex-col sm:flex-row justify-between items-center bg-black p-4 sm:p-6 sm:gap-0 gap-4 ">
           <div className="flex items-center gap-2 text-center">
             <img src={devices_icon} alt="" className="w-6 h-6 sm:w-8 sm:h-8" />
             <p className="text-white text-lg sm:text-2xl font-bold">
@@ -670,7 +641,7 @@ const ManageDevices = () => {
           </div>
           <div className="flex flex-wrap gap-2 sm:gap-4">
             <Button
-              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-green-600 transition duration-200"
+              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-green-600 hover:scale-105 transition duration-200"
               onClick={handleExportPdf}
             >
               <svg
@@ -712,7 +683,7 @@ const ManageDevices = () => {
               PDF
             </Button>
             <Button
-              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-red-600 transition duration-200"
+              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-red-600 hover:scale-105 transition duration-200"
               onClick={handleExportToExcel}
             >
               <svg
@@ -743,7 +714,7 @@ const ManageDevices = () => {
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="group border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-white hover:text-black transition duration-200">
+                <Button className="group border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-white hover:text-black hover:scale-105 transition duration-200">
                   <svg
                     width="20"
                     height="10"
@@ -828,7 +799,7 @@ const ManageDevices = () => {
               </TableHeader>
 
               <TableBody>
-                {status === "loading"
+                {status === "loading"|| loading
                   ? Array(5)
                       .fill()
                       .map((_, index) => (

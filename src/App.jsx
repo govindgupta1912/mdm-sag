@@ -22,6 +22,7 @@ import ManageApplication from "./pages/ManageApplication.jsx";
 import ManageDevices from "./pages/ManageDevices/ManageDevices.jsx";
 import DeviceDetails from "./pages/ManageDevices/DeviceDetails.jsx";
 import Policy from "./pages/MangePolicy/Policy.jsx";
+import ManageContent from "./pages/ContentManagement/MangeContent.jsx";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ const approuter = createBrowserRouter(
         <Route path="/manage-application" element={<ManageApplication />} />
         <Route path="/manage-devices" element={<ManageDevices/>}/>
         <Route path="/devices-details" element={<DeviceDetails/>}/>
+        <Route path="/manage-content" element={<ManageContent/>} />
       </Route>
     </>
   )

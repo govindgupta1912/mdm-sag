@@ -125,8 +125,8 @@ const Enroll = () => {
   };
 
   return (
-    <div className="bg-white flex flex-col items-center w-full h-[800px]">
-      <div className="bg-black w-full h-20 text-white  text-2xl font-bold  p-6 flex justify-center">
+    <div className="bg-white flex flex-col items-center w-full h-full min-h-screen">
+      <div className="sticky top-[74px] z-40 bg-black w-full h-20 text-white  text-2xl font-bold  p-6 flex justify-center">
         <img src={enroll} className="w-7 h-7" />
         Enrolling The Device
       </div>

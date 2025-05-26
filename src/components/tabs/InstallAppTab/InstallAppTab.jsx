@@ -24,6 +24,7 @@ import { fetchApplications } from "@/utilites/store/slices/applicationsSlice";
 import AppConfigModal from "./AppConfigModal";
 import AppPermissionModal from "./AppPermissionModal";
 import { Checkbox } from "@/components/ui/checkbox";
+import apk from "../../../assets/apk.png"; // Adjust the path as necessary
 
 
 const InstallAppTab = ({ policyData, setPolicyData }) => {
@@ -242,6 +243,11 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
                         !policyData.data.kioskPolicy.multiApp
                       }
                     />
+                     <img
+                                        className="h-10 w-15 sm:h-15 sm:w-15 rounded-full"
+                                        src={app.icon ? `data:image/png;base64,${app.icon}` :apk}
+                                        alt=""
+                                      />
                     <div>
                       <p className="font-semibold">{app.app_name}</p>
                       <p className="text-xs text-gray-500">{app.package_name}</p>
