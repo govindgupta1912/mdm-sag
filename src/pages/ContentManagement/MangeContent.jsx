@@ -5,6 +5,7 @@ import  upload from "../../assets/upload_file.png";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import UploadContent from "./UploadContent";
+import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 
 const ManageContent =()=>{
@@ -30,6 +31,32 @@ const ManageContent =()=>{
             <h1 className="text-2xl font-bold mb-4">Manage Content</h1>
             <p className="text-gray-600">This page is under construction.</p>
             <p className="text-gray-600">Please check back later.</p>
+        </div>
+        <div>
+          
+          <Table>
+            <TableCaption>
+
+            </TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-left">File Name</TableHead>
+                <TableHead className="text-left">File Type</TableHead>
+                <TableHead className="text-left">File Size</TableHead>
+                <TableHead className="text-left"> TimeStamp</TableHead>
+                <TableHead className="text-left">Actions</TableHead>
+                <TableHead></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {
+
+              }
+              </TableBody>
+              <TableFooter>
+
+              </TableFooter>
+          </Table>
         </div>
           
       <UploadContent open={open} setOpen={setOpen}/> 
