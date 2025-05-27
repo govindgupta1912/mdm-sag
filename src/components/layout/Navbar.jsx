@@ -74,7 +74,7 @@ const Navbar = () => {
             Manage Device
           </button>
           <button className="border border-white text-white px-1 py-1 text-sm rounded-md font-normal hover:text-black hover:bg-white ">
-            Manage Policyborder
+            Manage Policy
           </button>
         </div>
       )}
