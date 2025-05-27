@@ -5,6 +5,7 @@ import serialReducer from './slices/serialSlice'
 import policyReducer from './slices/policySlice'
 import applicationsReducer from './slices/applicationsSlice'
 import devicesReducer from './slices/devicesListSlice'
+import contentListReducer from './slices/contentListSlice'
 const appStore = configureStore(
     {
         reducer:{
@@ -12,6 +13,7 @@ const appStore = configureStore(
            policy: policyReducer,
            applications: applicationsReducer,
            devicesList: devicesReducer,
+           contentList: contentListReducer,
         },
         
     }
