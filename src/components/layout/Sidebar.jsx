@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Fetch from "./Fetch";
+import Fetch from "../../pages/FetchDeviceInfo/Fetch";
 import { connect, useDispatch } from "react-redux";
-import { setSerialNumber } from "../utilites/serialSlice";
+import { setSerialNumber } from "../../utilites/store/slices/serialSlice";
 
 const Sidebar = () => {
   const [info, setInfo] = useState(null); // Initialize as null
@@ -46,9 +46,8 @@ const Sidebar = () => {
   };
 
   return (
-   // <div className="w-1/5 h-screen  p-4 flex flex-col space-y-2">
-      <div className="w-1/5 fixed top-16 left-0 bottom-0 overflow-y-auto p-4 bg-white shadow-md">
-
+    // <div className="w-1/5 h-screen  p-4 flex flex-col space-y-2">
+    <div className="w-1/5 fixed top-16 left-0 bottom-0 overflow-y-auto p-4 bg-white shadow-md">
       <h1 className="text-[#03A9FC] font-semibold text-center text-2xl">
         Available Device
       </h1>

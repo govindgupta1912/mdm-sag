@@ -1,4 +1,4 @@
-import { Switch } from "./ui/switch";
+import { Switch } from "../ui/switch";
 
 const ToggleItems = ({ title, description,value,onChange }) => (
   <div className="flex items-center justify-between py-2 border-b border-gray-200">
@@ -7,7 +7,9 @@ const ToggleItems = ({ title, description,value,onChange }) => (
       <p className="text-sm text-gray-500">{description}</p>
     </div>
     {/* <Switch defaultChecked /> */}
-    <Switch checked={value} onCheckedChange={onChange} />
+    <Switch checked={value} onCheckedChange={onChange}
+    className="data-[state=checked]:bg-[#03A9FC] z-0 "
+    />
   </div>
 );
 

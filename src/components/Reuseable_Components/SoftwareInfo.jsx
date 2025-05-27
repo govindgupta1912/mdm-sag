@@ -1,6 +1,6 @@
 import React from "react";
 
-const HardwareInfo = ({ details }) => {
+const SoftwareInfo = ({ details }) => {
   // If details are not available, show a placeholder
   if (!details) {
     return <p className="text-gray-500">No data available</p>;
@@ -18,7 +18,7 @@ const HardwareInfo = ({ details }) => {
   console.log('SOFTWARE ========>', details)
 
   return (
-    <div className="max-w-md mx-auto p-4  rounded-2xl ">
+    <div className="max-w-md mx-auto p-4  rounded-2xl  bg-white ">
       <h2 className="text-lg font-semibold mb-3">💻 Software Info</h2>
       <div className="space-y-2">
         {softwareData.map((item, index) => (
@@ -32,4 +32,4 @@ const HardwareInfo = ({ details }) => {
   );
 };
 
-export default HardwareInfo;
+export default SoftwareInfo;

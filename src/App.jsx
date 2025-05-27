@@ -1,5 +1,5 @@
-import Navbar from "./components/Navbar.jsx";
-import Fetch from "./components/Fetch.jsx";
+import Navbar from "./components/layout/Navbar.jsx";
+import Fetch from "./pages/FetchDeviceInfo/Fetch.jsx";
 
 import {
   createBrowserRouter,
@@ -9,15 +9,20 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Sidebar from "./components/Sidebar.jsx";
+import Sidebar from "./components/layout/Sidebar.jsx";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
-import Enroll from "./components/Enroll.jsx";
-import appStore from "./utilites/appStore.js";
-import Policy from "./pages/Policy.jsx";
-import CreatePolicy from "./components/CreatePolicy.jsx";
+import Enroll from "./pages/EnrollDevice/Enroll.jsx";
+import appStore from "./utilites/store/appStore.js";
+//import Policy from "./pages/MangePolicy/Policy.jsx";
+import CreatePolicy from "./pages/MangePolicy/CreatePolicy.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ManageApplication from "./pages/ManageApplication.jsx";
+import ManageDevices from "./pages/ManageDevices/ManageDevices.jsx";
+import DeviceDetails from "./pages/ManageDevices/DeviceDetails.jsx";
+import Policy from "./pages/MangePolicy/Policy.jsx";
+import ManageContent from "./pages/ContentManagement/MangeContent.jsx";
 
 function App() {
   return (
@@ -44,8 +49,12 @@ const approuter = createBrowserRouter(
       <Route path="" element={<App />}>
         <Route index element={<Fetch />} />
         <Route path="/enroll" element={<Enroll />} />
-        <Route path="/policy" element={<Policy />} />
+        <Route path="/policy" element={<Policy/>} />
         <Route path="/create-policy" element={<CreatePolicy />} />
+        <Route path="/manage-application" element={<ManageApplication />} />
+        <Route path="/manage-devices" element={<ManageDevices/>}/>
+        <Route path="/devices-details" element={<DeviceDetails/>}/>
+        <Route path="/manage-content" element={<ManageContent/>} />
       </Route>
     </>
   )
