@@ -54,10 +54,11 @@ import { saveAs } from "file-saver";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDeviceList } from "@/utilites/store/slices/devicesListSlice";
 import { list } from "postcss";
+import { fetchContentList } from "@/utilites/store/slices/contentListSlice";
 
 const ManageDevices = () => {
- 
   const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedContentIds, setSelectedContentIds] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
   const [devicesList, setDevicesList] = useState([]);
   const [selectedPolicyId, setSelectedPolicyId] = useState(null);
@@ -106,6 +107,16 @@ const ManageDevices = () => {
   useEffect(() => {
     dispatch(fetchDeviceList());
   }, [dispatch, reloadDevices]);
+
+  const {
+    list: contentList,
+    status: contentStatus,
+    error: contentError,
+  } = useSelector((state) => state.contentList);
+
+  useEffect(() => {
+    dispatch(fetchContentList());
+  }, [dispatch]);
 
   useEffect(() => {
     if (status === "succeeded") {
@@ -199,8 +210,42 @@ const ManageDevices = () => {
     console.log("Selected Policy ID:", selectedPolicyId);
     console.log("Selected Device IDs:", selectedIds);
     setActiveModal(null);
+    setSelectedIds([]);
+    setSelectedPolicyId(null);
     setReloadDevices((prev) => !prev);
   };
+
+  const send_content_to_devices = async () => {
+    if (!selectedContentIds) {
+      toast.error("Please Select the Content to send");
+      return;
+    }
+    try {
+      const content_send_response = await axios.post(
+        `${API_BASE_URL}/api/send_content_to_devices`,
+        {
+          content_ids: selectedContentIds,
+          device_ids: selectedIds,
+        }
+      );
+      console.log("content_send _response", content_send_response);
+
+      if (content_send_response.data.status) {
+        toast.success(content_send_response.data.message);
+        setActiveModal(null);
+        setSelectedContentIds([]);
+        setSelectedIds([]);
+      } else {
+        toast.error(content_send_response.data.message);
+      }
+    } catch (error) {
+      console.log("Falied to Send The Content", error);
+      toast.error(error || "Something went wrong");
+    }
+    console.log("selected devicesIds", selectedIds);
+    console.log("selected contentIds", selectedContentIds);
+  };
+
   // Function to send notification to selected devices
   const sendNotificationToDevice = async () => {
     if (!message) {
@@ -246,6 +291,25 @@ const ManageDevices = () => {
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
+
+  const toggleSelectOneContent = (id) => {
+    setSelectedContentIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const isAllSelectedContent =
+    selectedContentIds.length === contentList?.length;
+
+  const toggleSelectAllContent = () => {
+    if (isAllSelectedContent) {
+      setSelectedContentIds([]);
+    } else {
+      setSelectedContentIds(contentList?.map((content) => content.content_id));
+    }
+  };
+
+  console.log("contents=====", selectedContentIds);
 
   const handelActionClick = (type) => {
     if (selectedIds.length === 0) {
@@ -312,41 +376,35 @@ const ManageDevices = () => {
   //   // proximity: device?.proximity || "",
   //   // fingerprint: device?.fingerprint || "",
   //   // camera: device?.camera || "",
-  //   // microphone: device?.microphone || "",
-  //   // gps: device?.gps || "",
-  //   // encryption_status: device?.encryption_status || "",
-  //   // is_registered: device?.is_registered ? "Yes" : "No",
-
-  //   "POLICY NAME": device?.policy_name || "",
-  //   "POLICY VERSION": device?.policy_version || "",
-  // });
-
+  //   // microphone:  toast.success(response.message);
 
   const toTitleCase = (str) =>
-  str
-    .toLowerCase()
-    .replace(/\w\S*/g, (word) => word.charAt(0).toUpperCase() + word.slice(1));
+    str
+      .toLowerCase()
+      .replace(
+        /\w\S*/g,
+        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+      );
 
-const flattenDeviceData = (device) => {
-  const data = {
-    "Model": device?.model || "",
-    "Manufacturer": device?.manufacturer || "",
-    "Android Version": device?.android_version || "",
-    "Api Level": device?.api_level || "",
-    "Architecture": device?.architecture || "",
-    "Total Ram": device?.total_ram || "",
-    "Total Storage": device?.total_storage || "",
-    "Serial No": device?.serial_no || "",
-    "Policy Name": device?.policy_name || "",
-    "Policy Version": device?.policy_version || "",
+  const flattenDeviceData = (device) => {
+    const data = {
+      Model: device?.model || "",
+      Manufacturer: device?.manufacturer || "",
+      "Android Version": device?.android_version || "",
+      "Api Level": device?.api_level || "",
+      Architecture: device?.architecture || "",
+      "Total Ram": device?.total_ram || "",
+      "Total Storage": device?.total_storage || "",
+      "Serial No": device?.serial_no || "",
+      "Policy Name": device?.policy_name || "",
+      "Policy Version": device?.policy_version || "",
+    };
+
+    // Optionally, apply formatting programmatically to all keys
+    return Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [toTitleCase(key), value])
+    );
   };
-
-  // Optionally, apply formatting programmatically to all keys
-  return Object.fromEntries(
-    Object.entries(data).map(([key, value]) => [toTitleCase(key), value])
-  );
-};
-
 
   console.log("flattenedData", flattenDeviceData(devicesList[0]));
 
@@ -603,6 +661,128 @@ const flattenDeviceData = (device) => {
         </DialogContent>
       </Dialog>
 
+      {/*content Model*/}
+{/* 
+      <Dialog
+        open={activeModal === "Content"}
+        onOpenChange={() => setActiveModal(null)}
+      >
+        <DialogContent>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="p-6  max-h-[80vh] overflow-y-auto"
+          >
+            <DialogHeader>
+              <DialogTitle>Select Content</DialogTitle>
+              <DialogDescription>
+                Select a Contents for selected devices.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div>
+              <div>
+                <Checkbox
+                  checked={isAllSelectedContent}
+                  onCheckedChange={toggleSelectAllContent}
+                  // className="border-gray-400 data-[state=checked]:bg-[#03A9FC]"
+                />
+
+                <Label>Select All{contentList?.length}</Label>
+              </div>
+              {contentList?.map((content, index) => (
+                <div key={content.content_id}>
+                  <Checkbox
+                    // checked={selectedIds.includes(device.device_id)}
+                    checked={selectedContentIds.includes(content.content_id)}
+                    onCheckedChange={() =>
+                      toggleSelectOneContent(content.content_id)
+                    }
+                    // className="border-gray-400 data-[state=checked]:bg-[#03A9FC]"
+                  />
+
+                  <Label> {content.filename}.{content.filetype}  ({content.size}mB)</Label>
+                </div>
+              ))}
+            </div>
+
+            <DialogFooter className="mt-6">
+              <Button variant="outline" onClick={() => setActiveModal(null)}>
+                Cancel
+              </Button>
+              <Button onClick={send_content_to_devices}>Send Content</Button>
+            </DialogFooter>
+          </motion.div>
+        </DialogContent>
+      </Dialog> */}
+
+
+      <Dialog
+  open={activeModal === "Content"}
+  onOpenChange={() => setActiveModal(null)}
+>
+  <DialogContent>
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="p-6 max-h-[80vh] overflow-y-auto space-y-4"
+    >
+      <DialogHeader>
+        <DialogTitle className="text-xl font-semibold">Select Content</DialogTitle>
+        <DialogDescription>
+          Choose the contents you want to send to the selected devices.
+        </DialogDescription>
+      </DialogHeader>
+
+      <div className="bg-gray-50 rounded-xl shadow p-4 space-y-4 border">
+        {/* Select All */}
+        <div className="flex items-center space-x-3 border-b pb-3">
+          <Checkbox
+            checked={isAllSelectedContent}
+            onCheckedChange={toggleSelectAllContent}
+          />
+          <Label className="font-medium">Select All ({contentList?.length})</Label>
+        </div>
+
+        {/* Content List */}
+        <div className="space-y-3">
+          {contentList?.map((content) => (
+            <div
+              key={content.content_id}
+              className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
+                selectedContentIds.includes(content.content_id)
+                  ? "bg-blue-50 border border-blue-300"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              <div className="flex items-center space-x-3">
+                <Checkbox
+                  checked={selectedContentIds.includes(content.content_id)}
+                  onCheckedChange={() => toggleSelectOneContent(content.content_id)}
+                />
+                <Label className="text-sm font-medium">
+                  {content.filename}.{content.filetype}
+                </Label>
+              </div>
+              <span className="text-xs text-gray-500">{content.size} MB</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <DialogFooter className="mt-6 flex justify-end space-x-2">
+        <Button variant="outline" onClick={() => setActiveModal(null)}>
+          Cancel
+        </Button>
+        <Button onClick={send_content_to_devices}>Send Content</Button>
+      </DialogFooter>
+    </motion.div>
+  </DialogContent>
+</Dialog>
+
+
       {/* send notification modal */}
       <Dialog
         open={activeModal === "Notification"}
@@ -799,7 +979,7 @@ const flattenDeviceData = (device) => {
               </TableHeader>
 
               <TableBody>
-                {status === "loading"|| loading
+                {status === "loading" || loading
                   ? Array(5)
                       .fill()
                       .map((_, index) => (

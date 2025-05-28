@@ -7,9 +7,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { fetchContentList } from "@/utilites/store/slices/contentListSlice";
 import { Plus } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -96,6 +98,8 @@ const UploadContent = ({ open, setOpen }) => {
   const [files, setFiles] = useState([]);
   const [uplooadProgress, setUploadProgress] = useState({});
 
+     const dispatch = useDispatch();
+
   const onDrop = useCallback((acceptedFiles) => {
     const filesWithPreview = acceptedFiles.map((file) => {
       const preview = file.type.startsWith("image/")
@@ -179,6 +183,8 @@ const UploadContent = ({ open, setOpen }) => {
     }
    
     toast.success("All files uploaded successfully!");
+     dispatch(fetchContentList());
+     
     //alert("All files uploaded successfully!");
     setFiles([]);
     setUploadProgress({});
