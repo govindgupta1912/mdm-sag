@@ -32,15 +32,19 @@ import { toast } from "react-toastify";
 import { RiEdit2Fill } from "react-icons/ri";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import EditContentDialog from "./EditContentDialog";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ManageContent = () => {
   const [open, setOpen] = useState(false);
-  const [contentModalOpen,setContentModalOpen] = useState(false);
+  //const [contentModalOpen,setContentModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedContent, setSelectedContent] = useState(null);
 const [editPath, setEditPath] = useState("");
 const [editFileName, setEditFileName] = useState("");
+const [contentModalOpen, setContentModalOpen] = useState(false);
+const [selectedContentData, setSelectedContentData] = useState(null);
+
   const dispatch = useDispatch();
   const {
     list: contentList,
@@ -79,53 +83,99 @@ const [editFileName, setEditFileName] = useState("");
     }
     setLoading(false);
   };
- const Edit_Content =(content)=>{
+ 
+  // const handelSave=async()=>{
+  //    setLoading(true);
+  //   try {
+  //      const Edit_Content_Response= await axios.post(`${API_BASE_URL}/api/edit_content`,{
+  //       content_id:selectedContent,
+  //       filename:editFileName,
+  //       filepath:editPath
+  //      })
+
+  //      if(Edit_Content_Response.data.status){
+  //       toast.success(Edit_Content_Response?.data?.message || "Content Edited Successfully");
+        
+  //        setContentModalOpen(false);
+  //        dispatch(fetchContentList());
+  //      }else {
+  //       toast.error(Edit_Content_Response.data?.message || "Error Will Editing The Content")
+  //      }
+
+  //      console.log("edit_content_response=====",Edit_Content_Response);
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.message)
+      
+  //   }
+      
+  //   setLoading(false);
+
+       
+  // }
+
+//  const Edit_Content =(content)=>{
   
-    setSelectedContent(content);
-  setEditPath(content?.path || "");
-  setEditFileName(content?.filename || "")
+//     setSelectedContent(content.content_id);
+//   setEditPath(content?.path || "");
+//   setEditFileName(content?.filename || "")
+//   setContentModalOpen(true);
+   
+//  }
+
+ const Edit_Content = (content) => {
+  setSelectedContentData(content);
   setContentModalOpen(true);
+};
+
    
- }
-   
-  const editDialog = (
-  <Dialog open={contentModalOpen} onOpenChange={setContentModalOpen}>
-    <DialogContent>
-      <DialogHeader>
-        <DialogTitle>Edit File Path</DialogTitle>
-      </DialogHeader>
-      <div className="space-y-4">
-        <Label htmlFor="edit-path">File Path</Label>
-        <Input
-          id="edit-path"
-          value={editPath}
-          onChange={(e) => setEditPath(e.target.value)}
-        />
-      </div>
-       <div className="space-y-4">
-        <Label htmlFor="edit-path">File Name</Label>
-        <Input
-          id="edit-path"
-          value={editFileName}
-          onChange={(e) => setEditFileName(e.target.value)}
-        />
-      </div>
-      <DialogFooter>
-        <Button onClick={() => {
-          // Save logic here
-          console.log("Saving path", editPath, "for", selectedContent);
-          setContentModalOpen(false);
-        }}>
-          Save
-        </Button>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
-);
+//   const editDialog = (
+//   <Dialog open={contentModalOpen} onOpenChange={setContentModalOpen}>
+//     <DialogContent>
+//       <DialogHeader>
+//         <DialogTitle>Edit File Path</DialogTitle>
+//       </DialogHeader>
+//       <div className="space-y-4">
+//         <Label htmlFor="edit-path">File Path</Label>
+//         <Input
+//           id="edit-path"
+//           value={editPath}
+//           onChange={(e) => setEditPath(e.target.value)}
+//         />
+//       </div>
+//        <div className="space-y-4">
+//         <Label htmlFor="edit-filename">File Name</Label>
+//         <Input
+//           id="edit-filename"
+//           value={editFileName}
+//           onChange={(e) => setEditFileName(e.target.value)}
+//         />
+//       </div>
+//       <DialogFooter>
+//         <Button onClick={async () => {
+//           // Save logic here
+//           await handelSave()
+//           console.log("Saving path", editPath, "for", selectedContent);
+         
+//         }}>
+//           Save
+//         </Button>
+//       </DialogFooter>
+//     </DialogContent>
+//   </Dialog>
+// );
 
   return (
     <>
-{editDialog}
+{/* {editDialog} */}
+<EditContentDialog
+  open={contentModalOpen}
+  setOpen={setContentModalOpen}
+  selectedContent={selectedContentData?.content_id}
+  contentData={selectedContentData}
+  onSave={() => dispatch(fetchContentList())}
+/>
+
 
     <div>
       <div className=" sticky top-[74px] z-40 flex justify-between bg-black p-6 items-center">
@@ -188,7 +238,7 @@ const [editFileName, setEditFileName] = useState("");
                     ))
                 : contentList?.map((content, index) => (
                     <TableRow
-                      key={index}
+                      key={content.content_id}
                       className="bg-white shadow-sm transition-colors duration-200 rounded-lg hover:bg-blue-50"
                     >
                       <TableCell className="py-4 font-mono">

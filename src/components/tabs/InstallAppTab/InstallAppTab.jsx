@@ -25,7 +25,8 @@ import AppConfigModal from "./AppConfigModal";
 import AppPermissionModal from "./AppPermissionModal";
 import { Checkbox } from "@/components/ui/checkbox";
 import apk from "../../../assets/apk.png"; // Adjust the path as necessary
-
+import { toast } from "react-toastify";
+//import { c } from "vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P";
 
 const InstallAppTab = ({ policyData, setPolicyData }) => {
   const [selectedApp, setSelectedApp] = useState([]);
@@ -64,7 +65,7 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
       permissionGrants: [],
       managedConfiguration: [],
       downloadUrl: app.download_url,
-      isBlocked: false
+      isBlocked: false,
     };
     //const updatePolicyData = { ...policyData };
     const updatePolicyData = structuredClone(policyData);
@@ -98,45 +99,82 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
 
   const handelBlockAppChange = (app, ischecked) => {
     const updatedPolicyData = structuredClone(policyData);
-    const isMulitiApp =updatedPolicyData.data.kioskPolicy.multiApp;
+    const isMulitiApp = updatedPolicyData.data.kioskPolicy.multiApp;
     const targetArray = isMulitiApp
       ? updatedPolicyData.data.kioskPolicy.allowedApps
-      :updatedPolicyData.data.applications;
+      : updatedPolicyData.data.applications;
 
-      const updatedApps = targetArray.map((item) => {
-        if(item.packageName === app.package_name){
-          return{
-            ...item,
-            isBlocked: ischecked
-          }
-        }
-        return item;
-      });
-      if(isMulitiApp){
-        updatedPolicyData.data.kioskPolicy.allowedApps = updatedApps;
+    const updatedApps = targetArray.map((item) => {
+      if (item.packageName === app.package_name) {
+        return {
+          ...item,
+          isBlocked: ischecked,
+        };
       }
-      else{
-        updatedPolicyData.data.applications = updatedApps;
-      }
-      setPolicyData(updatedPolicyData);
-    
-
-  }
+      // else
+      // {
+      //   toast.error("please enable the app the before blocking the app");
+      // }
+      return item;
+    });
+    if (isMulitiApp) {
+      updatedPolicyData.data.kioskPolicy.allowedApps = updatedApps;
+    } else {
+      updatedPolicyData.data.applications = updatedApps;
+    }
+    setPolicyData(updatedPolicyData);
+  };
 
   const openAppConfigModal = (app) => {
-   // console.log("AppConfigModal", app);
-    
-    setSelectedApp(app);
-    setConfigModalOpen(true);
-  }
- const openAppPermissionModal = (app) => {
-  setSelectedApp(app);
-  setAppPermissionModalOpen(true);
-  console.log("AppPermissionModal", app);
- }
+    // console.log("AppConfigModal", app);
+    const multiApp = policyData.data.kioskPolicy.multiApp;
 
-  console.log("AppConfigModalSelectedApp===",selectedApp);
-  
+    const targetArray = multiApp
+      ? policyData.data.kioskPolicy.allowedApps
+      : policyData.data.applications;
+
+    console.log("trageted array=========", targetArray);
+    console.log("app=======", app);
+
+    const alreadyExists = targetArray.some(
+      (a) => a.packageName === app.package_name
+    );
+    if (alreadyExists) {
+      setSelectedApp(app);
+      setConfigModalOpen(true);
+    } else {
+      toast.error("Please enable the app before setting the configration");
+    }
+    // setSelectedApp(app);
+    // setConfigModalOpen(true);
+  };
+  const openAppPermissionModal = (app) => {
+
+    const multiApp = policyData.data.kioskPolicy.multiApp;
+
+    const targetArray = multiApp
+      ? policyData.data.kioskPolicy.allowedApps
+      : policyData.data.applications;
+
+    
+    const alreadyExists = targetArray.some(
+      (a) => a.packageName === app.package_name
+    );
+    if (alreadyExists) {
+      setSelectedApp(app);
+      setAppPermissionModalOpen(true);
+    } else {
+      toast.error("Please enable the app before setting the permission");
+    }
+
+
+    // setSelectedApp(app);
+    // setAppPermissionModalOpen(true);
+    // console.log("AppPermissionModal", app);
+  };
+
+  console.log("AppConfigModalSelectedApp===", selectedApp);
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-semibold mb-6 text-center md:text-left">
@@ -204,14 +242,13 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
           </DropdownMenu>
         )}
       </div> */}
-{/* 
+      {/* 
       <div className="mt-6 w-full"> */}
-        <div className="overflow-x-auto">
-
+      <div className="overflow-x-auto">
         <Table className="m-w-[800px]">
           <TableCaption>A list of your Application.</TableCaption>
           <TableHeader>
-            <TableRow >
+            <TableRow>
               <TableHead className="text-[#03A9FC] font-bold ">Name</TableHead>
               <TableHead className="text-[#03A9FC] font-bold ">
                 Version
@@ -223,34 +260,37 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
                 Configuration
               </TableHead>
               <TableHead className="text-[#03A9FC] font-bold">
-                 Block App
-                </TableHead>
+                Block App
+              </TableHead>
               {/* <TableHead className="text-[#03A9FC] font-bold">Action</TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
             {apps.map((app) => (
               <TableRow key={app.id}>
-                
-                 <TableCell>
+                <TableCell>
                   <div className="flex flex-col md:flex-row md:items-center gap-2">
                     <Switch
                       checked={!!toggleApps[app.package_name]}
-                      onCheckedChange={(checked) => handelToggleApp(app, checked)}
+                      onCheckedChange={(checked) =>
+                        handelToggleApp(app, checked)
+                      }
                       className="data-[state=checked]:bg-[#03A9FC]"
                       disabled={
                         policyData.data.kioskPolicy.enabled &&
                         !policyData.data.kioskPolicy.multiApp
                       }
                     />
-                     <img
-                                        className="h-10 w-15 sm:h-15 sm:w-15 rounded-full"
-                                        src={app.icon ? `data:image/png;base64,${app.icon}` :apk}
-                                        alt=""
-                                      />
+                    <img
+                      className="h-10 w-15 sm:h-15 sm:w-15 rounded-full"
+                      src={app.icon ? `data:image/png;base64,${app.icon}` : apk}
+                      alt=""
+                    />
                     <div>
                       <p className="font-semibold">{app.app_name}</p>
-                      <p className="text-xs text-gray-500">{app.package_name}</p>
+                      <p className="text-xs text-gray-500">
+                        {app.package_name}
+                      </p>
                     </div>
                   </div>
                 </TableCell>
@@ -258,8 +298,9 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
                   {app.version_name}
                 </TableCell>
                 <TableCell>
-                  <button className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC] hover:scale-105 transform transition-all duration-400"
-                  onClick={() => openAppPermissionModal(app)}
+                  <button
+                    className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC] hover:scale-105 transform transition-all duration-400"
+                    onClick={() => openAppPermissionModal(app)}
                   >
                     Manager
                   </button>
@@ -274,33 +315,34 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
                 </TableCell>
                 <TableCell>
                   <Checkbox
-                  //  className="data-[state=checked]:bg-[#03A9FC]"
-                   checked={policyData.data.kioskPolicy.multiApp
-                    ? policyData.data.kioskPolicy.allowedApps.find(
-                      (item) => item.packageName === app.package_name
-                    )?.isBlocked || false
-                    : policyData.data.applications.find(
-                      (item)=> item.packageName === app.package_name)?.isBlocked || false
-                   }
-                   onCheckedChange={(checked) =>handelBlockAppChange(app,checked)}
+                    //  className="data-[state=checked]:bg-[#03A9FC]"
+                    checked={
+                      policyData.data.kioskPolicy.multiApp
+                        ? policyData.data.kioskPolicy.allowedApps.find(
+                            (item) => item.packageName === app.package_name
+                          )?.isBlocked || false
+                        : policyData.data.applications.find(
+                            (item) => item.packageName === app.package_name
+                          )?.isBlocked || false
+                    }
+                    onCheckedChange={(checked) =>
+                      handelBlockAppChange(app, checked)
+                    }
                   />
-                  </TableCell>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
-     
-      
-       <AppConfigModal
-   policyData={policyData}
-  setPolicyData={setPolicyData}    
-  open={ConfigModalOpen}
-  onOpenChange={setConfigModalOpen}
-  app={selectedApp}
-  
-  
-/>
+
+      <AppConfigModal
+        policyData={policyData}
+        setPolicyData={setPolicyData}
+        open={ConfigModalOpen}
+        onOpenChange={setConfigModalOpen}
+        app={selectedApp}
+      />
 
       <AppPermissionModal
         policyData={policyData}
@@ -315,9 +357,7 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
           onClose={() => setAppPermissionModalOpen(false)}
         />
       )} */}
-
     </div>
-   
   );
 };
 

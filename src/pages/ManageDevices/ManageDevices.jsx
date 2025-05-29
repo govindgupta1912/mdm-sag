@@ -157,7 +157,7 @@ const ManageDevices = () => {
       // fetch_Device_List();
     } catch (error) {
       console.log("faild to delete the devices", error);
-      toast.error("Failed to delete device");
+      toast.error(error?.response?.data?.message||"Failed to delete device");
     }
     setLoading(false);
   };
@@ -177,6 +177,7 @@ const ManageDevices = () => {
       }
     } catch (error) {
       console.log("Failed to fetch Data", error);
+      toast.error(error?.response?.data?.message||"Failed to Fetch the policy Data");
     }
   };
   useEffect(() => {
@@ -205,7 +206,7 @@ const ManageDevices = () => {
       }
     } catch (error) {
       console.log("Failed to apply policy", error);
-      toast.error("Failed to apply policy");
+      toast.error(error?.response?.data?.message || "Failed to apply policy");
     }
     console.log("Selected Policy ID:", selectedPolicyId);
     console.log("Selected Device IDs:", selectedIds);
@@ -240,7 +241,7 @@ const ManageDevices = () => {
       }
     } catch (error) {
       console.log("Falied to Send The Content", error);
-      toast.error(error || "Something went wrong");
+      toast.error(error?.response?.data?.message||"Something went wrong");
     }
     console.log("selected devicesIds", selectedIds);
     console.log("selected contentIds", selectedContentIds);
@@ -268,7 +269,7 @@ const ManageDevices = () => {
       }
     } catch (error) {
       console.log("Failed to send notification", error);
-      toast.error("Failed to send notification");
+      toast.error(error?.response?.data?.message|| "Failed to send notification");
     }
     console.log("Selected Device IDs:", selectedIds);
     setMessage("");
@@ -821,7 +822,7 @@ const ManageDevices = () => {
           </div>
           <div className="flex flex-wrap gap-2 sm:gap-4">
             <Button
-              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-green-600 hover:scale-105 transition duration-200"
+              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-red-600 hover:scale-105 transition duration-200"
               onClick={handleExportPdf}
             >
               <svg
@@ -863,7 +864,7 @@ const ManageDevices = () => {
               PDF
             </Button>
             <Button
-              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-red-600 hover:scale-105 transition duration-200"
+              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-green-600 hover:scale-105 transition duration-200"
               onClick={handleExportToExcel}
             >
               <svg
