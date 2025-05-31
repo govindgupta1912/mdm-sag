@@ -27,12 +27,12 @@ import ManageContent from "./pages/ContentManagement/MangeContent.jsx";
 function App() {
   return (
     <Provider store={appStore}>
-      <div className="h-full flex flex-col">
+      <div className="h-full flex flex-col ">
         <Navbar />
 
-        <div className="pt-16 flex">
+        <div className="pt-16 flex  bg-gray-200">
           <Sidebar />
-          <main className="ml-[20%] p-4 bg-gray-200 w-full h-full min-h-screen">
+          <main className="ml-[20%] p-4 bg-gray-200 w-full h-full">
             <Outlet />
           </main>
         </div>

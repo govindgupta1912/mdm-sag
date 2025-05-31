@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import HardwareInfo from "../../components/Reuseable_Components/HardwareInfo";
 import SoftwareInfo from "../../components/Reuseable_Components/SoftwareInfo";
 import SensorInfo from "../../components/Reuseable_Components/SensorInfo";
-import nodata from "../../assets/no-data.png";
+import nodata from "../../assets/ic_no_data_found.svg";
 import Application from "./Application";
 import NetworkInfo from "../../components/Reuseable_Components/NetworkInfo";
 import { toast } from "react-toastify";
@@ -144,19 +144,19 @@ const Fetch = () => {
   };
 
   return (
-      <div className="pt-20 flex flex-col min-h-screen   p-4 md:p-6">
+      <div className="pt-20 flex flex-col    p-4 md:p-6">
 
       {/* Header Section */}
-      <div className="sticky top-[74px] z-40 flex items-center justify-between w-full  p-4 bg-white shadow-md rounded-md">
-        <h1 className="text-xl md:text-2xl ">Fetch Device Details </h1>
+      <div className="sticky top-[74px] z-40 flex items-center justify-between w-full  p-4 bg-white  rounded-md">
+        <h1 className="text-sm md:text-lg ">Fetch Device Details </h1>
         <div className="space-x-4">
           <button
             //className="text-white bg-[#03A9FC] hover:bg-blue-800 px-6 py-2 rounded-md"
             // className="bg-[#03A9FC] text-white px-8 py-2 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
-            className={`bg-[#03A9FC] text-white px-8 py-2 rounded-md transition-all duration-200 ease-in-out ${
+            className={`bg-gradient text-white px-10 py-1.5 rounded-md transition-all duration-200 ease-in-out ${
               processing
                 ? "opacity-50 cursor-not-allowed"
-                : "hover:shadow-lg hover:bg-sky-700 hover:scale-105 transform"
+                : "hover:shadow-lg  hover:scale-95 transform"
             }`}
             onClick={fetch_Detail}
             disabled={processing}
@@ -166,10 +166,10 @@ const Fetch = () => {
           <button
             // className="text-white bg-[#03A9FC] hover:bg-blue-800 px-6 py-2 rounded-md"
             // className="bg-[#03A9FC] text-white px-8 py-2 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
-            className={`bg-[#03A9FC] text-white px-8 py-2 rounded-md transition-all duration-200 ease-in-out ${
+            className={`bg-gradient text-white px-10 py-1.5 rounded-md transition-all duration-200 ease-in-out ${
               processing
                 ? "opacity-50 cursor-not-allowed"
-                : "hover:shadow-lg hover:bg-sky-700 hover:scale-105 transform"
+                : "hover:shadow-lg hover:bg-sky-700 hover:scale-95 transform"
             }`}
             onClick={send_Deatil}
             disabled={processing}

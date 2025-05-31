@@ -104,6 +104,15 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
       ? updatedPolicyData.data.kioskPolicy.allowedApps
       : updatedPolicyData.data.applications;
 
+    const matchedApp = targetArray.find(
+      (item) => item.packageName === app.package_name
+    );
+
+    if (!matchedApp) {
+      toast.error("Please enable the app before blocking it.");
+      return; // stop execution
+    }
+
     const updatedApps = targetArray.map((item) => {
       if (item.packageName === app.package_name) {
         return {
@@ -111,10 +120,7 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
           isBlocked: ischecked,
         };
       }
-      // else
-      // {
-      //   toast.error("please enable the app the before blocking the app");
-      // }
+
       return item;
     });
     if (isMulitiApp) {
@@ -149,14 +155,12 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
     // setConfigModalOpen(true);
   };
   const openAppPermissionModal = (app) => {
-
     const multiApp = policyData.data.kioskPolicy.multiApp;
 
     const targetArray = multiApp
       ? policyData.data.kioskPolicy.allowedApps
       : policyData.data.applications;
 
-    
     const alreadyExists = targetArray.some(
       (a) => a.packageName === app.package_name
     );
@@ -166,7 +170,6 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
     } else {
       toast.error("Please enable the app before setting the permission");
     }
-
 
     // setSelectedApp(app);
     // setAppPermissionModalOpen(true);
@@ -246,20 +249,21 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
       <div className="mt-6 w-full"> */}
       <div className="overflow-x-auto">
         <Table className="m-w-[800px]">
-          <TableCaption>A list of your Application.</TableCaption>
+          {/* <TableCaption>A list of your Application.</TableCaption> */}
           <TableHeader>
+
             <TableRow>
-              <TableHead className="text-[#03A9FC] font-bold ">Name</TableHead>
+              <TableHead className="text-[#03A9FC]  font-bold ">Name</TableHead>
               <TableHead className="text-[#03A9FC] font-bold ">
                 Version
               </TableHead>
               <TableHead className="text-[#03A9FC] font-bold ">
-                Permission
+                Permissions
               </TableHead>
-              <TableHead className="text-[#03A9FC] font-bold">
-                Configuration
+              <TableHead className="text-[#03A9FC] font-bold text-center items-center">
+                Configurations
               </TableHead>
-              <TableHead className="text-[#03A9FC] font-bold">
+              <TableHead className="text-[#03A9FC] font-bold text-center">
                 Block App
               </TableHead>
               {/* <TableHead className="text-[#03A9FC] font-bold">Action</TableHead> */}
@@ -302,7 +306,9 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
                     className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC] hover:scale-105 transform transition-all duration-400"
                     onClick={() => openAppPermissionModal(app)}
                   >
-                    Manager
+                   Permission
+
+
                   </button>
                 </TableCell>
                 <TableCell>
@@ -310,12 +316,12 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
                     className="border border-[#03A9FC] text-[#03A9FC] font-bold px-4 py-2 hover:text-white hover:bg-[#03A9FC]"
                     onClick={() => openAppConfigModal(app)}
                   >
-                    Manager
+                    Configure
                   </button>
                 </TableCell>
-                <TableCell>
+                <TableCell className="text-center">
                   <Checkbox
-                    //  className="data-[state=checked]:bg-[#03A9FC]"
+                     className="data-[state=checked]:bg-[#03A9FC] rounded-full"
                     checked={
                       policyData.data.kioskPolicy.multiApp
                         ? policyData.data.kioskPolicy.allowedApps.find(

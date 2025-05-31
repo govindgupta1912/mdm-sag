@@ -209,9 +209,9 @@ const Policy = () => {
   return (
     <div>
       {/* <div className="bg-black w-full flex justify-between items-center  px-4"> */}
-      <div className=" sticky top-[74px] z-40 bg-black w-full flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 py-1 space-y-2 sm:space-y-0">
+      <div className=" sticky top-[74px] z-40 bg-dark w-full flex flex-col sm:flex-row justify-between items-start sm:items-center h-[68px] px-4 py-1 space-y-2 sm:space-y-0">
         {/* <div className=" h-20 text-white  text-2xl font-bold  p-6 flex "> */}
-        <div className="text-white text-xl sm:text-2xl h-20 font-bold flex items-center gap-2">
+        <div className="text-white text-lg sm:text-xl  font-semibold flex items-center gap-2">
           <img src={enroll} className="w-7 h-7" />
           Manage Policy
         </div>
@@ -252,13 +252,13 @@ const Policy = () => {
                    </Table>
             </div> */}
 
-      <div className="w-full p-4">
+      <div className="w-full ">
         {/* TABLE VIEW (Tablet and above) */}
         <div className="hidden sm:block max-h-[600px]">
           <Table className="table-auto border-separate border-spacing-y-2 w-full text-sm sm:text-base">
-            <TableCaption className="mb-4 text-gray-600">
+            {/* <TableCaption className="mb-4 text-gray-600">
               A list of all policies.
-            </TableCaption>
+            </TableCaption> */}
             <TableHeader className="sticky top-0 z-10 bg-[#03A9FC] text-white">
               <TableRow className="bg-[#03A9FC] text-white ">
                 <TableHead className="text-white">Policy ID</TableHead>
@@ -327,7 +327,7 @@ const Policy = () => {
                     </TableRow>
                   ))}
             </TableBody>
-            {/* <TableFooter>
+            <TableFooter>
         <TableRow>
           <TableCell
             colSpan={5}
@@ -336,7 +336,7 @@ const Policy = () => {
             Showing {policies?.length} polic{policies?.length === 1 ? "y" : "ies"}
           </TableCell>
         </TableRow>
-      </TableFooter> */}
+      </TableFooter>
           </Table>
         </div>
 

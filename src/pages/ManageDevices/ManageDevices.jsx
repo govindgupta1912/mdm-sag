@@ -157,7 +157,7 @@ const ManageDevices = () => {
       // fetch_Device_List();
     } catch (error) {
       console.log("faild to delete the devices", error);
-      toast.error(error?.response?.data?.message||"Failed to delete device");
+      toast.error(error?.response?.data?.message || "Failed to delete device");
     }
     setLoading(false);
   };
@@ -177,7 +177,9 @@ const ManageDevices = () => {
       }
     } catch (error) {
       console.log("Failed to fetch Data", error);
-      toast.error(error?.response?.data?.message||"Failed to Fetch the policy Data");
+      toast.error(
+        error?.response?.data?.message || "Failed to Fetch the policy Data"
+      );
     }
   };
   useEffect(() => {
@@ -241,7 +243,7 @@ const ManageDevices = () => {
       }
     } catch (error) {
       console.log("Falied to Send The Content", error);
-      toast.error(error?.response?.data?.message||"Something went wrong");
+      toast.error(error?.response?.data?.message || "Something went wrong");
     }
     console.log("selected devicesIds", selectedIds);
     console.log("selected contentIds", selectedContentIds);
@@ -269,7 +271,9 @@ const ManageDevices = () => {
       }
     } catch (error) {
       console.log("Failed to send notification", error);
-      toast.error(error?.response?.data?.message|| "Failed to send notification");
+      toast.error(
+        error?.response?.data?.message || "Failed to send notification"
+      );
     }
     console.log("Selected Device IDs:", selectedIds);
     setMessage("");
@@ -663,7 +667,7 @@ const ManageDevices = () => {
       </Dialog>
 
       {/*content Model*/}
-{/* 
+      {/* 
       <Dialog
         open={activeModal === "Content"}
         onOpenChange={() => setActiveModal(null)}
@@ -718,71 +722,79 @@ const ManageDevices = () => {
         </DialogContent>
       </Dialog> */}
 
-
       <Dialog
-  open={activeModal === "Content"}
-  onOpenChange={() => setActiveModal(null)}
->
-  <DialogContent>
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="p-6 max-h-[80vh] overflow-y-auto space-y-4"
-    >
-      <DialogHeader>
-        <DialogTitle className="text-xl font-semibold">Select Content</DialogTitle>
-        <DialogDescription>
-          Choose the contents you want to send to the selected devices.
-        </DialogDescription>
-      </DialogHeader>
+        open={activeModal === "Content"}
+        onOpenChange={() => setActiveModal(null)}
+      >
+        <DialogContent>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="p-6 max-h-[80vh] overflow-y-auto space-y-4"
+          >
+            <DialogHeader>
+              <DialogTitle className="text-xl font-semibold">
+                Select Content
+              </DialogTitle>
+              <DialogDescription>
+                Choose the contents you want to send to the selected devices.
+              </DialogDescription>
+            </DialogHeader>
 
-      <div className="bg-gray-50 rounded-xl shadow p-4 space-y-4 border">
-        {/* Select All */}
-        <div className="flex items-center space-x-3 border-b pb-3">
-          <Checkbox
-            checked={isAllSelectedContent}
-            onCheckedChange={toggleSelectAllContent}
-          />
-          <Label className="font-medium">Select All ({contentList?.length})</Label>
-        </div>
-
-        {/* Content List */}
-        <div className="space-y-3">
-          {contentList?.map((content) => (
-            <div
-              key={content.content_id}
-              className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
-                selectedContentIds.includes(content.content_id)
-                  ? "bg-blue-50 border border-blue-300"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              <div className="flex items-center space-x-3">
+            <div className="bg-gray-50 rounded-xl shadow p-4 space-y-4 border">
+              {/* Select All */}
+              <div className="flex items-center space-x-3 border-b pb-3">
                 <Checkbox
-                  checked={selectedContentIds.includes(content.content_id)}
-                  onCheckedChange={() => toggleSelectOneContent(content.content_id)}
+                  checked={isAllSelectedContent}
+                  onCheckedChange={toggleSelectAllContent}
                 />
-                <Label className="text-sm font-medium">
-                  {content.filename}.{content.filetype}
+                <Label className="font-medium">
+                  Select All ({contentList?.length})
                 </Label>
               </div>
-              <span className="text-xs text-gray-500">{content.size} MB</span>
+
+              {/* Content List */}
+              <div className="space-y-3">
+                {contentList?.map((content) => (
+                  <div
+                    key={content.content_id}
+                    className={`flex items-center justify-between p-3 rounded-lg transition-colors ${
+                      selectedContentIds.includes(content.content_id)
+                        ? "bg-blue-50 border border-blue-300"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Checkbox
+                        checked={selectedContentIds.includes(
+                          content.content_id
+                        )}
+                        onCheckedChange={() =>
+                          toggleSelectOneContent(content.content_id)
+                        }
+                      />
+                      <Label className="text-sm font-medium">
+                        {content.filename}.{content.filetype}
+                      </Label>
+                    </div>
+                    <span className="text-xs text-gray-500">
+                      {content.size} MB
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
 
-      <DialogFooter className="mt-6 flex justify-end space-x-2">
-        <Button variant="outline" onClick={() => setActiveModal(null)}>
-          Cancel
-        </Button>
-        <Button onClick={send_content_to_devices}>Send Content</Button>
-      </DialogFooter>
-    </motion.div>
-  </DialogContent>
-</Dialog>
-
+            <DialogFooter className="mt-6 flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setActiveModal(null)}>
+                Cancel
+              </Button>
+              <Button onClick={send_content_to_devices}>Send Content</Button>
+            </DialogFooter>
+          </motion.div>
+        </DialogContent>
+      </Dialog>
 
       {/* send notification modal */}
       <Dialog
@@ -813,16 +825,16 @@ const ManageDevices = () => {
       </Dialog>
 
       <div>
-        <div className="sticky top-[80px] z-40 flex flex-col sm:flex-row justify-between items-center bg-black p-4 sm:p-6 sm:gap-0 gap-4 ">
+        <div className="sticky top-[80px] z-40 flex flex-col sm:flex-row justify-between items-center  bg-dark p-4 sm:p-4 sm:gap-0 gap-4   h-[68px] ">
           <div className="flex items-center gap-2 text-center">
-            <img src={devices_icon} alt="" className="w-6 h-6 sm:w-8 sm:h-8" />
-            <p className="text-white text-lg sm:text-2xl font-bold">
+            <img src={devices_icon} alt="" className="w-6 h-6 sm:w-7 sm:h-7" />
+            <p className="text-white text-lg sm:text-xl font-semibold">
               Manage Devices
             </p>
           </div>
           <div className="flex flex-wrap gap-2 sm:gap-4">
             <Button
-              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-red-600 hover:scale-105 transition duration-200"
+              className="border border-[#787878] text-white px-4 py-2 sm:py-3 w-30 rounded-md cursor-pointer hover:bg-red-600 hover:scale-105 hover:border-transparent transition duration-200"
               onClick={handleExportPdf}
             >
               <svg
@@ -864,7 +876,7 @@ const ManageDevices = () => {
               PDF
             </Button>
             <Button
-              className="border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-green-600 hover:scale-105 transition duration-200"
+              className="border border-[#787878] text-white px-4 py-2 sm:py-3 w-30 rounded-md cursor-pointer hover:bg-green-600 hover:scale-105 hover:border-transparent transition duration-200"
               onClick={handleExportToExcel}
             >
               <svg
@@ -895,7 +907,7 @@ const ManageDevices = () => {
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="group border border-white text-white px-4 py-2 sm:py-3 rounded-md cursor-pointer hover:bg-white hover:text-black hover:scale-105 transition duration-200">
+                <Button className="group border border-[#787878] text-white px-4 py-2 sm:py-3 w-30 rounded-md cursor-pointer hover:bg-white hover:text-black hover:scale-105 hover:border-transparent transition duration-200">
                   <svg
                     width="20"
                     height="10"
@@ -945,20 +957,20 @@ const ManageDevices = () => {
           </div>
         </div>
 
-        <div className="w-full p-4">
+        <div className="w-full py-1">
           <div className="hidden sm:block overflow-x-auto">
             {/* Standard table for tablets and up */}
             <Table className="table-auto border-separate border-spacing-y-2 w-full text-sm sm:text-base">
-              <TableCaption className="mb-4 text-gray-600">
+              {/* <TableCaption className="mb-4 text-gray-600">
                 A list of all Devices.
-              </TableCaption>
+              </TableCaption> */}
               <TableHeader>
                 <TableRow className="bg-[#03A9FC] text-white rounded-md">
                   <TableHead className="w-12 text-center">
                     <Checkbox
                       checked={isAllSelected}
                       onCheckedChange={toggleSelectAll}
-                      className="border-white bg-white data-[state=checked]:bg-[#03A9FC]"
+                      className="border-white rounded-full w-5 h-5 bg-white data-[state=checked]:bg-[#03A9FC]"
                     />
                   </TableHead>
                   <TableHead className="py-4 text-white text-center">
@@ -1010,7 +1022,7 @@ const ManageDevices = () => {
                             onCheckedChange={() =>
                               toggleSelectOne(device.device_id)
                             }
-                            className="border-gray-400 data-[state=checked]:bg-[#03A9FC]"
+                            className="border-gray-400 rounded-full w-5 h-5 data-[state=checked]:bg-[#03A9FC]"
                           />
                         </TableCell>
                         <TableCell className="py-4 text-center font-mono">
@@ -1030,14 +1042,14 @@ const ManageDevices = () => {
                             <Link
                               to="/devices-details"
                               state={{ device }}
-                              className="text-blue-600 hover:text-blue-800 transition"
+                              className="text-[#03A9FC] hover:text-blue-800 hover:scale-105 transition"
                               title="View Device Details"
                             >
                               <Eye size={20} />
                             </Link>
                             <button
                               onClick={() => delete_enroll_devices(device)}
-                              className="text-red-600 hover:text-red-800 transition"
+                              className="text-red-600 hover:text-red-800 hover:scale-105 transition"
                               title="Delete Device"
                             >
                               <Trash2 size={20} />
@@ -1052,7 +1064,7 @@ const ManageDevices = () => {
                 <TableRow>
                   <TableCell
                     colSpan={6}
-                    className="text-center text-sm text-muted-foreground pt-6"
+                    className="text-center text-sm text-muted-foreground "
                   >
                     Showing {devicesList.length} device
                     {devicesList.length !== 1 ? "s" : ""}

@@ -125,8 +125,8 @@ const Enroll = () => {
   };
 
   return (
-    <div className="bg-white flex flex-col items-center w-full h-full min-h-screen">
-      <div className="sticky top-[74px] z-40 bg-black w-full h-20 text-white  text-2xl font-bold  p-6 flex justify-center">
+    <div className="bg-white flex flex-col items-center w-full h-screen ">
+      <div className="sticky top-[74px] z-40 bg-dark w-full  text-white  text-xl font-semibold h-[68px] p-4 flex gap-2 justify-center items-center">
         <img src={enroll} className="w-7 h-7" />
         Enrolling The Device
       </div>
@@ -137,10 +137,10 @@ const Enroll = () => {
         <button
           //className="bg-[#03A9FC] w-32 text-white px-3 py-2 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
 
-          className={`bg-[#03A9FC] text-white px-6 py-2 transition-all duration-200 ease-in-out h-12 w-36 ${
+          className={`bg-gradient rounded-md text-white px-6 py-2 transition-all duration-200 ease-in-out h-12 w-36 ${
             step !== 0
               ? "opacity-50 cursor-not-allowed"
-              : "hover:shadow-lg hover:bg-sky-700 hover:scale-105 transform"
+              : "hover:shadow-lg hover:bg-sky-700 hover:scale-95 transform"
           }`}
           onClick={Install}
           disabled={step !== 0}
@@ -153,10 +153,10 @@ const Enroll = () => {
         </h3>
         <button
           //className="bg-[#03A9FC] w-32 text-white px-3 py-2 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
-          className={`bg-[#03A9FC] text-white px-6 py-2 transition-all duration-200 ease-in-out h-12 w-36 ${
+          className={`bg-gradient rounded-md text-white px-6 py-2 transition-all duration-200 ease-in-out h-12 w-36 ${
             step !== 1
               ? "opacity-50 cursor-not-allowed"
-              : "hover:shadow-lg hover:bg-sky-700 hover:scale-105 transform"
+              : "hover:shadow-lg hover:bg-sky-700 hover:scale-95 transform"
           }`}
           onClick={permission}
           disabled={step !== 1}
@@ -169,10 +169,10 @@ const Enroll = () => {
         </h3>
         <button
           //className="bg-[#03A9FC] w-32 text-white px-3 py-2 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
-          className={`bg-[#03A9FC] text-white px-6 py-2 transition-all duration-200 ease-in-out h-12 w-36 ${
+          className={`bg-gradient rounded-md text-white px-6 py-2 transition-all duration-200 ease-in-out h-12 w-36 ${
             step !== 2
               ? "opacity-50 cursor-not-allowed"
-              : "hover:shadow-lg hover:bg-sky-700 hover:scale-105 transform"
+              : "hover:shadow-lg hover:bg-sky-700 hover:scale-95 transform"
           }`}
           // onClick={register}
           onClick={() => register()}

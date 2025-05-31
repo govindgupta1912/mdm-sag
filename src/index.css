@@ -28,7 +28,17 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
+    --radius: 0.5rem;
+
+    /* Custom Variables */
+     --primary-color: #03A9FC ; 
+    --secondary-color: #3B83F6;
+    --primary-gradinet:linear-gradient(90.11deg, #3B83F6 1.39%, #03A9FC 101.39%);
+    --primary-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --primary-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --primary-dark: #222222;
+    --pr-gray: #a3a3A3;
+    --pr-gray-light: #e9e9e9;
   }
   .dark {
     --background: 222.2 84% 4.9%;
@@ -64,5 +74,18 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-color: var(--pr-gray-light);
+  }
+
+  .bg-gradient {
+    background: var(--primary-gradinet);
+  }
+  /* .bg-gradient:hover {
+    background: var(--secondary-color);
+  } */
+
+  .bg-dark {
+    background-color: var(--primary-dark);
   }
 }
+

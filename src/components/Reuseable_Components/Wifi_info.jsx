@@ -4,8 +4,8 @@ import { Wifi } from "lucide-react";
 
      const wifiData = [
       { label: "SSID", value: details?.wifi_info?.ssid || "N/A" },
-      { label: "Signal Strength", value: details?.wifi_info?.signal_strength || "N/A" },
-      { label: "Security Type", value: details?.wifi_info?.security_type || "N/A" },
+      // { label: "Signal Strength", value: details?.wifi_info?.signal_strength || "N/A" },
+      // { label: "Security Type", value: details?.wifi_info?.security_type || "N/A" },
       { label: "BSSID", value: details?.wifi_info?.bssid || "N/A" },
       { label: "WiFi State", value: details?.wifi_info?.state || "N/A" },
       { label: "WiFi Enabled", value: details?.wifi_info?.enabled || "N/A" },]

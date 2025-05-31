@@ -382,24 +382,24 @@ const DeviceDetails = () => {
             onClick={() => lockDevice(deviceData.device_id)}
             color="text-green-600"
           />
-          <ActionButton
+          {/* <ActionButton
             text="Delete"
             icon={<Trash2 size={20} />}
             onClick={() => toast.warn("Delete function not implemented")}
             color="text-red-600"
-          />
+          /> */}
           <ActionButton
             text="Reboot"
             icon={<RefreshCcw size={20} />}
             onClick={() => rebootDevice(deviceData.device_id)}
             color="text-orange-500"
           />
-          <ActionButton
+          {/* <ActionButton
             text="Change Password"
             icon={<img src={changePwd} alt="Change" className="w-5 h-5" />}
             onClick={() => toast.info("Change Password feature coming soon")}
             color="text-blue-500"
-          />
+          /> */}
         </div>
       </div>
 

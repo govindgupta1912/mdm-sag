@@ -3,6 +3,7 @@ import axios from "axios";
 import Fetch from "../../pages/FetchDeviceInfo/Fetch";
 import { connect, useDispatch } from "react-redux";
 import { setSerialNumber } from "../../utilites/store/slices/serialSlice";
+import { VscDebugDisconnect } from "react-icons/vsc";
 
 const Sidebar = () => {
   const [info, setInfo] = useState(null); // Initialize as null
@@ -47,10 +48,14 @@ const Sidebar = () => {
 
   return (
     // <div className="w-1/5 h-screen  p-4 flex flex-col space-y-2">
-    <div className="w-1/5 fixed top-16 left-0 bottom-0 overflow-y-auto p-4 bg-white shadow-md">
-      <h1 className="text-[#03A9FC] font-semibold text-center text-2xl">
-        Available Device
-      </h1>
+    // <div className="w-1/5 fixed top-16 left-0 bottom-0 overflow-y-auto p-4 bg-white shadow-md">
+    //   <h1 className="text-[#03A9FC] font-semibold text-center text-2xl">
+    //     Available Device
+    //   </h1>
+        <div className="w-1/5 fixed top-16 left-0 bottom-0 overflow-y-auto p-4 bg-[#F8FAFC] shadow-md border-r border-gray-200">
+  <h1 className="text-[#0D1B2A] font-semibold text-center text-xl mt-1">
+    Available Device
+  </h1>
 
       {/* <div className="bg-gray-200 p-3 text-center mb-4 min-h-[80px] flex flex-col justify-center">
          {errors ? (
@@ -92,7 +97,7 @@ const Sidebar = () => {
         )}
       </div> */}
 
-      <div className="bg-gray-200 p-3 text-center mb-4 min-h-[80px] flex flex-col justify-center">
+      <div className="bg-gray-200 p-3 text-center mb-2 min-h-[80px] flex flex-col justify-center mt-2 rounded-md">
         {fetchStatus === "loading" && (
           <p className="text-blue-600 font-semibold animate-pulse">
             Fetching device info...
@@ -116,26 +121,30 @@ const Sidebar = () => {
         {fetchStatus === "success" && !info && <p>No device connected yet.</p>}
       </div>
 
-      <div className="flex space-x-4 justify-center py-4">
+      <div className="flex space-x-4 justify-center ">
         <button
           type="button"
-          className="bg-[#03A9FC] text-white px-5 py-1.5 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
+          className="flex justify-center items-center gap-1 bg-gradient text-white px-5 py-1.5 w-full bg-pr rounded-md shadow hover:scale-95 transition"
+          //className="bg-[#03A9FC] text-white px-5 py-1.5 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
           //className="text-white bg-[#03A9FC] hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium text-sm px-5 py-1.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           onClick={connectADB}
           disabled={processing}
         >
+          <VscDebugDisconnect className="h-4 w-5" />
+
           Connect
           {/* {processing?'Connecting':'Connect'} */}
         </button>
-
+{/* 
         <button
           type="button"
-          className="bg-[#03A9FC] text-white px-10 py-1.5 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
+          className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-10 py-1.5 rounded-md shadow hover:scale-105 transition"
+          //className="bg-[#03A9FC] text-white px-10 py-1.5 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
 
           //className="text-white bg-[#03A9FC] hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium text-sm px-10 py-1.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
         >
           ADD
-        </button>
+        </button> */}
       </div>
     </div>
   );

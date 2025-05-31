@@ -198,8 +198,8 @@ const ManageApplication = () => {
 
   return (
     <div>
-      <div className=" sticky top-[74px] z-40 flex justify-between bg-black p-6 items-center">
-        <div className="flex text-white text-2xl font-bold">
+      <div className=" sticky top-[74px] z-40 flex justify-between  bg-dark h-[68px] py-6 px-4 items-center">
+        <div className="flex text-white gap-2 text-xl font-semibold">
           <img src={application} alt="" />
           <h1>Manage Application</h1>
         </div>
@@ -215,14 +215,14 @@ const ManageApplication = () => {
           }}
         >
           <DialogTrigger asChild>
-            <Button
+            <button
               variant="outline"
               onClick={() => setOpen(true)}
               className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors hover:scale-105 duration-200 
             bg-white border border-gray-300 rounded-md shadow-sm"
             >
-              <Plus size={30} className="text-black" />
-            </Button>
+              <Plus size={20} className="text-black" />
+            </button>
           </DialogTrigger>
 
           <DialogContent className="w-full sm:max-w-[500px] rounded-2xl shadow-2xl p-6 ">
@@ -317,8 +317,8 @@ const ManageApplication = () => {
                 </label>
               </div>
 
-              <div className="flex items-center justify-between">
-                <Label htmlFor="vpn" className="text-sm text-gray-700">
+              <div className="flex items-center justify-between ">
+                <Label htmlFor="vpn" className="text-sm text-gray-700 opacity-20">
                   VPN App
                 </Label>
                 <Switch
@@ -398,13 +398,13 @@ const ManageApplication = () => {
                 </div>
                 <div className="flex flex-col sm:flex-row items-center  ">
                   <button
-                    className="bg-green-600 text-white px-4 py-2 w-full sm:w-1/2 rounded hover:bg-green-800"
+                    className="bg-green-600 text-white px-4 py-2  sm:w-1/2  hover:bg-green-800"
                     onClick={() => openeditDialog(app)}
                   >
                     Update
                   </button>
                   <button
-                    className="bg-red-600 text-white px-4 py-2 w-full sm:w-1/2 rounded hover:bg-red-800"
+                    className="bg-red-600 text-white px-4 py-2  sm:w-1/2 hover:bg-red-800"
                     onClick={() => deleteApp(app.app_id)}
                   >
                     Delete

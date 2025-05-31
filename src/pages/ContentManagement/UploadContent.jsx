@@ -15,81 +15,153 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const FileUploadPreview = ({ files, onRemove, uplooadProgress }) => {
-  return (
-    <div className="w-full max-w-md mt-4">
-      <ul className="space-y-4">
-        {files.map((fileObj, index) => (
-          <li
-            key={index}
-            className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center space-x-4">
-              {fileObj.preview && (
-                <img
-                  src={fileObj.preview}
-                  alt={fileObj.name}
-                  className="h-12 w-12 object-cover rounded-md"
-                />
-              )}
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-gray-800">
-                  {fileObj.name}
-                </span>
-                <span className="text-xs text-gray-500">
-                  {fileObj.size} - {fileObj.type}
-                </span>
+// const FileUploadPreview = ({ files, onRemove, uplooadProgress }) => {
+//   return (
+//     <div className="w-full max-w-md mt-4">
+//       <ul className="space-y-4">
+//         {files.map((fileObj, index) => (
+//           <li
+//             key={index}
+//             className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+//           >
+//             <div className="flex items-center space-x-4">
+//               {fileObj.preview && (
+//                 <img
+//                   src={fileObj.preview}
+//                   alt={fileObj.name}
+//                   className="h-12 w-12 object-cover rounded-md"
+//                 />
+//               )}
+//               <div className="flex flex-col">
+//                 <span className="text-sm font-medium text-gray-800">
+//                   {fileObj.name}
+//                 </span>
+//                 <span className="text-xs text-gray-500">
+//                   {fileObj.size} - {fileObj.type}
+//                 </span>
 
                 
+//               </div>
+//               {uplooadProgress[fileObj.name] >= 0 && (
+//                   <>
+//                     <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+//                       <div
+//                         className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+//                         style={{
+//                           width: `${uplooadProgress[fileObj.name]}%`,
+//                         }}
+//                       ></div>
+//                     </div>
+//                     <div className="text-xs text-right text-gray-600 mt-1">
+//                       {uplooadProgress[fileObj.name] === 100
+//                         ? "Uploaded"
+//                         : `Uploading: ${uplooadProgress[fileObj.name]}%`}
+//                     </div>
+//                   </>
+//                 )}
+//               {/* {uplooadProgress[fileObj.name] && (
+//                 <div className="text-xs text-gray-500">
+//                   Uploading: {uplooadProgress[fileObj.name]}%
+//                 </div>
+//               )} */}
+//             </div>
+//             <Button
+//               variant="destructive"
+//               size="icon"
+//               onClick={() => onRemove(index)}
+//               className="h-8 w-8 p-0 rounded-full bg-red-500 hover:bg-red-600 text-white"
+//             >
+//               <span className="sr-only">Remove</span>
+//               <svg
+//                 xmlns="http://www.w3.org/2000/svg"
+//                 className="h-4 w-4"
+//                 fill="none"
+//                 viewBox="0 0 24 24"
+//                 stroke="currentColor"
+//                 strokeWidth={2}
+//               >
+//                 <path
+//                   strokeLinecap="round"
+//                   strokeLinejoin="round"
+//                   d="M6 18L18 6M6 6l12 12"
+//                 />
+//               </svg>
+//             </Button>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
+
+const FileUploadPreview = ({ files, onRemove, uplooadProgress }) => {
+  return (
+    <div className="w-full max-w-2xl mt-6 space-y-4">
+      {files.map((fileObj, index) => (
+        <div
+          key={index}
+          className="flex items-center justify-between bg-white rounded-xl shadow-md p-4 transition-all hover:shadow-lg"
+        >
+          <div className="flex items-center space-x-4 w-full">
+            {fileObj.preview && (
+              <img
+                src={fileObj.preview}
+                alt={fileObj.name}
+                className="h-16 w-16 object-cover rounded-lg border border-gray-200"
+              />
+            )}
+            <div className="flex-1">
+              <div className="text-sm font-semibold text-gray-800 truncate">
+                {fileObj.name}
               </div>
-              {uplooadProgress[fileObj.name] >= 0 && (
-                  <>
-                    <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                      <div
-                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                        style={{
-                          width: `${uplooadProgress[fileObj.name]}%`,
-                        }}
-                      ></div>
-                    </div>
-                    <div className="text-xs text-right text-gray-600 mt-1">
-                      {uplooadProgress[fileObj.name] === 100
-                        ? "Uploaded"
-                        : `Uploading: ${uplooadProgress[fileObj.name]}%`}
-                    </div>
-                  </>
-                )}
-              {/* {uplooadProgress[fileObj.name] && (
-                <div className="text-xs text-gray-500">
-                  Uploading: {uplooadProgress[fileObj.name]}%
+             <div className="text-xs text-gray-500 mt-1">
+  {fileObj.size}  &middot; {fileObj.type}
+</div>
+
+              {typeof uplooadProgress[fileObj.name] === "number" && (
+                <div className="mt-2">
+                  <div className="relative w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div
+                      className={`absolute left-0 top-0 h-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500`}
+                      style={{
+                        width: `${uplooadProgress[fileObj.name]}%`,
+                      }}
+                    ></div>
+                  </div>
+                  <div className="text-xs text-gray-600 mt-1">
+                    {uplooadProgress[fileObj.name] === 100
+                      ? "✅ Uploaded"
+                      : `Uploading: ${uplooadProgress[fileObj.name]}%`}
+                  </div>
                 </div>
-              )} */}
+              )}
             </div>
-            <Button
-              variant="destructive"
-              size="icon"
-              onClick={() => onRemove(index)}
-              className="h-8 w-8 p-0 rounded-full bg-red-500 hover:bg-red-600 text-white"
+          </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onRemove(index)}
+            className="ml-4 text-gray-500 hover:text-red-600 transition-colors"
+          >
+            <span className="sr-only">Remove</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
             >
-              <span className="sr-only">Remove</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </Button>
-          </li>
-        ))}
-      </ul>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </Button>
+        </div>
+      ))}
     </div>
   );
 };
@@ -218,13 +290,13 @@ const UploadContent = ({ open, setOpen }) => {
         {/* </DialogTrigger> */}
 
         <DialogContent className="w-full sm:max-w-[500px] rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto ">
-          <DialogHeader className="sticky top-0 z-50 bg-white p-4 rounded-t-2xl shadow-md">
+          <DialogHeader className="sticky top-[-25px] z-50 bg-white p-2 rounded-t-2xl ">
             <DialogTitle className="text-2xl font-semibold">
               Upload Files
             </DialogTitle>
-            <DialogDescription className="text-gray-500">
+            {/* <DialogDescription className="text-gray-500">
               Add files to Upload
-            </DialogDescription>
+            </DialogDescription> */}
           </DialogHeader>
 
           <div className="flex flex-col items-center justify-center p-6">

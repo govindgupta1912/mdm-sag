@@ -112,12 +112,12 @@ const CreatePolicy = () => {
   };
 
   return (
-    <div className="w-full  space-y-4 min-h-screen bg-white">
-      <div className="w-full">
+   
+      <div className="w-full bg-white h-full min-h-screen flex flex-col">
         {/* Header */}
         {/* <div className="bg-black flex justify-between items-center px-4 w-full  "> */}
-        <div className="sticky top-[74px] z-40 bg-black flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 w-full space-y-2 sm:space-y-0">
-          <div className="h-20 text-white text-2xl font-bold p-6 flex gap-2 items-center">
+        <div className="sticky top-[74px] z-40 bg-dark flex flex-col sm:flex-row justify-between items-start sm:items-center h-[68px] px-4 w-full space-y-2 sm:space-y-0">
+          <div className=" text-white text-xl font-semibold p-6 flex gap-2 items-center">
             <img src={enroll} className="w-7 h-7" />
             Manage Policy
           </div>
@@ -159,7 +159,7 @@ const CreatePolicy = () => {
             </div>
           ) : (
             // <div className="flex justify-around border border-gray-300 p-6 rounded-md mb-4">
-            <div className="sticky top-[160px] z-60 flex flex-col md:flex-row justify-around gap-4 bg-white border border-gray-300 p-4 rounded-md mb-4">
+            <div className="sticky top-[142px] z-30 flex flex-col md:flex-row justify-around gap-4 bg-white border border-gray-300 p-4 rounded-md mb-4">
               <div className="flex flex-col">
                 <span className="font-bold">Policy ID:</span>
                 {localPolicy.id}
@@ -272,7 +272,7 @@ const CreatePolicy = () => {
           </Tabs>
         </div>
       </div>
-    </div>
+    
   );
 };
 
