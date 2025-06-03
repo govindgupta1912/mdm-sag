@@ -99,7 +99,7 @@ const Sidebar = () => {
 
       <div className="bg-gray-200 p-3 text-center mb-2 min-h-[80px] flex flex-col justify-center mt-2 rounded-md">
         {fetchStatus === "loading" && (
-          <p className="text-blue-600 font-semibold animate-pulse">
+          <p className="text-blue-600  animate-pulse">
             Fetching device info...
           </p>
         )}
@@ -131,8 +131,8 @@ const Sidebar = () => {
           disabled={processing}
         >
           <VscDebugDisconnect className="h-4 w-5" />
-
-          Connect
+          {info ? "Reconnect" : "Connect"}
+          
           {/* {processing?'Connecting':'Connect'} */}
         </button>
 {/* 

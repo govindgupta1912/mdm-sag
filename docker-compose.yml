@@ -1,21 +1,14 @@
-# version: '3'
 
-# services:
-#   frontend:
-#     image: sag_frontend_gg
-#     ports:
-#       - "3000:80"  # or whatever port your app uses
-#     restart: always
-
-
-version: '3.9'
 
 services:
   frontend:
     build:
-      context: ./frontend  # Make sure this is the path to your frontend folder
+      context: ./ # Make sure this is the path to your frontend folder
+      dockerfile: Dockerfile  # Ensure this is the correct Dockerfile for your frontend
     ports:
-      - "80:80"  # Exposes port 80 from the container to port 80 on your host
+      - "88:80"  #  port mapping for first is host and second is container port
+    restart: always
     environment:
       - VITE_API_BASE_URL=http://backend:9002  # Make sure to adjust this based on your backend service
+
    

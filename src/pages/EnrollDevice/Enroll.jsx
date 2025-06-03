@@ -19,6 +19,13 @@ const Enroll = () => {
     setStatus("Installing SAG Agent...");
 
     try {
+       if (!Serial_number) {
+        setStatus("Device is not connected");
+        setStatusType("error");
+        setLoading(false);
+        return;
+       }
+
       const response1 = await axios.post(
         `${API_BASE_URL}/api/enrolled_device`,
         {
@@ -125,7 +132,7 @@ const Enroll = () => {
   };
 
   return (
-    <div className="bg-white flex flex-col items-center w-full h-screen ">
+    <div className="bg-white flex flex-col items-center w-full pb-10  ">
       <div className="sticky top-[74px] z-40 bg-dark w-full  text-white  text-xl font-semibold h-[68px] p-4 flex gap-2 justify-center items-center">
         <img src={enroll} className="w-7 h-7" />
         Enrolling The Device
@@ -187,7 +194,7 @@ const Enroll = () => {
       <div className="mt-6">
         {status && (
           <div
-            className={`w-[500px] h-[100px] flex items-center justify-center px-4 py-3 rounded-lg shadow transition-all duration-1000 ${
+            className={`w-[500px] h-[60px] flex items-center justify-center px-4 py-3 rounded-lg shadow transition-all duration-1000 ${
               statusType === "success"
                 ? "bg-green-100 text-green-800 text-xl border border-green-300"
                 : statusType === "error"

@@ -185,7 +185,7 @@ const ManageContent = () => {
 
   <button className="hover:scale-105 " onClick={() => setOpen(true)}>
  
-    <RiUploadCloud2Line className="text-black bg-white p-2 h-10 w-10 rounded-md shadow-sm hover:scale-105 transition-transform" />
+    <RiUploadCloud2Line className="text-white  bg-gradient p-2 h-10 w-10 rounded-md shadow-sm hover:scale-105 transition-transform" />
 
   </button>
 </div>
@@ -288,7 +288,7 @@ const ManageContent = () => {
                 <TableRow>
                   <TableCell
                     colSpan={6}
-                    className="text-center text-sm text-muted-foreground pt-6"
+                    className="text-center text-sm text-muted-foreground "
                   >
                     Showing {contentList.length} content
                     {contentList.length !== 1 ? "s" : ""}

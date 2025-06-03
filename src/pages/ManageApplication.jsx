@@ -219,9 +219,9 @@ const ManageApplication = () => {
               variant="outline"
               onClick={() => setOpen(true)}
               className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors hover:scale-105 duration-200 
-            bg-white border border-gray-300 rounded-md shadow-sm"
+             bg-gradient rounded-md shadow-sm"
             >
-              <Plus size={20} className="text-black" />
+              <Plus size={20} className="text-white " />
             </button>
           </DialogTrigger>
 
@@ -332,7 +332,7 @@ const ManageApplication = () => {
             <DialogFooter className="mt-6">
               <Button
                 onClick={handleSave}
-                className="w-full text-base py-2 rounded-xl"
+                className="w-full bg-gradient text-base py-2 rounded-md"
                 disabled={processing}
               >
                 Save Application
@@ -379,7 +379,7 @@ const ManageApplication = () => {
           {status === "failed" && <p>Error: {error}</p>}
           {status === "succeeded" &&
             apps.map((app, index) => (
-              <div key={index}>
+              <Card key={index} className="rounded-md">
                 <div className="flex flex-col items-center p-4 bg-white  shadow-md max-w-sm w-full">
                   <img
                     className="h-20 w-20 sm:h-20 sm:w-20 rounded-full"
@@ -410,7 +410,7 @@ const ManageApplication = () => {
                     Delete
                   </button>
                 </div>
-              </div>
+              </Card>
             ))}
         </div>
       </div>

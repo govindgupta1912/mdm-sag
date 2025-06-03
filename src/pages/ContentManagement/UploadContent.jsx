@@ -355,7 +355,7 @@ const UploadContent = ({ open, setOpen }) => {
           <DialogFooter className="mt-6">
             <Button
               onClick={handleUpload}
-              className="w-full text-base py-2 rounded-xl"
+              className="w-full text-base py-2 rounded-md bg-gradient"
               disabled={files.length === 0}
             >
               Upload {files.length} {files.length > 1 ? "Files" : "File"}

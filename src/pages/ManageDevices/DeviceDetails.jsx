@@ -211,7 +211,7 @@ const DeviceDetails = () => {
     (app) => app.is_system_app
   );
   const Non_System_app_list = deviceData?.application.filter(
-    (app) => !app.is_system_app
+    (app) => app.is_user_facing
   );
 
   const lockDevice = async (device_id) => {
@@ -227,7 +227,7 @@ const DeviceDetails = () => {
       else toast.error("Failed to Lock Device");
     } catch (error) {
       console.error("Error locking device:", error);
-      toast.error(error?.response?.data?.message||"Error locking device");
+      toast.error(error?.response?.data?.message || "Error locking device");
     }
   };
 
@@ -240,7 +240,7 @@ const DeviceDetails = () => {
       else toast.error("Failed to Reboot Device");
     } catch (error) {
       console.error("Error rebooting device:", error);
-      toast.error(error?.response?.data?.message||"Error rebooting device");
+      toast.error(error?.response?.data?.message || "Error rebooting device");
     }
   };
 
@@ -257,7 +257,7 @@ const DeviceDetails = () => {
       }
     } catch (error) {
       console.error("Error uninstalling app:", error);
-      toast.error(error?.response?.data?.message||"Error uninstalling app");
+      toast.error(error?.response?.data?.message || "Error uninstalling app");
     }
   };
 
@@ -274,7 +274,7 @@ const DeviceDetails = () => {
       }
     } catch (error) {
       console.error("Error clearing app data:", error);
-      toast.error(error?.response?.data?.message||"Error clearing app data");
+      toast.error(error?.response?.data?.message || "Error clearing app data");
     }
   };
 
@@ -289,15 +289,18 @@ const DeviceDetails = () => {
   );
 
   const AppList = ({ title, apps, icon }) => (
-    <div>
-      <h2 className="text-xl font-bold mb-4 text-gray-700">{title}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[450px] overflow-y-auto pr-2">
+    <div className=" ">
+      <div className="flex items-center gap-2 mb-4">
+        <img src={icon} className="w-10 h-10 object-contain" alt="Icon" />
+        <h2 className="text-xl font-bold text-gray-700">{title}</h2>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[450px] overflow-y-auto pr-2 pb-4">
         {apps.map((app, idx) => (
           <div
             key={idx}
             className="bg-white p-4 rounded-lg shadow flex items-start gap-4 relative"
           >
-            <img src={icon} alt={app.app_name} className="w-10 h-10 mt-1" />
+            <img src={icon} alt={app.app_name} className="w-7 h-7 mt-1" />
             <div className="flex-1 overflow-hidden">
               <h3 className="text-base font-semibold truncate">
                 {app.app_name}
@@ -380,7 +383,7 @@ const DeviceDetails = () => {
             text="Lock"
             icon={<LockKeyhole size={20} />}
             onClick={() => lockDevice(deviceData.device_id)}
-            color="text-green-600"
+            color="bg-green-500 text-white hover:bg-green-600"
           />
           {/* <ActionButton
             text="Delete"
@@ -392,7 +395,7 @@ const DeviceDetails = () => {
             text="Reboot"
             icon={<RefreshCcw size={20} />}
             onClick={() => rebootDevice(deviceData.device_id)}
-            color="text-orange-500"
+            color="bg-orange-500 text-white hover:bg-orange-600"
           />
           {/* <ActionButton
             text="Change Password"
@@ -409,15 +412,14 @@ const DeviceDetails = () => {
           title="Installed Applications"
           apps={Non_System_app_list}
           icon={androidLogo}
+          className=""
         />
         <AppList
           title="System Applications"
           apps={System_app_list}
           icon={systemAppLogo}
         />
-        <ContentMangementOnDevice
-         device_id={deviceData.device_id}
-        />
+        <ContentMangementOnDevice device_id={deviceData.device_id} />
       </div>
     </div>
   );

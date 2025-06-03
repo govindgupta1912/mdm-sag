@@ -30,7 +30,7 @@ function App() {
       <div className="h-full flex flex-col ">
         <Navbar />
 
-        <div className="pt-16 flex  bg-gray-200">
+        <div className="pt-16 flex ">
           <Sidebar />
           <main className="ml-[20%] p-4 bg-gray-200 w-full h-full">
             <Outlet />

@@ -66,6 +66,7 @@ const InstallAppTab = ({ policyData, setPolicyData }) => {
       managedConfiguration: [],
       downloadUrl: app.download_url,
       isBlocked: false,
+      versionCode: parseInt(app.version_code),
     };
     //const updatePolicyData = { ...policyData };
     const updatePolicyData = structuredClone(policyData);

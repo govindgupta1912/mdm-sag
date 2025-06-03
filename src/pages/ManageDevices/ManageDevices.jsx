@@ -11,7 +11,7 @@ import {
 import devices from "../../assets/devices.png";
 import devices_icon from "../../assets/devices.png";
 import { Bell, Eye, FileText, ShieldCheck, Trash2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 
@@ -96,6 +96,7 @@ const ManageDevices = () => {
   // useEffect(() => {
   //   fetch_Device_List();
   // }, [reloadDevices]);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const {
@@ -907,14 +908,26 @@ const ManageDevices = () => {
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="group border border-[#787878] text-white px-4 py-2 sm:py-3 w-30 rounded-md cursor-pointer hover:bg-white hover:text-black hover:scale-105 hover:border-transparent transition duration-200">
+                <Button 
+                // className={`group border border-[#787878] text-white px-4 py-2 sm:py-3 w-30 rounded-md cursor-pointer
+                //  hover:bg-white hover:text-black hover:scale-105 hover:border-transparent transition duration-200`}
+                 className={`group border px-4 py-2 sm:py-3 w-30 rounded-md cursor-pointer transition duration-200
+    ${
+      selectedIds.length > 0
+        ? "bg-[#ffd56a] text-black border-transparent hover:scale-105 hover:text-black hover:bg-white"
+        : "border-[#787878] text-white hover:bg-white hover:text-black hover:scale-105 hover:border-transparent"
+    }
+  `}
+                 >
                   <svg
                     width="20"
                     height="10"
                     viewBox="0 0 20 20"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="fill-white group-hover:fill-black transition duration-200"
+                    className={`fill-white group-hover:fill-black transition duration-200
+                      ${selectedIds.length > 0 ? "fill-black" : ""}
+                      `}
                   >
                     <path d="M11 3C13.21 3 15 4.79 15 7C15 8.5 14.2 9.77 13 10.46V9.24C13.61 8.69 14 7.89 14 7C14 5.34 12.66 4 11 4C9.34 4 8 5.34 8 7C8 7.89 8.39 8.69 9 9.24V10.46C7.8 9.77 7 8.5 7 7C7 4.79 8.79 3 11 3ZM18 18.5C17.97 19.32 17.32 19.97 16.5 20H11C10.62 20 10.26 19.85 10 19.57L6 15.37L6.74 14.6C6.93 14.39 7.2 14.28 7.5 14.28H7.7L10 16V7C10 6.45 10.45 6 11 6C11.55 6 12 6.45 12 7V11.47L13.21 11.6L17.15 13.79C17.68 14.03 18 14.56 18 15.14V18.5ZM18 0H2C0.9 0 0 0.9 0 2V10C0 10.5304 0.210714 11.0391 0.585786 11.4142C0.960859 11.7893 1.46957 12 2 12H6V10H2V2H18V10H16V12H18V11.96L18.04 12C19.13 12 20 11.09 20 10V2C20 1.46957 19.7893 0.960859 19.4142 0.585786C19.0391 0.210714 18.5304 0 18 0Z" />
                   </svg>
@@ -1008,13 +1021,15 @@ const ManageDevices = () => {
                         </TableRow>
                       ))
                   : devicesList?.map((device, index) => (
+                    
                       <TableRow
                         key={index}
-                        className={`bg-white shadow-sm transition-colors duration-200 rounded-lg hover:bg-blue-50 ${
+                        className={` cursor-pointer bg-white shadow-sm transition-colors duration-200 rounded-lg hover:bg-blue-50 ${
                           selectedIds.includes(device.device_id)
                             ? "bg-blue-100"
                             : ""
                         }`}
+                        onClick={()=>navigate("/devices-details",{state:{device}})}
                       >
                         <TableCell className="text-center">
                           <Checkbox
@@ -1023,6 +1038,7 @@ const ManageDevices = () => {
                               toggleSelectOne(device.device_id)
                             }
                             className="border-gray-400 rounded-full w-5 h-5 data-[state=checked]:bg-[#03A9FC]"
+                            onClick={(e)=> e.stopPropagation()}
                           />
                         </TableCell>
                         <TableCell className="py-4 text-center font-mono">
@@ -1044,11 +1060,14 @@ const ManageDevices = () => {
                               state={{ device }}
                               className="text-[#03A9FC] hover:text-blue-800 hover:scale-105 transition"
                               title="View Device Details"
+                              onClick={(e)=> e.stopPropagation()}
                             >
                               <Eye size={20} />
                             </Link>
                             <button
-                              onClick={() => delete_enroll_devices(device)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                delete_enroll_devices(device)}}
                               className="text-red-600 hover:text-red-800 hover:scale-105 transition"
                               title="Delete Device"
                             >

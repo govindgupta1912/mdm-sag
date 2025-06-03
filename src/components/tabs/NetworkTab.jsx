@@ -376,7 +376,7 @@ const NetworkTab = ({ policyData, setPolicyData }) => {
         <CollapsibleTrigger asChild>
           <Button
             variant="outline"
-            className="w-full justify-between font-semibold text-base"
+            className="w-full justify-between font-semibold text-base "
           >
             Wi-Fi Configuration Settings
             {open ? <ChevronUp className="ml-2" /> : <ChevronDown className="ml-2" />}

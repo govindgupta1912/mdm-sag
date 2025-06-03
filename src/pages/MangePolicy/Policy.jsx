@@ -217,9 +217,9 @@ const Policy = () => {
         </div>
         <Link
           to={"/create-policy"}
-          className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors hover:scale-105 duration-200  bg-white border border-gray-300 rounded-md shadow-sm"
+          className="w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors hover:scale-105 duration-200   bg-gradient rounded-md shadow-sm"
         >
-          <Plus size={20} className="text-black" />
+          <Plus size={20} className="text-white" />
         </Link>
       </div>
       {/* <div>
@@ -331,7 +331,7 @@ const Policy = () => {
         <TableRow>
           <TableCell
             colSpan={5}
-            className="text-center text-sm text-muted-foreground pt-6"
+            className="text-center text-sm text-muted-foreground "
           >
             Showing {policies?.length} polic{policies?.length === 1 ? "y" : "ies"}
           </TableCell>

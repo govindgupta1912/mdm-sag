@@ -219,10 +219,7 @@ const AppConfigModal = ({
     else {  
       toast.error("App not added in the policy data!");
 
-    }
-
-
-    
+    }    
     
   };
 

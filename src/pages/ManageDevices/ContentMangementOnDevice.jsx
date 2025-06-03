@@ -26,9 +26,11 @@ const ContentMangementOnDevice = ({ device_id }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message || "Error while fteching the content"
-      );
+      // toast.error(
+      //   error?.response?.data?.message || "Error while fteching the content"
+      // );
+      console.log("Error while fetching content on device:", error);
+      
     }
   };
 
@@ -37,69 +39,81 @@ const ContentMangementOnDevice = ({ device_id }) => {
   }, []);
   console.log("Content_on_devices======", content);
 
-  const delete_content_on_device=async(content_id)=>{
+  const delete_content_on_device = async (content_id) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/delete_content_from_device`,
+      const response = await axios.post(
+        `${API_BASE_URL}/api/delete_content_from_device`,
         {
-          device_id:device_id,
-          content_id:content_id
+          device_id: device_id,
+          content_id: content_id,
         }
-      )
+      );
 
-       if (response.data.status) {
-        toast.success(response.data.message || "Content updated");
-         fetch_content_on_device();
-       }
-       else
-       {
-        toast.error(response.data.message || "Failed to Delete the Content On device");
-       }
-    
+      if (response.data.status) {
+        toast.success(response.data.message || "Content deleted successfully");
+        // Refresh the content list after deletion
+        setContent((prevContent) =>
+          prevContent.filter((item) => item.content_id !== content_id)
+        );
+       // fetch_content_on_device();
+      } else {
+        toast.error(
+          response.data.message || "Failed to Delete the Content On device"
+        );
+      }
     } catch (error) {
       toast.error(error?.response?.data?.message || "Error editing content");
     }
-  }
- return (
-  <div className="space-y-4">
-    {/* Header */}
-    <div className="flex items-center gap-2 text-xl font-bold text-gray-800">
-      <BiSolidBookContent className="text-blue-500" size={24} />
-      <span>Total Files: {content.length}</span>
-    </div>
+  };
+  return (
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-center gap-2 text-xl font-bold text-gray-800">
+        <BiSolidBookContent className="text-blue-500" size={24} />
+        <span>Total Files: {content.length}</span>
+      </div>
 
-    {/* File Cards */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[500px] overflow-y-auto pr-2">
-      {content.map((contentItem) => (
-        <Card
-          key={contentItem.content_id}
-          className="p-4 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
-        >
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2 text-base font-semibold truncate w-full">
-              <BiSolidBookContent className="text-blue-500" />
-              <span className="truncate">{contentItem.filename}</span>
+      {/* File Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[500px] overflow-y-auto pr-2">
+        {content.map((contentItem) => (
+          <Card
+            key={contentItem.content_id}
+            className="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2 text-base font-semibold truncate w-full">
+                <BiSolidBookContent className="text-blue-500" />
+                <span className="truncate">{contentItem.filename}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-red-500 hover:text-red-700"
+                onClick={() => delete_content_on_device(contentItem.content_id)}
+              >
+                <FiDelete size={18} />
+              </Button>
             </div>
-            <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-700">
-              <FiDelete size={18} />
-            </Button>
-          </div>
 
-          <p className="text-sm text-gray-600 mb-1 truncate">
-            <span className="font-medium text-gray-700">Path:</span> {contentItem.path}
-          </p>
+            <p className="text-sm text-gray-600 mb-1 truncate">
+              <span className="font-medium text-gray-700">Path:</span>{" "}
+              {contentItem.path}
+            </p>
 
-          <p className="text-sm text-gray-600 mb-1">
-            <span className="font-medium text-gray-700">Size:</span> {contentItem.size} MB
-          </p>
+            <p className="text-sm text-gray-600 mb-1">
+              <span className="font-medium text-gray-700">Size:</span>{" "}
+              {contentItem.size} MB
+            </p>
 
-          <p className="text-sm text-gray-600">
-            <span className="font-medium text-gray-700">Added on:</span> {contentItem.created_on}
-          </p>
-        </Card>
-      ))}
+            <p className="text-sm text-gray-600">
+              <span className="font-medium text-gray-700">Added on:</span>{" "}
+              {contentItem.created_on}
+            </p>
+          </Card>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default ContentMangementOnDevice;
