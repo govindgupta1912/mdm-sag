@@ -11,7 +11,7 @@ const Sidebar = () => {
   const [processing, setProcessing] = useState(false);
   const dispatch = useDispatch();
   const [fetchStatus, setFetchStatus] = useState("idle");
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
 
   const connectADB = async () => {
     setProcessing(true);

@@ -22,7 +22,7 @@ import InstallAppTab from "../../components/tabs/InstallAppTab/InstallAppTab";
 import KioskTab from "../../components/tabs/KioskTab";
 import { toast } from "react-toastify";
 import isEqual from "fast-deep-equal";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
 
 // Main Page
 const CreatePolicy = () => {

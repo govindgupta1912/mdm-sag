@@ -6,7 +6,7 @@ import { FiDelete } from "react-icons/fi";
 import { BiSolidBookContent } from "react-icons/bi";
 import { Button } from "@/components/ui/button";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
 
 const ContentMangementOnDevice = ({ device_id }) => {
   const [content, setContent] = useState([]);

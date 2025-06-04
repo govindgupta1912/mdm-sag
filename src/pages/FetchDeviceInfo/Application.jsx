@@ -16,7 +16,7 @@ import { saveAs } from "file-saver";
 const Application = ({ details }) => {
   const data = details.application;
   console.log("package_name", data);
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
   const [selectedApp, setSelectedApp] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [processing, setProcessing] = useState(false);

@@ -3,12 +3,16 @@
 services:
   frontend:
     build:
-      context: ./ # Make sure this is the path to your frontend folder
-      dockerfile: Dockerfile  # Ensure this is the correct Dockerfile for your frontend
+      context: .  # Path to the frontend folder containing Dockerfile
+      dockerfile: Dockerfile  # Name of the Dockerfile
     ports:
-      - "88:80"  #  port mapping for first is host and second is container port
+      - "88:80"  # Host port 88 maps to container port 80
     restart: always
     environment:
-      - VITE_API_BASE_URL=http://backend:9002  # Make sure to adjust this based on your backend service
+      - VITE_API_BASE_URL=http://backend:9002  # Adjust to your backend's URL
+    networks:
+      - app-network  # Network for potential future backend integration
 
-   
+networks:
+  app-network:
+    driver: bridge  # Bridge network for service communication

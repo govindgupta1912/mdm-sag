@@ -6,7 +6,7 @@ import { ClipLoader } from "react-spinners";
 
 const Enroll = () => {
   const Serial_number = useSelector((state) => state.serial.serialNumber);
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
 
   const [step, setStep] = useState(0);
   const [status, setStatus] = useState("");

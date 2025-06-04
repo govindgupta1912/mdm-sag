@@ -15,7 +15,7 @@ const Fetch = () => {
   const [error, setError] = useState("");
   const [send, setSend] = useState();
   const Serial_number = useSelector((state) => state.serial.serialNumber);
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
   const [processing, setProcessing] = useState(false);
 
   // const response = await axios.get(`${API_BASE_URL}/api/connect_device_list/`);

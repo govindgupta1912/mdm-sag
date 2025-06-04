@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
 
 const EditContentDialog = ({ open, setOpen, selectedContent, contentData, onSave }) => {
   const [editPath, setEditPath] = useState(contentData?.path || "");
