@@ -1,18 +1,30 @@
-
-
 services:
   frontend:
     build:
-      context: .  # Path to the frontend folder containing Dockerfile
-      dockerfile: Dockerfile  # Name of the Dockerfile
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "88:80"  # Host port 88 maps to container port 80
+      - "88:80"
     restart: always
     environment:
-      - VITE_API_BASE_URL=http://backend:9002  # Adjust to your backend's URL
+      - VITE_API_BASE_URL=http://frontend:80/api
     networks:
-      - app-network  # Network for potential future backend integration
-
+      - app-network
 networks:
   app-network:
-    driver: bridge  # Bridge network for service communication
+    driver: bridge
+# services:
+#   frontend:
+#     build:
+#       context: ./
+#       dockerfile: Dockerfile
+#     ports:
+#       - "88:80" # Host port 88 maps to container port 80
+#     restart: always
+#     environment:
+#       - VITE_API_BASE_URL=http://frontend:80/api # Route API requests through Nginx
+#     networks:
+#       - app-network # Network for communication with backend
+# networks:
+#   app-network:
+#     driver: bridge # Bridge network for service communication
