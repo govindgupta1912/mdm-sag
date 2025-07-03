@@ -33,7 +33,7 @@ const ManageApplication = () => {
   const [isVpnApp, setIsVpnApp] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [edittingApp, setEdittingApp] = useState(null);
-  const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const fileInputRef = useRef(null);
 
   const dispatch = useDispatch();

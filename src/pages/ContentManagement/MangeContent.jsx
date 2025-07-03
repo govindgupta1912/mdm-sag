@@ -37,7 +37,7 @@ import { ImUpload3 } from "react-icons/im";
 import { BiUpload } from "react-icons/bi";
 import { RiUploadCloud2Line } from "react-icons/ri";
 
-const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ManageContent = () => {
   const [open, setOpen] = useState(false);

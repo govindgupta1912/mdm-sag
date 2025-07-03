@@ -66,7 +66,7 @@ const ManageDevices = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const isAllSelected = selectedIds.length === devicesList?.length;
-  const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   console.log("selectedIds========", selectedIds);
 

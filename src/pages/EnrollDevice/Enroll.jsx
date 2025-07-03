@@ -6,7 +6,7 @@ import { ClipLoader } from "react-spinners";
 
 const Enroll = () => {
   const Serial_number = useSelector((state) => state.serial.serialNumber);
-  const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [step, setStep] = useState(0);
   const [status, setStatus] = useState("");
@@ -139,7 +139,7 @@ const Enroll = () => {
       </div>
       <div className="flex flex-col  items-center space-y-8 p-4 mt-10">
         <h2 className="text-2xl font-medium">
-          Start: Install SAG Agent mobile app on Android device
+          Start: Install Agent (mobile app) on Android device
         </h2>
         <button
           //className="bg-[#03A9FC] w-32 text-white px-3 py-2 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "
@@ -172,7 +172,7 @@ const Enroll = () => {
         </button>
         <h3 className="text-2xl font-normal">
           {" "}
-          Step2: Register device on mobiHEAL
+          Step2: Register device on Guardian MDM
         </h3>
         <button
           //className="bg-[#03A9FC] w-32 text-white px-3 py-2 hover:shadow-lg hover:bg-sky-700  hover:scale-105 transform transition-all duration-200 ease-in-out "

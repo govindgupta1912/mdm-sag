@@ -13,7 +13,7 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // const FileUploadPreview = ({ files, onRemove, uplooadProgress }) => {
 //   return (

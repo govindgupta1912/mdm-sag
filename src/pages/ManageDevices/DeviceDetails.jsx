@@ -15,7 +15,7 @@
 
 //   const location = useLocation();
 //   const deviceData = location.state?.device;
-//   const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
+//   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 //   console.log("DeviceData", deviceData);
 
 //   if (!deviceData) {
@@ -201,7 +201,7 @@ import ContentMangementOnDevice from "./ContentMangementOnDevice";
 const DeviceDetails = () => {
   const location = useLocation();
   const deviceData = location.state?.device;
-  const API_BASE_URL = window._env_ .VITE_API_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   if (!deviceData) {
     return <div className="p-8 text-center">No device data available.</div>;

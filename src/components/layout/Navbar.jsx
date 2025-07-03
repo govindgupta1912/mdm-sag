@@ -26,7 +26,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <img src={mdm} alt="Logo" className="h-7 w-7" />
-          <span className="text-white font-bold text-lg">mobiHEAL MDM</span>
+          <span className="text-white font-bold text-lg">Guardian MDM</span>
         </div>
 
         {/* Mobile menu toggle */}
